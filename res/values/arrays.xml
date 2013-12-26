@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+	<array name="entries">
+		<item>@drawable/events</item>		
+		<item>@drawable/notes</item> 		
+		<item>@drawable/others</item>		
+		<item>@drawable/pictures</item>
+		<item>@drawable/quick_notes</item>		
+		<item>@drawable/records</item>						
+	</array>	
+	<array name="names">
+	    <item>Events</item>
+	    <item>Notes</item>
+	    <item>Others</item>
+	    <item>Pictures</item>
+	    <item>Quick Notes</item>
+	    <item>Records</item>
+	</array>
+</resources>
