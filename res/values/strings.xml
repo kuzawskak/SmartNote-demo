@@ -4,5 +4,9 @@
     <string name="app_name">SmartNote-demo</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_canvas">CanvasActivity</string>
+    <string name="title_activity_directories">Directories</string>
+    <string name="title_activity_create_dir">CreateDir</string>
+    <string name="create_dir_label">Enter directory name</string>
 
 </resources>

@@ -22,6 +22,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.example.smartnote_demo.CanvasActivity"
+            android:label="@string/title_activity_canvas" >
+        </activity>
+        <activity
+            android:name="com.example.smartnote_demo.Directories"
+            android:label="@string/title_activity_directories" >
+        </activity>
+        <activity
+            android:name="com.example.smartnote_demo.CreateDir"
+            android:label="@string/title_activity_create_dir" >
+        </activity>
     </application>
 
 </manifest>
