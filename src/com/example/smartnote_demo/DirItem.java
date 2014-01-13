@@ -7,6 +7,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -54,7 +55,7 @@ public class DirItem extends FrameLayout {
 		
 	    this.setOnTouchListener(new MyTouchListener());
 	
-	    this.setOnDragListener(new MyDragListener());
+	   
 				
 	}	
 	
@@ -117,59 +118,29 @@ public class DirItem extends FrameLayout {
 	private final class MyTouchListener implements OnTouchListener {
 	    public boolean onTouch(View view, MotionEvent motionEvent) {
 	      if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+	    	 Log.v("motion","action down");
 	        ClipData data = ClipData.newPlainText("", "");
 	        DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
 	        view.startDrag(data, shadowBuilder, view, 0);
 	       // view.setVisibility(View.INVISIBLE);
 	        return true;
-	      } else {
+	      } else if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+	    	  Log.v("motion","action up");
+	    	  return true;
+	      }
+	      
+	      else
+	      {
 	        return false;
 	      }
+	      
+	      
 	    }
 	  }
 	
 	
 
-	  class MyDragListener implements OnDragListener {
-	    Drawable enterShape = getResources().getDrawable(R.drawable.notepad);
-	    Drawable normalShape = getResources().getDrawable(R.drawable.notepad);
-
-	    @Override
-	    public boolean onDrag(View v, DragEvent event) {
-	      int action = event.getAction();
-	      switch (event.getAction()) {
-	      case DragEvent.ACTION_DRAG_STARTED:
-	        // do nothing
-	        break;
-	      case DragEvent.ACTION_DRAG_ENTERED:
-	        v.setBackgroundDrawable(enterShape);
-	        break;
-	      case DragEvent.ACTION_DRAG_EXITED:
-	        v.setBackgroundDrawable(normalShape);
-	        break;
-	      case DragEvent.ACTION_DROP:
-	        // Dropped, reassign View to ViewGroup
-	        View view = (View) event.getLocalState();
-	        LinearLayout owner = (LinearLayout) view.getParent();
-	        owner.removeView(view);
-	     // Get scroll view out of the way
-	        owner.setVisibility(View.GONE);
-
-	        // Put the child view into scrollview's parent view
-	       // parentLayout.addView(scrollChildLayout);
-	        owner.invalidate();
-	       // LinearLayout container = (LinearLayout) v;
-	        //container.addView(view);
-	        //view.setVisibility(View.VISIBLE);
-	        break;
-	      case DragEvent.ACTION_DRAG_ENDED:
-	        v.setBackgroundDrawable(normalShape);
-	      default:
-	        break;
-	      }
-	      return true;
-	    }
-	  }
+	 
 }
 
 
