@@ -1,90 +1,59 @@
 package com.example.smartnote_demo;
 
+import com.smartnote_demo.notepad.*;
+
+import java.util.ArrayList;
+import android.app.Activity;
 import android.content.Context;
-import android.database.DataSetObserver;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
+import android.widget.ArrayAdapter;
 
-public class ButtonAdapter implements ListAdapter {
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+ 
+public class ButtonAdapter extends BaseAdapter {
+    private Context mContext;
+ 
+    NotepadItem[] items;
+ 
+    
+    
+    public void AddItem(NotepadItem item){
+    	items[getCount()]=item;
+    }
+    
+    // Constructor
+    public ButtonAdapter(Context c,NotepadItem[] notepad_items){
+        mContext = c;
+        items = notepad_items;
+    }
+ 
+    @Override
+    public int getCount() {
+        return items.length;
+    }
+ 
+    @Override
+    public Object getItem(int position) {
+        return items[position];
+    }
+ 
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+ 
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ImageView imageView = null;
 
-	private Context mContext;
-	
-	public ButtonAdapter(Context c) {
-		mContext =c;
-	}
-	
-	
-	@Override
-	public int getCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Object getItem(int position) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public long getItemId(int position) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getItemViewType(int position) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int getViewTypeCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean hasStableIds() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void registerDataSetObserver(DataSetObserver observer) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unregisterDataSetObserver(DataSetObserver observer) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean areAllItemsEnabled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isEnabled(int arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
+        return imageView;
+    }
+ 
 }

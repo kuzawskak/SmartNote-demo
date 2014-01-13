@@ -9,4 +9,10 @@
     <string name="title_activity_create_dir">CreateDir</string>
     <string name="create_dir_label">Enter directory name</string>
 
+	<string name="images_dir">Images</string>
+	<string name="notes_dir">Notes</string>
+	<string name="records_dir">Records</string>
+	<string name="quicknotes_dir">Quick Notes</string>
+	<string name="events">Events</string>
+	<string name="others">Others</string>
 </resources>

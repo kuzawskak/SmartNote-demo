@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  
+    android:background="@drawable/notepad"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:orientation="horizontal">           
+
+        <TextView
+            android:id="@+id/notepad_title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:text="notepad"
+            android:textColor="@android:color/white"
+            android:textSize="15sp" />
+
+</RelativeLayout>
