@@ -41,26 +41,26 @@ public class MainActivity extends Activity {
 			public void onItemSelected(CarouselAdapter<?> parent, View view,
 					int position, long id) {
 				
-		        final TextView txt = (TextView)(findViewById(R.id.selected_item));
+		   //     final TextView txt = (TextView)(findViewById(R.id.selected_item));
 		        
 				switch(position){
 				case 0:
-					txt.setText("Events chosen - show calendar");
+					//txt.setText("Events chosen - show calendar");
 					break;
 				case 1:
-					txt.setText("Notes chosen - show folders");
+					//txt.setText("Notes chosen - show folders");
 					Intent directories_intent = new Intent(MainActivity.this,Directories.class);
 					startActivity(directories_intent);
 					
 					break;
 				case 2:
-					txt.setText("Others chosen - ...");
+					//txt.setText("Others chosen - ...");
 					break;
 				case 3:
-					txt.setText("Pictures chosen - show gallery");
+					//txt.setText("Pictures chosen - show gallery");
 					break;
 				case 4:
-					txt.setText("Quick notes chosen - show panel with canvas");
+				//	txt.setText("Quick notes chosen - show panel with canvas");
 					Log.e("smart","1");
 					Intent canvas_intent = new Intent(MainActivity.this,CanvasActivity.class);			
 					Log.e("smart","failure 2");
@@ -70,7 +70,7 @@ public class MainActivity extends Activity {
 					Log.e("smart","3");
 					break;
 				case 5:
-					txt.setText("Records chosen  -show folder with records");
+					//txt.setText("Records chosen  -show folder with records");
 					break;
 					
 				}

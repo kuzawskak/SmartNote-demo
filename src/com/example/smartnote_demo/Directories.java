@@ -45,7 +45,7 @@ public class Directories extends Activity implements OnItemClickListener {
 		layoutInsideScrollview.setPadding(10, 10, 10, 10);
 		for(int i=0;i<20;i++)
 		{
-			count=i;
+			count = i;
 			layoutInsideScrollview.addView(createNotePad());
 		}
 		
@@ -67,7 +67,6 @@ public class Directories extends Activity implements OnItemClickListener {
 
 
 	public DirItem createNotePad(){
-
 		DirItem notePadView = new DirItem(this,"filename"+count);
 
 	//	notePadView.setImageResource(R.drawable.notepad);
@@ -123,20 +122,11 @@ public class Directories extends Activity implements OnItemClickListener {
 		        break;
 		      case DragEvent.ACTION_DROP:
 		    	  View view = (View) event.getLocalState();
-		    	  view.setVisibility(View.GONE);
+		    	 // view.setVisibility(View.GONE);
+		    	 // view.setVisibility(View.GONE);
 		    	  ((LinearLayout)v).removeView(view);
-		  //WORKS FINE!
-		    	
-			      //  LinearLayout owner = (LinearLayout) view.getParent();
-			        Log.v("motion","before remove");
-			        if(view!=null) {
-			        	  Log.v("motion","not null");
-			        view.setVisibility(View.GONE);
-			      // owner.removeView(view);
-			       view.setVisibility(View.GONE);
-			        view.setVisibility(View.INVISIBLE);
-			        Log.v("motion","after remove");
-			        }
+		  
+		    
 		        break;
 		      case DragEvent.ACTION_DRAG_ENDED:
 		    	  

@@ -116,15 +116,33 @@ public class DirItem extends FrameLayout {
 	}
 
 	private final class MyTouchListener implements OnTouchListener {
+		boolean start  = false;
+    	float x1, x2, y1, y2;
 	    public boolean onTouch(View view, MotionEvent motionEvent) {
+	    	
+
+	    	
+
 	      if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 	    	 Log.v("motion","action down");
-	        ClipData data = ClipData.newPlainText("", "");
-	        DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-	        view.startDrag(data, shadowBuilder, view, 0);
+	    	  x1=motionEvent.getX();
+	    	  y1 = motionEvent.getY();
 	       // view.setVisibility(View.INVISIBLE);
 	        return true;
-	      } else if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+	      } 
+	      else if(motionEvent.getAction() == MotionEvent.ACTION_MOVE)
+	    	  {
+	    	  x2 = motionEvent.getX();
+	    	  y2 = motionEvent.getY();
+	    	  if(Math.abs(y2-y1)>100 && start == false)
+	    		  start=true;
+	    	  ClipData data = ClipData.newPlainText("", "");
+		        DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+		        view.startDrag(data, shadowBuilder, view, 0);
+	    	  return true;
+	    	  }
+	      else if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+	    	  
 	    	  Log.v("motion","action up");
 	    	  return true;
 	      }

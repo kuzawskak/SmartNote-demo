@@ -6,23 +6,17 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+
     >
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-    	android:layout_weight="0.5"
-        android:text="text"
-        android:id="@+id/selected_item"
-        android:background="#1E1921"
-        android:textColor="#A85E4F"
-        android:textStyle="normal"
-        />
+
     <LinearLayout
     	android:layout_weight="0.5"
     	android:padding="5dip"
     	android:gravity="top"
 	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent" 
+	    android:layout_height="fill_parent"
+	        android:background = "@drawable/leather"
+	 
     	>
 			<com.smartnote_demo.carouselmenu.Carousel
 			    android:layout_width="fill_parent"
