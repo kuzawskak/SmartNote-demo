@@ -127,27 +127,28 @@ containing a value of this type.
         public static final int wood=0x7f02002b;
     }
     public static final class id {
-        public static final int action_settings=0x7f090014;
-        public static final int button1=0x7f090003;
+        public static final int action_settings=0x7f090015;
         public static final int button_ok=0x7f090002;
-        public static final int canvas_container=0x7f090007;
-        public static final int canvas_default_background=0x7f09000f;
-        public static final int carousel=0x7f090006;
+        public static final int canvas_container=0x7f090008;
+        public static final int canvas_default_background=0x7f090010;
+        public static final int carousel=0x7f090007;
         public static final int editText1=0x7f090001;
-        public static final int eraseBtn=0x7f09000a;
-        public static final int horizontalScrollView1=0x7f090004;
-        public static final int item_image=0x7f090010;
-        public static final int item_text=0x7f090011;
-        public static final int layout_container=0x7f09000e;
-        public static final int linearLayoutInsideScroll=0x7f090005;
-        public static final int myselector=0x7f090013;
-        public static final int notepad_title_textview=0x7f090012;
-        public static final int penBtn=0x7f090009;
-        public static final int redoBtn=0x7f09000d;
-        public static final int textBtn=0x7f09000b;
+        public static final int eraseBtn=0x7f09000b;
+        public static final int horizontalScrollView1=0x7f090003;
+        public static final int imageButton1=0x7f090006;
+        public static final int imageButton2=0x7f090005;
+        public static final int item_image=0x7f090011;
+        public static final int item_text=0x7f090012;
+        public static final int layout_container=0x7f09000f;
+        public static final int linearLayoutInsideScroll=0x7f090004;
+        public static final int myselector=0x7f090014;
+        public static final int notepad_title_textview=0x7f090013;
+        public static final int penBtn=0x7f09000a;
+        public static final int redoBtn=0x7f09000e;
+        public static final int textBtn=0x7f09000c;
         public static final int textView1=0x7f090000;
-        public static final int tool_menu=0x7f090008;
-        public static final int undoBtn=0x7f09000c;
+        public static final int tool_menu=0x7f090009;
+        public static final int undoBtn=0x7f09000d;
     }
     public static final class layout {
         public static final int activity_canvas=0x7f030000;
@@ -157,7 +158,8 @@ containing a value of this type.
         public static final int clear_canvas=0x7f030004;
         public static final int editor_basic_ui=0x7f030005;
         public static final int item=0x7f030006;
-        public static final int notepad_item=0x7f030007;
+        public static final int notepad_dir=0x7f030007;
+        public static final int notepad_item=0x7f030008;
     }
     public static final class menu {
         public static final int canvas=0x7f080000;

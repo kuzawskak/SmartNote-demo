@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Point;
 import android.view.Display;
 import android.view.DragEvent;
 import android.view.Gravity;
@@ -39,18 +40,25 @@ public class Directories extends Activity implements OnItemClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_directories);
 
-		final Button new_dir_button = (Button)findViewById(R.id.button1);
+		//final Button new_dir_button = (Button)findViewById(R.id.button1);
 		LinearLayout layoutInsideScrollview = (LinearLayout)findViewById(R.id.linearLayoutInsideScroll);
-	
-		layoutInsideScrollview.setPadding(10, 10, 10, 10);
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int width = size.x;
+		int height = size.y;
+	//	layoutInsideScrollview.setPadding(10, 10, 10, 10);
 		for(int i=0;i<20;i++)
 		{
 			count = i;
-			layoutInsideScrollview.addView(createNotePad());
+			layoutInsideScrollview.addView(createNotePad((int)(height*0.9)));
 		}
 		
+
 		
-		new_dir_button.setOnClickListener(new View.OnClickListener() {
+		
+		
+	/*	new_dir_button.setOnClickListener(new View.OnClickListener() {
 						
 			@Override
 			public void onClick(View v) {
@@ -60,14 +68,15 @@ public class Directories extends Activity implements OnItemClickListener {
 				startActivity(create_dir_intent);
 			}
 		});
+		*/
 		layoutInsideScrollview.setOnDragListener(new MyDragListener());
 	}
 
 
 
 
-	public DirItem createNotePad(){
-		DirItem notePadView = new DirItem(this,"filename"+count);
+	public DirItem createNotePad(int height){
+		DirItem notePadView = new DirItem(this,"filename"+count,height);
 
 	//	notePadView.setImageResource(R.drawable.notepad);
 		

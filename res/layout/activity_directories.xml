@@ -1,33 +1,54 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".Directories" >
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="new Dir" />
+        android:background="@drawable/wood" 
+    tools:context=".Directories" 
+    >
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView1"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" 
-        android:background="@drawable/wood">
-
+        android:layout_height="0dp"
+           android:layout_weight="0.90"
+        android:layout_alignParentTop="true">
+		
         <LinearLayout
         android:id="@+id/linearLayoutInsideScroll"
             android:layout_width="match_parent"
+            
             android:layout_height="match_parent"
+            
             android:orientation="horizontal" >
         </LinearLayout>
     </HorizontalScrollView>
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+
+               android:layout_weight="0.10"
+        android:layout_below="@+id/horizontalScrollView1"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon" />
+
+        <ImageButton
+            android:id="@+id/imageButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon" />
+        
+    </LinearLayout>
+
+</LinearLayout>

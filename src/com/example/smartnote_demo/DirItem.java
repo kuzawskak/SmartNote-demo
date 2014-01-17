@@ -6,6 +6,7 @@ import com.example.smartnote_demo.R;
 import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,22 +35,27 @@ public class DirItem extends FrameLayout {
 	// It's needed to find screen coordinates
 	private Matrix mCIMatrix;
 	
-	public DirItem(Context context,String filename) {
+	public DirItem(Context context,String filename,int height) {
 		
 		super(context);
 		
-		FrameLayout.LayoutParams params = 
-				new FrameLayout.LayoutParams(
-						LayoutParams.WRAP_CONTENT, 
-						LayoutParams.WRAP_CONTENT);
+		
+		
+		
+		/*FrameLayout.LayoutParams params = 
+				new FrameLayout.LayoutParams(100,200);
+						//LayoutParams.WRAP_CONTENT, 
+						//LayoutParams.WRAP_CONTENT);
 		
 		this.setLayoutParams(params);
-		
+		*/
+		//this.setBackgroundColor(Color.BLACK);
 	  	LayoutInflater inflater = LayoutInflater.from(context);
-		View itemTemplate = inflater.inflate(R.layout.item, this, true);
+		View itemTemplate = inflater.inflate(R.layout.notepad_dir, this, true);
 	  	
 		
 		mImage = (ImageView)itemTemplate.findViewById(R.id.item_image);
+		
 		mText = (TextView)itemTemplate.findViewById(R.id.item_text);
 		mText.setText(filename);
 		
