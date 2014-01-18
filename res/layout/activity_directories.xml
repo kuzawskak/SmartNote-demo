@@ -7,33 +7,44 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-
-        android:background="@drawable/wood" 
+    android:background="@drawable/wood" 
     tools:context=".Directories" 
     >
 
-    <HorizontalScrollView
+    
+     <com.smartnote_demo.directories_menu.TopMenu
+                android:id="@+id/topMenu"
+              android:layout_height="0dp"
+        android:layout_weight="0.10"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        ></com.smartnote_demo.directories_menu.TopMenu>
+    
+    
+    
+    
+     <HorizontalScrollView
         android:id="@+id/horizontalScrollView1"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-           android:layout_weight="0.90"
-        android:layout_alignParentTop="true">
+        android:layout_weight="0.80"
+        android:layout_below="@+id/topMenu"
+        >
 		
         <LinearLayout
         android:id="@+id/linearLayoutInsideScroll"
-            android:layout_width="match_parent"
-            
-            android:layout_height="match_parent"
-            
+            android:layout_width="match_parent"  
+             
+            android:layout_height="match_parent"  
             android:orientation="horizontal" >
         </LinearLayout>
     </HorizontalScrollView>
-
+<!--
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-
-               android:layout_weight="0.10"
+        android:layout_weight="0.10"
         android:layout_below="@+id/horizontalScrollView1"
         android:orientation="horizontal" >
 
@@ -50,5 +61,17 @@
             android:src="@drawable/icon" />
         
     </LinearLayout>
+-->
+    
+    <com.smartnote_demo.directories_menu.BottomMenu
+        
+              android:layout_height="0dp"
+        android:layout_weight="0.10"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/horizontalScrollView1"
+           
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        ></com.smartnote_demo.directories_menu.BottomMenu>
 
 </LinearLayout>

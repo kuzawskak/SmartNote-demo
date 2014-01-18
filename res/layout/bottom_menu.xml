@@ -1,0 +1,18 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+        <ImageButton
+            android:id="@+id/homeButton"
+			android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+      		android:scaleType="fitXY"
+            android:background="@drawable/button_round_blue" />
+
+    	<ImageButton   
+            android:id="@+id/createItemButton"
+            android:layout_width="30dp"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:paddingRight="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_round_blue" />        
+</merge>

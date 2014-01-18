@@ -5,6 +5,7 @@ import com.smartnote_demo.carouselmenu.CarouselAdapter;
 import com.smartnote_demo.carouselmenu.CarouselAdapter.OnItemClickListener;
 import com.smartnote_demo.carouselmenu.CarouselAdapter.OnItemSelectedListener;
 import com.smartnote_demo.carouselmenu.CarouselItem;
+import com.smartnote_demo.directories_menu.Directories;
 
 import android.app.Activity;
 import android.content.Intent;
