@@ -2,7 +2,7 @@
         <ImageButton
             android:id="@+id/exitButton"
 			android:layout_width="30dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_gravity="right"
       		android:scaleType="fitXY"
             android:background="@drawable/button_round_blue" />      

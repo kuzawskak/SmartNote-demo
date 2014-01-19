@@ -7,6 +7,7 @@ import com.example.smartnote_demo.R.layout;
 
 import android.content.ClipData;
 import android.content.Context;
+import android.gesture.GestureOverlayView.OnGestureListener;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -45,13 +46,13 @@ public class DirItem extends FrameLayout {
 		Log.d("heightinside",h);
 		
 		FrameLayout.LayoutParams params = 
-				new FrameLayout.LayoutParams(100,200);
+				new FrameLayout.LayoutParams(200,300);
 						//LayoutParams.MATCH_PARENT, 
 						//LayoutParams.MATCH_PARENT);
 		
 		this.setLayoutParams(params);
 	
-		this.setBackgroundColor(Color.RED);
+		//this.setBackgroundColor(Color.RED);
 	 	LayoutInflater inflater = LayoutInflater.from(context);
 		View itemTemplate = inflater.inflate(R.layout.notepad_dir, this, true);
 
@@ -59,10 +60,10 @@ public class DirItem extends FrameLayout {
 		 mImage = (ImageView)itemTemplate.findViewById(R.id.item_image);
 
 		mText = (TextView)itemTemplate.findViewById(R.id.item_text);
-		
+	
 		//mText.setText(h);
 		
-	    this.setOnTouchListener(new MyTouchListener());
+	    //this.setOnTouchListener(new MyTouchListener());
 	
 	   
 				
@@ -124,6 +125,29 @@ public class DirItem extends FrameLayout {
 		this.mCIMatrix = mMatrix;
 	}
 
+	private final class NotepadClickListener implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			//open view for new notepad create			
+		}
+	
+	}
+	
+	private final class NotepadGestureListener implements OnLongClickListener{
+
+		@Override
+		public boolean onLongClick(View v) {
+			// show context menu
+			return false;
+		}
+		
+	}
+	
+
+	
+	
+	
 	private final class MyTouchListener implements OnTouchListener {
 		boolean start  = false;
     	float x1, x2, y1, y2;

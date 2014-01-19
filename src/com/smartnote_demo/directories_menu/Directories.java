@@ -94,7 +94,7 @@ public class Directories extends Activity implements OnItemClickListener {
 		//		LayoutParams.WRAP_CONTENT,height);
 		//parms.gravity = Gravity.CENTER_HORIZONTAL;
 		//notePadView.setLayoutParams(parms);
-	notePadView.setPadding(0, 0,0,0);
+	//notePadView.setPadding(0, 0,0,0);
 		return notePadView;		
 	}
 	
