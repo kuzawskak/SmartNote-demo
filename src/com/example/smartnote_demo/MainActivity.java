@@ -14,18 +14,27 @@ import android.service.dreams.DreamService;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
+	
+	
+	private ImageButton ExitButton;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Carousel carousel = (Carousel)findViewById(R.id.carousel);
+        ExitButton = (ImageButton)findViewById(R.id.exitButton);
+                
+        ExitButton.setOnClickListener(new ExitButtonListener());
+        
+                
         carousel.setOnItemClickListener(new OnItemClickListener(){
-
+       
 			public void onItemClick(CarouselAdapter<?> parent, View view,
 					int position, long id) {	
 				
@@ -33,8 +42,7 @@ public class MainActivity extends Activity {
 						String.format("%s has been clicked", 
 						((CarouselItem)parent.getChildAt(position)).getName()), 
 						Toast.LENGTH_SHORT).show();				
-			}
-        	
+			}		
         });
 
         carousel.setOnItemSelectedListener(new OnItemSelectedListener(){
