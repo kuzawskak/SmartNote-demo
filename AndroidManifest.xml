@@ -34,6 +34,13 @@
             android:name="com.smartnote_demo.directories_menu.CreateDir"
             android:label="@string/title_activity_create_dir" >
         </activity>
+        <activity
+            android:name="com.smartnote_demo.notepad_creator.NotepadCreator" >
+        </activity>
+        <activity
+            android:name="com.smartnote_demo.events_menu.Calendar" >
+        </activity>
+        
     </application>
 
 </manifest>

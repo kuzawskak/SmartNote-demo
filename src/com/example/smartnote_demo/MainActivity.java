@@ -6,7 +6,7 @@ import com.smartnote_demo.carouselmenu.CarouselAdapter.OnItemClickListener;
 import com.smartnote_demo.carouselmenu.CarouselAdapter.OnItemSelectedListener;
 import com.smartnote_demo.carouselmenu.CarouselItem;
 import com.smartnote_demo.directories_menu.Directories;
-
+import com.smartnote_demo.events_menu.Calendar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -55,12 +55,17 @@ public class MainActivity extends Activity {
 				switch(position){
 				case 0:
 					//txt.setText("Events chosen - show calendar");
+					Intent events_intent = new Intent(MainActivity.this,Calendar.class);	
+					startActivity(events_intent);
+	
+					
+
+			
 					break;
 				case 1:
-					//txt.setText("Notes chosen - show folders");
 					Intent directories_intent = new Intent(MainActivity.this,Directories.class);
 					startActivity(directories_intent);
-					
+		
 					break;
 				case 2:
 					//txt.setText("Others chosen - ...");
