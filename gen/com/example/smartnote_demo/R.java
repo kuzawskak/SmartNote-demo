@@ -128,7 +128,9 @@ containing a value of this type.
         public static final int wood=0x7f02002c;
     }
     public static final class id {
-        public static final int action_settings=0x7f090018;
+        public static final int action_settings=0x7f09001d;
+        public static final int b1=0x7f090014;
+        public static final int b2=0x7f090015;
         public static final int button_ok=0x7f090002;
         public static final int canvas_container=0x7f090009;
         public static final int canvas_default_background=0x7f090011;
@@ -136,20 +138,23 @@ containing a value of this type.
         public static final int createItemButton=0x7f090008;
         public static final int editText1=0x7f090001;
         public static final int eraseBtn=0x7f09000c;
-        public static final int exitButton=0x7f090016;
-        public static final int grid_item_label=0x7f090014;
+        public static final int exitButton=0x7f090018;
+        public static final int grid_item_label=0x7f090016;
+        public static final int header=0x7f090019;
         public static final int homeButton=0x7f090007;
         public static final int horizontalScrollView1=0x7f090004;
+        public static final int icon=0x7f09001b;
         public static final int item_image=0x7f090012;
         public static final int item_text=0x7f090013;
         public static final int layout_container=0x7f090010;
         public static final int linearLayoutInsideScroll=0x7f090005;
-        public static final int myselector=0x7f090017;
-        public static final int notepad_title_textview=0x7f090015;
+        public static final int myselector=0x7f09001c;
+        public static final int notepad_title_textview=0x7f090017;
         public static final int penBtn=0x7f09000b;
         public static final int redoBtn=0x7f09000f;
         public static final int textBtn=0x7f09000d;
         public static final int textView1=0x7f090000;
+        public static final int title=0x7f09001a;
         public static final int tool_menu=0x7f09000a;
         public static final int topMenu=0x7f090003;
         public static final int undoBtn=0x7f09000e;
@@ -163,9 +168,11 @@ containing a value of this type.
         public static final int clear_canvas=0x7f030005;
         public static final int editor_basic_ui=0x7f030006;
         public static final int item=0x7f030007;
-        public static final int notepad_dir=0x7f030008;
-        public static final int notepad_item=0x7f030009;
-        public static final int top_menu=0x7f03000a;
+        public static final int main=0x7f030008;
+        public static final int notepad_dir=0x7f030009;
+        public static final int notepad_item=0x7f03000a;
+        public static final int top_menu=0x7f03000b;
+        public static final int window_title=0x7f03000c;
     }
     public static final class menu {
         public static final int canvas=0x7f080000;
@@ -215,6 +222,9 @@ containing a value of this type.
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f070001;
+        public static final int Theme_Default=0x7f070002;
+        public static final int Theme_FullScreen=0x7f070004;
+        public static final int Theme_NoTitle=0x7f070003;
     }
     public static final class styleable {
         /** Attributes that can be used with a Carousel.
