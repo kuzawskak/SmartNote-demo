@@ -44,11 +44,9 @@ public class NotepadItem extends FrameLayout {
 		String h = ""+height;
 
 		FrameLayout.LayoutParams params = 
-				new FrameLayout.LayoutParams(50,100);
+				new FrameLayout.LayoutParams(50,50);
 
 		this.setLayoutParams(params);
-	
-		this.setBackgroundColor(Color.RED);
 	 	LayoutInflater inflater = LayoutInflater.from(context);
 		View itemTemplate = inflater.inflate(R.layout.notepad_skin, this, true);
 		

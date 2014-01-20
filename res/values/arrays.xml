@@ -2,9 +2,9 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 	<array name="entries">
 		<item>@drawable/events</item>		
-		<item>@drawable/notes_new_icon</item> 		
+		<item>@drawable/notes</item> 		
 		<item>@drawable/others</item>		
-		<item>@drawable/pictures</item>
+		<item>@drawable/images</item>
 		<item>@drawable/quick_notes</item>		
 		<item>@drawable/records</item>						
 	</array>	

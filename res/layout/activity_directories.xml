@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/wood" 
+    android:background="@drawable/wood_background" 
     tools:context=".Directories" 
     >
 
@@ -28,6 +28,10 @@
         android:id="@+id/horizontalScrollView1"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_weight="0.80"
         android:layout_below="@+id/topMenu"
         >
@@ -69,7 +73,6 @@
         android:layout_weight="0.10"
         android:layout_width="wrap_content"
         android:layout_below="@+id/horizontalScrollView1"
-           
         android:orientation="horizontal"
         android:layout_gravity="right"
         ></com.smartnote_demo.directories_menu.BottomMenu>

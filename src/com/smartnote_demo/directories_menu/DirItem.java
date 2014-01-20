@@ -48,11 +48,8 @@ public class DirItem extends FrameLayout {
 		FrameLayout.LayoutParams params = 
 				new FrameLayout.LayoutParams(200,300);
 						//LayoutParams.MATCH_PARENT, 
-						//LayoutParams.MATCH_PARENT);
-		
+						//LayoutParams.MATCH_PARENT);		
 		this.setLayoutParams(params);
-	
-		this.setBackgroundColor(Color.RED);
 	 	LayoutInflater inflater = LayoutInflater.from(context);
 		View itemTemplate = inflater.inflate(R.layout.notepad_dir, this, true);
 

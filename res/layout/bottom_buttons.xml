@@ -1,23 +1,23 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
         <ImageButton
             android:id="@+id/createButton"
-			android:layout_width="30dp"
-            android:layout_height="30dp"
+			android:layout_width="100dp"
+            android:layout_height="50dp"
             android:layout_gravity="right|bottom"
       		android:paddingBottom="10dp"
       		android:layout_marginBottom="20dp"
       		android:scaleType="fitXY"
-            android:background="@drawable/button_round_blue" />
+            android:background="@drawable/create" />
 
     	<ImageButton   
             android:id="@+id/cancelButton"
-            android:layout_width="30dp"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
 			android:layout_marginLeft="10dp"
 			android:layout_marginRight="10dp"
 			android:layout_marginBottom="20dp"
 			android:paddingRight="0dp"
 			android:paddingBottom="10dp"
-            android:layout_height="30dp"
             android:layout_gravity="right|bottom"
-            android:background="@drawable/button_round_blue" />        
+            android:background="@drawable/cancel" />        
 </merge>

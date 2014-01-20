@@ -26,8 +26,8 @@ public class NotepadItem extends FrameLayout{
 		
 	  	LayoutInflater inflater = LayoutInflater.from(context);
 		View itemTemplate = inflater.inflate(R.layout.notepad_item, this, true);
-	  	
-		mText = (TextView)itemTemplate.findViewById(R.id.notepad_title_textview);
+	  	//
+		//mText = (TextView)itemTemplate.findViewById(R.id.notepad_title_textview);
 	}
 
 }

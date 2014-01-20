@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/leather"
+        android:background="@drawable/main_background"
         android:gravity="top"
         android:orientation="vertical"
         android:padding="5dip" >

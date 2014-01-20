@@ -2,12 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-
+    android:orientation="vertical"
+    android:background="@drawable/main_background" >
+	
     
         <HorizontalScrollView
+        android:background="@drawable/wood_background"
         android:id="@+id/horizontalScrollView1"
         android:layout_width="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_height="0dp"
         android:layout_weight="0.3" >
 
@@ -21,8 +27,13 @@
     </HorizontalScrollView>
 
     <HorizontalScrollView
+        android:background="@drawable/wood_background"
         android:id="@+id/horizontalScrollView2"
         android:layout_width="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_height="0dp"
         android:layout_weight="0.3" >
 
@@ -66,7 +77,6 @@
         android:layout_weight="0.20"
         android:layout_width="wrap_content"             
         android:orientation="horizontal"
-        android:background="@android:color/black"
         android:layout_gravity="right|bottom"
         
         ></com.smartnote_demo.notepad_creator.BottomButtons>

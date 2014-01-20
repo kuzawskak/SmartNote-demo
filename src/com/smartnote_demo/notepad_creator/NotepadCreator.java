@@ -20,19 +20,22 @@ public class NotepadCreator extends Activity {
 	private LinearLayout NotepadSkins;
 	private LinearLayout SiteSkins;
 	private int[] NotepadSkinIds={
-			R.drawable.notepad,
-			R.drawable.notepad,
-			R.drawable.notepad,
-			R.drawable.notepad,
-			R.drawable.notepad,
+			R.drawable.skin1,
+			R.drawable.skin2,
+			R.drawable.skin3,
+			R.drawable.skin4,
+			R.drawable.skin5,
+			R.drawable.skin6,
+		
 	};
 	
 	private int[] SiteSkinIds={
-			R.drawable.notepad,
-			R.drawable.notepad,
-			R.drawable.notepad,
-			R.drawable.notepad,
-			R.drawable.notepad,
+			R.drawable.page1,
+			R.drawable.page2,
+			R.drawable.page3,
+			R.drawable.page4,
+			R.drawable.page5,
+			
 	};
 	
 	

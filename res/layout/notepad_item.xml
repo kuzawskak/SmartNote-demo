@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  
-    android:background="@drawable/notepad"
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content"
-    android:orientation="horizontal">           
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight = "0.9"
+    	android:paddingLeft="10dp"
+    		android:paddingRight="10dp"
+    android:orientation="vertical" >
+    <ImageView
+        android:id="@+id/item_image"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+			android:layout_marginLeft="50dp"
+			android:layout_marginRight="50dp"
+           android:layout_weight="1.0"
+        android:scaleType="fitXY"
+        android:src="@drawable/skin1" />
 
-        <TextView
-            android:id="@+id/notepad_title_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dip"
-            android:text="notepad"
-            android:textColor="@android:color/white"
-            android:textSize="15sp" />
+<!--  <TextView  
+    android:id="@+id/grid_item_label"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" 
+        android:layout_weight="0.2"
+    android:text="My Text" 
+   />-->
 
-</RelativeLayout>
+</merge>
