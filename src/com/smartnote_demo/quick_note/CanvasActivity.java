@@ -13,12 +13,15 @@ import com.smartnote_demo.spen_tools.SPenSDKUtils;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
@@ -52,6 +55,7 @@ public class CanvasActivity extends ActivityWithSPenLayer {
 	private ImageView		mRedoBtn;	
 	private ImageView		mTextBtn;
 	private ImageView		mSaveBtn;	
+	private float mZoomValue = 1f;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +116,9 @@ public class CanvasActivity extends ActivityWithSPenLayer {
 		// Create Setting View
 		mSCanvas.createSettingView(mLayoutContainer, settingResourceMapInt, settingResourceMapString);
 
+		
+		
+		
 		//====================================================================================
 		//
 		// Set Callback Listener(Interface)
@@ -182,10 +189,43 @@ public class CanvasActivity extends ActivityWithSPenLayer {
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
-		super.onBackPressed();
+		//super.onBackPressed();
+		exitActivity();	
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		// Release SCanvasView resources
+		if(!mSCanvas.closeSCanvasView())
+			Log.e("smart", "Fail to close SCanvasView");
+	}	
 
+	
+
+	private void exitActivity(){
+		// TODO Auto-generated method stub		
+		//change it and ask if the user wants to SAVE the file
+		AlertDialog.Builder ad = new AlertDialog.Builder(mContext);		
+		ad.setIcon(getResources().getDrawable(android.R.drawable.ic_dialog_alert));	// Android Resource
+		ad.setTitle(getResources().getString(R.string.app_name))
+		.setMessage("Exit this program")
+		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {				
+				// finish dialog
+				dialog.dismiss();
+				setResult(RESULT_OK, getIntent());
+				finish();
+			}
+		})
+		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+
+			}
+		})
+		.show();
+		ad = null;	
+	}
 
 @Override
 public void onConfigurationChanged(Configuration newConfig) {
@@ -196,7 +236,8 @@ public void onConfigurationChanged(Configuration newConfig) {
 
 
 void setSCanvasViewLayout(){
-	Rect rectCanvas = getMaximumCanvasRect(mSrcImageRect, CANVAS_WIDTH_MARGIN, CANVAS_HEIGHT_MARGIN);
+	//TODO: consider changing it back to original and try to get rid of invisible margins (now we draw also on margin with background set)!
+	Rect rectCanvas = getMaximumCanvasRect(mSrcImageRect,0,0);// CANVAS_WIDTH_MARGIN, CANVAS_HEIGHT_MARGIN);
 	int nCurWidth = rectCanvas.right-rectCanvas.left;
 	int nCurHeight = rectCanvas.bottom-rectCanvas.top;
 	// Place SCanvasView In the Center
@@ -263,9 +304,13 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 				Toast.makeText(mContext, "Tap Canvas to insert Text", Toast.LENGTH_SHORT).show();
 			}
 		}
+		else if(nBtnID == mSaveBtn.getId()){
+			//temporary zoom testing			
+			//thats works! but we want probably canvas to fill the whole place
+			mSCanvas.setCanvasZoomScale(mZoomValue += 0.2, false);
+			mSCanvas.setCanvasZoomScale(mZoomValue, true);			
+		}
 	}
-
-
 };
 
 
