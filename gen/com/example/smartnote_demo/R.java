@@ -149,39 +149,41 @@ containing a value of this type.
         public static final int wood_background=0x7f02003e;
     }
     public static final class id {
-        public static final int NotepadSitesContainer=0x7f0a001b;
-        public static final int NotepadSkinsContainer=0x7f0a0019;
-        public static final int action_settings=0x7f0a0023;
-        public static final int b1=0x7f0a0017;
-        public static final int b2=0x7f0a0018;
+        public static final int NotepadSitesContainer=0x7f0a001d;
+        public static final int NotepadSkinsContainer=0x7f0a001b;
+        public static final int Spinner01=0x7f0a001a;
+        public static final int action_settings=0x7f0a0025;
+        public static final int b1=0x7f0a0018;
+        public static final int b2=0x7f0a0019;
         public static final int button_ok=0x7f0a0002;
         public static final int calendarView1=0x7f0a000b;
         public static final int cancelButton=0x7f0a0008;
         public static final int canvas_container=0x7f0a000c;
-        public static final int canvas_default_background=0x7f0a0014;
+        public static final int canvas_default_background=0x7f0a0015;
         public static final int carousel=0x7f0a0006;
         public static final int createButton=0x7f0a0007;
         public static final int createItemButton=0x7f0a000a;
         public static final int editText1=0x7f0a0001;
         public static final int eraseBtn=0x7f0a000f;
-        public static final int exitButton=0x7f0a001e;
-        public static final int header=0x7f0a001f;
+        public static final int exitButton=0x7f0a0020;
+        public static final int header=0x7f0a0021;
         public static final int homeButton=0x7f0a0009;
         public static final int horizontalScrollView1=0x7f0a0004;
-        public static final int horizontalScrollView2=0x7f0a001a;
-        public static final int icon=0x7f0a0021;
-        public static final int item_image=0x7f0a0015;
-        public static final int item_text=0x7f0a0016;
-        public static final int layout_container=0x7f0a0013;
+        public static final int horizontalScrollView2=0x7f0a001c;
+        public static final int icon=0x7f0a0023;
+        public static final int item_image=0x7f0a0016;
+        public static final int item_text=0x7f0a0017;
+        public static final int layout_container=0x7f0a0014;
         public static final int linearLayoutInsideScroll=0x7f0a0005;
-        public static final int myselector=0x7f0a0022;
-        public static final int notepad_image=0x7f0a001c;
-        public static final int notepad_skin_name=0x7f0a001d;
+        public static final int myselector=0x7f0a0024;
+        public static final int notepad_image=0x7f0a001e;
+        public static final int notepad_skin_name=0x7f0a001f;
         public static final int penBtn=0x7f0a000e;
         public static final int redoBtn=0x7f0a0012;
+        public static final int saveBtn=0x7f0a0013;
         public static final int textBtn=0x7f0a0010;
         public static final int textView1=0x7f0a0000;
-        public static final int title=0x7f0a0020;
+        public static final int title=0x7f0a0022;
         public static final int tool_menu=0x7f0a000d;
         public static final int topMenu=0x7f0a0003;
         public static final int undoBtn=0x7f0a0011;
@@ -198,12 +200,15 @@ containing a value of this type.
         public static final int editor_basic_ui=0x7f030008;
         public static final int item=0x7f030009;
         public static final int main=0x7f03000a;
-        public static final int notepad_creator=0x7f03000b;
-        public static final int notepad_dir=0x7f03000c;
-        public static final int notepad_item=0x7f03000d;
-        public static final int notepad_skin=0x7f03000e;
-        public static final int top_menu=0x7f03000f;
-        public static final int window_title=0x7f030010;
+        public static final int mspinner=0x7f03000b;
+        public static final int mspinnertext=0x7f03000c;
+        public static final int mspinnertext_tablet=0x7f03000d;
+        public static final int notepad_creator=0x7f03000e;
+        public static final int notepad_dir=0x7f03000f;
+        public static final int notepad_item=0x7f030010;
+        public static final int notepad_skin=0x7f030011;
+        public static final int top_menu=0x7f030012;
+        public static final int window_title=0x7f030013;
     }
     public static final class menu {
         public static final int canvas=0x7f090000;
@@ -213,18 +218,220 @@ containing a value of this type.
     }
     public static final class string {
         public static final int action_settings=0x7f070001;
+        public static final int adjust_saving_contents_by_cropping_off=0x7f070060;
+        public static final int adjust_saving_contents_by_cropping_on=0x7f070061;
+        public static final int align_center_desc=0x7f0700c0;
+        /**   Locale 
+         */
+        public static final int align_left_desc=0x7f0700bf;
+        public static final int align_right_desc=0x7f0700c1;
         public static final int app_name=0x7f070000;
+        public static final int background_audio_auto_replay_off=0x7f070072;
+        public static final int background_audio_auto_replay_on=0x7f070073;
+        public static final int background_audio_play_off=0x7f070070;
+        public static final int background_audio_play_on=0x7f070071;
+        public static final int background_audio_stop_off=0x7f070074;
+        public static final int background_audio_stop_on=0x7f070075;
+        public static final int beautify_style_desc=0x7f0700b0;
+        public static final int boundary_touch_scroll_disable=0x7f07008a;
+        public static final int boundary_touch_scroll_enable=0x7f07008b;
+        public static final int cancel=0x7f070023;
+        public static final int clear_all=0x7f070014;
+        public static final int context_identifier=0x7f070035;
         public static final int create_dir_label=0x7f070006;
+        public static final int create_new_image_off=0x7f070064;
+        public static final int create_new_image_on=0x7f070065;
+        public static final int custom_color_desc=0x7f070097;
+        /**  Talkback & Description
+         */
+        public static final int defined_color_desc=0x7f070096;
+        public static final int done=0x7f07002e;
+        public static final int down=0x7f07002b;
+        public static final int dropperview_color_desc=0x7f0700a5;
+        public static final int encode_foreground_image_off=0x7f070066;
+        public static final int encode_foreground_image_on=0x7f070067;
+        public static final int encode_object_data_off=0x7f07006a;
+        public static final int encode_object_data_on=0x7f07006b;
+        public static final int encode_thumbnail_image_off=0x7f070068;
+        public static final int encode_thumbnail_image_on=0x7f070069;
+        public static final int encode_video_file_data_off=0x7f07006c;
+        public static final int encode_video_file_data_on=0x7f07006d;
+        public static final int eraser_settings=0x7f070013;
         public static final int events=0x7f07000b;
+        public static final int filling_settings=0x7f07001c;
+        public static final int gesture_edit_clear=0x7f07008d;
+        public static final int gesture_edit_default=0x7f070093;
+        public static final int gesture_edit_delete=0x7f070091;
+        public static final int gesture_edit_delete_all=0x7f070092;
+        public static final int gesture_edit_filepath=0x7f070094;
+        public static final int gesture_edit_load=0x7f07008f;
+        /**  Gesture 
+         */
+        public static final int gesture_edit_recognize=0x7f07008c;
+        public static final int gesture_edit_register=0x7f070090;
+        public static final int gesture_edit_save=0x7f07008e;
+        public static final int gesture_edit_test=0x7f070095;
         public static final int hello_world=0x7f070002;
+        public static final int hover=0x7f070034;
+        public static final int hover_popup_window=0x7f0700c2;
+        public static final int hover_scroll_disable=0x7f070082;
+        public static final int hover_scroll_enable=0x7f070083;
         public static final int images_dir=0x7f070007;
+        public static final int insertcanvasimage=0x7f070020;
+        public static final int left=0x7f070029;
+        public static final int list_type_desc=0x7f0700b1;
+        public static final int load_msg=0x7f070037;
+        public static final int load_title=0x7f070036;
+        public static final int maintain_pen_color_disable=0x7f070086;
+        public static final int maintain_pen_color_enable=0x7f070087;
+        public static final int maintain_scale_on_resize_disable=0x7f070084;
+        public static final int maintain_scale_on_resize_enable=0x7f070085;
+        public static final int minus=0x7f07002d;
+        public static final int nomusic=0x7f070024;
         public static final int notes_dir=0x7f070008;
+        public static final int object_delete_desc=0x7f0700a9;
+        public static final int object_rotate_left_desc=0x7f0700aa;
+        public static final int object_rotate_right_desc=0x7f0700ab;
+        public static final int ok=0x7f070022;
         public static final int others=0x7f07000c;
+        public static final int pen_only_mode_disable=0x7f07007c;
+        public static final int pen_only_mode_enable=0x7f07007d;
+        public static final int pen_preview_desc=0x7f070098;
+        /**  Settings 
+         */
+        public static final int pen_settings=0x7f07000d;
+        public static final int pen_settings_beautify_brush_reset=0x7f0700ba;
+        public static final int pen_settings_beautify_brush_tab=0x7f0700b9;
+        public static final int pen_settings_beautify_cursive=0x7f0700bb;
+        public static final int pen_settings_beautify_dummy=0x7f0700bd;
+        public static final int pen_settings_beautify_modulation=0x7f0700be;
+        public static final int pen_settings_beautify_sustenance=0x7f0700bc;
+        /**  Beautify 
+         */
+        public static final int pen_settings_chinese_brush_tab=0x7f0700b8;
+        public static final int pen_settings_preset_delete_msg=0x7f070010;
+        public static final int pen_settings_preset_delete_title=0x7f07000f;
+        public static final int pen_settings_preset_empty=0x7f07000e;
+        public static final int pen_settings_preset_exist=0x7f070011;
+        public static final int pen_settings_preset_maximum_msg=0x7f070012;
+        public static final int pentype_desc_brush=0x7f07009a;
+        public static final int pentype_desc_chinese_brush=0x7f07009b;
+        public static final int pentype_desc_crayon=0x7f07009c;
+        public static final int pentype_desc_marker=0x7f07009d;
+        public static final int pentype_desc_solid=0x7f070099;
+        public static final int play_animation_using_sound_effect_off=0x7f070076;
+        public static final int play_animation_using_sound_effect_on=0x7f070077;
+        /**  Animation Option 
+         */
+        public static final int play_animation_using_trasparent_background_off=0x7f07006e;
+        public static final int play_animation_using_trasparent_background_on=0x7f07006f;
+        public static final int plus=0x7f07002c;
+        /**  Other Option 
+         */
+        public static final int predictive_text_disable=0x7f070078;
+        public static final int predictive_text_enable=0x7f070079;
+        public static final int preset_preview_desc=0x7f07009e;
+        public static final int pressure=0x7f070031;
         public static final int quicknotes_dir=0x7f07000a;
         public static final int records_dir=0x7f070009;
+        public static final int right=0x7f07002a;
+        /**  SAMM Option 
+         */
+        public static final int save_image_horizontal_crop_off=0x7f07005c;
+        public static final int save_image_horizontal_crop_on=0x7f07005d;
+        public static final int save_image_vertical_crop_off=0x7f07005e;
+        public static final int save_image_vertical_crop_on=0x7f07005f;
+        public static final int save_only_foreground_image_off=0x7f070062;
+        public static final int save_only_foreground_image_on=0x7f070063;
+        public static final int seekbar_cursive_desc=0x7f0700ac;
+        public static final int seekbar_dummy_desc=0x7f0700ae;
+        public static final int seekbar_modulation_desc=0x7f0700af;
+        public static final int seekbar_opacity_desc=0x7f0700a6;
+        public static final int seekbar_size_desc=0x7f0700a7;
+        public static final int seekbar_sustenance_desc=0x7f0700ad;
+        public static final int selectimage=0x7f070026;
+        public static final int setfilterlevel=0x7f070027;
+        public static final int setimagefilter=0x7f070025;
+        public static final int settinginformation=0x7f070021;
+        public static final int settingview_close_btn_desc=0x7f07001d;
+        public static final int settingview_contract_desc=0x7f0700a3;
+        public static final int settingview_expand_desc=0x7f0700a2;
+        public static final int settingview_pinup_disable=0x7f07007a;
+        public static final int settingview_pinup_enable=0x7f07007b;
+        public static final int settingview_preset_add_btn_desc=0x7f07001e;
+        public static final int settingview_preset_delete_btn_desc=0x7f07001f;
+        public static final int settingview_scrollbar_desc=0x7f0700a4;
+        public static final int signature_registration_draw=0x7f07004b;
+        public static final int signature_registration_registration_failure=0x7f07004a;
+        public static final int signature_registration_registration_sub_title=0x7f070046;
+        public static final int signature_registration_registration_success_1=0x7f070047;
+        public static final int signature_registration_registration_success_2=0x7f070048;
+        public static final int signature_registration_registration_success_3=0x7f070049;
+        public static final int signature_registration_registration_title=0x7f070045;
+        public static final int signature_retry_sub_title=0x7f070059;
+        public static final int signature_retry_title=0x7f070058;
+        public static final int signature_start_check_failure=0x7f07003b;
+        public static final int signature_start_check_sub_title=0x7f070039;
+        public static final int signature_start_check_success=0x7f07003a;
+        /**  Signature 
+         */
+        public static final int signature_start_check_title=0x7f070038;
+        public static final int signature_start_delete_failure=0x7f070043;
+        public static final int signature_start_delete_sub_title=0x7f070042;
+        public static final int signature_start_delete_success=0x7f070044;
+        public static final int signature_start_delete_title=0x7f070041;
+        public static final int signature_start_registration_sub_title=0x7f07003d;
+        public static final int signature_start_registration_title=0x7f07003c;
+        public static final int signature_start_verification_failure=0x7f070040;
+        public static final int signature_start_verification_sub_title=0x7f07003f;
+        public static final int signature_start_verification_title=0x7f07003e;
+        public static final int signature_verification_draw=0x7f070057;
+        public static final int signature_verification_level_cancel=0x7f070056;
+        public static final int signature_verification_level_confirm=0x7f070055;
+        public static final int signature_verification_level_high=0x7f070054;
+        public static final int signature_verification_level_low=0x7f070052;
+        public static final int signature_verification_level_medium=0x7f070053;
+        public static final int signature_verification_level_sub_title=0x7f070051;
+        public static final int signature_verification_level_title=0x7f070050;
+        public static final int signature_verification_verification_failure=0x7f07004f;
+        public static final int signature_verification_verification_sub_title=0x7f07004d;
+        public static final int signature_verification_verification_success=0x7f07004e;
+        public static final int signature_verification_verification_title=0x7f07004c;
+        public static final int stroke_longclick_disable=0x7f07007e;
+        public static final int stroke_longclick_enable=0x7f07007f;
+        public static final int support_beautify_stroke_disable=0x7f070088;
+        public static final int support_beautify_stroke_enable=0x7f070089;
+        public static final int text_font_desc=0x7f0700a0;
+        public static final int text_longclick_disable=0x7f070080;
+        public static final int text_longclick_enable=0x7f070081;
+        public static final int text_preview_desc=0x7f07009f;
+        public static final int text_settings=0x7f070015;
+        public static final int text_settings_tab_font=0x7f070016;
+        public static final int text_settings_tab_list=0x7f070019;
+        public static final int text_settings_tab_paragraph=0x7f070017;
+        public static final int text_settings_tab_paragraph_align=0x7f070018;
+        public static final int text_size_desc=0x7f0700a1;
+        public static final int textbox_delete_desc=0x7f0700a8;
+        public static final int textbox_hint=0x7f07001a;
+        public static final int texttitle=0x7f07001b;
         public static final int title_activity_canvas=0x7f070003;
         public static final int title_activity_create_dir=0x7f070005;
         public static final int title_activity_directories=0x7f070004;
+        public static final int tool=0x7f070032;
+        public static final int touch=0x7f070033;
+        public static final int type_bold_off_desc=0x7f0700b3;
+        public static final int type_bold_on_desc=0x7f0700b2;
+        public static final int type_italic_off_desc=0x7f0700b5;
+        public static final int type_italic_on_desc=0x7f0700b4;
+        public static final int type_underline_off_desc=0x7f0700b7;
+        public static final int type_underline_on_desc=0x7f0700b6;
+        public static final int up=0x7f070028;
+        /**  User font 
+         */
+        public static final int user_font_name1=0x7f07005a;
+        public static final int user_font_name2=0x7f07005b;
+        public static final int xcoordinates=0x7f07002f;
+        public static final int ycoordinates=0x7f070030;
     }
     public static final class style {
         /** 

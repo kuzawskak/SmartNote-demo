@@ -7,6 +7,8 @@ import com.smartnote_demo.carouselmenu.CarouselAdapter.OnItemSelectedListener;
 import com.smartnote_demo.carouselmenu.CarouselItem;
 import com.smartnote_demo.directories_menu.Directories;
 import com.smartnote_demo.events_menu.Calendar;
+import com.smartnote_demo.quick_note.CanvasActivity;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

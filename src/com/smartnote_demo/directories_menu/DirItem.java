@@ -45,10 +45,14 @@ public class DirItem extends FrameLayout {
 		String h = ""+height;
 		Log.d("heightinside",h);
 		
-		FrameLayout.LayoutParams params = 
-				new FrameLayout.LayoutParams(200,300);
+		LinearLayout.LayoutParams params = 
+				new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 
+				LayoutParams.MATCH_PARENT);
+				//(200,300);
 						//LayoutParams.MATCH_PARENT, 
-						//LayoutParams.MATCH_PARENT);		
+						//LayoutParams.MATCH_PARENT);	
+		params.weight = 1;
+		
 		this.setLayoutParams(params);
 	 	LayoutInflater inflater = LayoutInflater.from(context);
 		View itemTemplate = inflater.inflate(R.layout.notepad_dir, this, true);

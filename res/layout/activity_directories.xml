@@ -21,9 +21,7 @@
         android:layout_gravity="right"
         ></com.smartnote_demo.directories_menu.TopMenu>
     
-    
-    
-    
+        
      <HorizontalScrollView
         android:id="@+id/horizontalScrollView1"
         android:layout_width="wrap_content"
@@ -38,8 +36,7 @@
 		
         <LinearLayout
         android:id="@+id/linearLayoutInsideScroll"
-            android:layout_width="match_parent"  
-             
+            android:layout_width="match_parent"             
             android:layout_height="match_parent"  
             android:orientation="horizontal" >
         </LinearLayout>

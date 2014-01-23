@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.smartnote_demo.CanvasActivity"
+            android:name="com.smartnote_demo.quick_note.CanvasActivity"
             android:label="@string/title_activity_canvas" >
         </activity>
         <activity
