@@ -1,14 +1,19 @@
 
 package com.smartnote_demo.directories_menu;
 
+import java.io.File;
+import java.io.FileInputStream;
+
 import com.example.smartnote_demo.R;
 import com.example.smartnote_demo.R.id;
 import com.example.smartnote_demo.R.layout;
 
 import android.content.ClipData;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.gesture.GestureOverlayView.OnGestureListener;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.util.Log;
@@ -25,11 +30,15 @@ import android.view.View.OnDragListener;
 import android.view.DragEvent;
 import android.graphics.drawable.Drawable;
 
+
+
+
+
 public class DirItem extends FrameLayout {
 
 	private ImageView mImage;
 	private TextView mText;
-	
+	private Context mContext;
 	private int index;
 	private float itemX;
 	private float itemY;
@@ -41,7 +50,7 @@ public class DirItem extends FrameLayout {
 	public DirItem(Context context,String filename,int height) {
 		
 		super(context);
-		
+		mContext = context;
 		String h = ""+height;
 		Log.d("heightinside",h);
 		
@@ -57,18 +66,37 @@ public class DirItem extends FrameLayout {
 	 	LayoutInflater inflater = LayoutInflater.from(context);
 		View itemTemplate = inflater.inflate(R.layout.notepad_dir, this, true);
 
+
 		
 		 mImage = (ImageView)itemTemplate.findViewById(R.id.item_image);
 
 		mText = (TextView)itemTemplate.findViewById(R.id.item_text);
 	
 		//mText.setText(h);
-		
+	
 	    //this.setOnTouchListener(new MyTouchListener());
 	
 	   
 				
 	}	
+	
+	public void loadBitmap(String filename)
+	{
+		Bitmap bmForeground = null;
+		try {
+		File filePath = mContext.getFileStreamPath("desiredFilename.png");//here filename should be used
+		FileInputStream fi = new FileInputStream(filePath);
+		bmForeground =  BitmapFactory.decodeStream(fi);
+		if(bmForeground==null) Log.e("smart","no bitmap");
+		} catch (Exception ex) {
+		Log.e("getThumbnail() on internal storage", ex.getMessage());
+		}
+	
+			bmForeground=Bitmap.createScaledBitmap(bmForeground,200,300,true);
+			mImage.setImageBitmap(bmForeground);
+	}
+	
+	
 	
 	public String getName(){
 		return mText.getText().toString();

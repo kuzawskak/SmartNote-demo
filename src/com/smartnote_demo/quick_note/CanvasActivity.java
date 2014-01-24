@@ -1,9 +1,15 @@
 package com.smartnote_demo.quick_note;
 
+import org.apache.commons.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 
 import com.example.smartnote_demo.R;
 import com.example.smartnote_demo.R.layout;
+import com.samsung.samm.common.SOptionSAMM;
+import com.samsung.samm.common.SOptionSCanvas;
 import com.samsung.spenemulatorlibrary.ActivityWithSPenLayer;
 import com.samsung.spensdk.SCanvasConstants;
 import com.samsung.spensdk.SCanvasView;
@@ -12,6 +18,7 @@ import com.samsung.spensdk.applistener.SCanvasInitializeListener;
 import com.smartnote_demo.spen_tools.SPenSDKUtils;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -55,6 +62,7 @@ public class CanvasActivity extends ActivityWithSPenLayer {
 	private ImageView		mRedoBtn;	
 	private ImageView		mTextBtn;
 	private ImageView		mSaveBtn;	
+	private File mFolder = null;
 	private float mZoomValue = 1f;
 	
 	@Override
@@ -305,15 +313,74 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 			}
 		}
 		else if(nBtnID == mSaveBtn.getId()){
+
+			if(
+			saveSAMMFile()==false)
+				Log.e("smart","failed to save samm file");
+		
 			//temporary zoom testing			
 			//thats works! but we want probably canvas to fill the whole place
-			mSCanvas.setCanvasZoomScale(mZoomValue += 0.2, false);
-			mSCanvas.setCanvasZoomScale(mZoomValue, true);			
+		//	mSCanvas.setCanvasZoomScale(mZoomValue += 0.2, false);
+		//	mSCanvas.setCanvasZoomScale(mZoomValue, true);			
 		}
 	}
 };
 
 
+
+
+
+private boolean saveSAMMFile() 
+{    
+	//we get the whole bitmap - not only the foreground (arg0 ==false)
+	Bitmap bmCanvas = mSCanvas.getCanvasBitmap(false);
+	  return saveImageToInternalStorage(bmCanvas);
+
+	
+}       
+
+//it will be used rather in Directories menu when we will be loading saved notepad
+private boolean loadCanvasImage(String fileName, boolean loadAsForegroundImage) {
+{
+	// Look for file only in internal storage!
+	Bitmap bmForeground = null;;
+	try {
+	File filePath = getFileStreamPath(fileName);
+	FileInputStream fi = new FileInputStream(filePath);
+	bmForeground =  BitmapFactory.decodeStream(fi);
+	if(bmForeground==null) Log.e("smart","no bitmap");
+	} catch (Exception ex) {
+	Log.e("getThumbnail() on internal storage", ex.getMessage());
+	}
+	
+		int nWidth = mSCanvas.getWidth();
+		int nHeight = mSCanvas.getHeight();
+		Log.e("smart","load bm");
+		bmForeground=Bitmap.createScaledBitmap(bmForeground, nWidth, nHeight, true);		
+		return mSCanvas.setClearImageBitmap(bmForeground);
+	} 
+	
+}
+
+public boolean saveImageToInternalStorage(Bitmap image) {
+
+    try {
+    // Use the compress method on the Bitmap object to write image to
+    // the OutputStream
+    FileOutputStream fos = openFileOutput("desiredFilename.png", Context.MODE_PRIVATE);
+
+    // Writing the bitmap to the output stream
+    image.compress(Bitmap.CompressFormat.PNG, 100, fos);
+    fos.close();
+	  
+       
+    return true;
+    } catch (Exception e) {
+    Log.e("saveToInternalStorage()", e.getMessage());
+    return false;
+    }
+    }
+ 
 // Update tool button
 private void updateModeState(){
 	int nCurMode = mSCanvas.getCanvasMode();
