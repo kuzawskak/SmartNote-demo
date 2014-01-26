@@ -9,7 +9,7 @@ import com.smartnote_demo.directories_menu.Directories;
 import com.smartnote_demo.events_menu.Calendar;
 import com.smartnote_demo.quick_note.CanvasActivity;
 import com.smartnote_demo.quick_note.QuickNoteActivity;
-
+import com.smartnote_demo.database.MemoDatabaseHandler;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
                 
         ExitButton.setOnClickListener(new ExitButtonListener());
         
+        MemoDatabaseHandler db = new MemoDatabaseHandler(this);
                 
         carousel.setOnItemClickListener(new OnItemClickListener(){
        

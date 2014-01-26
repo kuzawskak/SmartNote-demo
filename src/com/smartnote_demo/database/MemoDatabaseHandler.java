@@ -63,12 +63,12 @@ public class MemoDatabaseHandler extends SQLiteOpenHelper{
 	
 
     // Adding new contact
-public void addMemo(Memo contact) {
+public void addMemo(Memo memo) {
     SQLiteDatabase db = this.getWritableDatabase();
  
     ContentValues values = new ContentValues();
-    values.put(KEY_FILENAME, contact.getFileName()); // Contact Name
-    values.put(KEY_DATE, contact.getCreationDate()); // Contact Phone Number
+    values.put(KEY_FILENAME, memo.getFileName()); // Contact Name
+    values.put(KEY_DATE, memo.getCreationDate()); // Contact Phone Number
  
     // Inserting Row
     db.insert(TABLE_MEMOS, null, values);
@@ -78,7 +78,7 @@ public void addMemo(Memo contact) {
 	
 //getMemo()
 // Getting single contact
-public Memo getContact(int id) {
+public Memo getMemo(int id) {
 SQLiteDatabase db = this.getReadableDatabase();
 
 Cursor cursor = db.query(TABLE_MEMOS, new String[] { KEY_ID,
@@ -95,8 +95,8 @@ return memo;
 
 
 //Getting All Contacts
-public List<Memo> getAllContacts() {
-    List<Memo> contactList = new ArrayList<Memo>();
+public List<Memo> getAllMemos() {
+    List<Memo> memoList = new ArrayList<Memo>();
     // Select All Query
     String selectQuery = "SELECT  * FROM " + TABLE_MEMOS;
 
@@ -111,12 +111,12 @@ public List<Memo> getAllContacts() {
             memo.setName(cursor.getString(1));
             memo.setCreationDate(cursor.getString(2));
             // Adding contact to list
-            contactList.add(memo);
+            memoList.add(memo);
         } while (cursor.moveToNext());
     }
 
     // return contact list
-    return contactList;
+    return memoList;
 }
 
 // Updating single contact
@@ -152,4 +152,11 @@ public int getContactsCount() {
     return cursor.getCount();
 }
 
+public Cursor GetCursor() {
+	    // Select All Query
+	SQLiteDatabase db = getReadableDatabase();      
+	Cursor cursor =  db.rawQuery( "select rowid _id,* from " + TABLE_MEMOS, null);
+	    return cursor;
 }
+}
+

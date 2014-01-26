@@ -1,35 +1,23 @@
 package com.smartnote_demo.quick_note;
 
-import org.apache.commons.io.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.Calendar;
 import java.util.HashMap;
 
-import com.example.smartnote_demo.R;
-import com.example.smartnote_demo.R.layout;
-import com.samsung.samm.common.SOptionSAMM;
-import com.samsung.samm.common.SOptionSCanvas;
-import com.samsung.spenemulatorlibrary.ActivityWithSPenLayer;
-import com.samsung.spensdk.SCanvasConstants;
-import com.samsung.spensdk.SCanvasView;
-import com.samsung.spensdk.applistener.HistoryUpdateListener;
-import com.samsung.spensdk.applistener.SCanvasInitializeListener;
-import com.smartnote_demo.quick_note.QuickNoteActivity.PlanetFragment;
-import com.smartnote_demo.spen_tools.SPenSDKUtils;
-
-import android.os.Bundle;
-import android.os.Environment;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteCursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
@@ -45,8 +33,20 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
+import com.example.smartnote_demo.R;
+import com.samsung.spenemulatorlibrary.ActivityWithSPenLayer;
+import com.samsung.spensdk.SCanvasConstants;
+import com.samsung.spensdk.SCanvasView;
+import com.samsung.spensdk.applistener.HistoryUpdateListener;
+import com.samsung.spensdk.applistener.SCanvasInitializeListener;
+import com.smartnote_demo.database.Memo;
+import com.smartnote_demo.database.MemoDatabaseHandler;
+import com.smartnote_demo.quick_note.QuickNoteActivity.PlanetFragment;
+import com.smartnote_demo.spen_tools.SPenSDKUtils;
+import android.widget.CursorAdapter;
 public class CanvasActivity extends ActivityWithSPenLayer {
 
 	private DrawerLayout mDrawerLayout;
@@ -88,9 +88,22 @@ public class CanvasActivity extends ActivityWithSPenLayer {
         
         
         mDrawerLayout.setDrawerShadow(R.drawable.notepad, GravityCompat.START);
+        MemoDatabaseHandler handler = new MemoDatabaseHandler(this);
+        String[] arrayColumns = new String[]{"date"};
+        //arrayViewID contains the id of textViews
+        // you can add more Views as per Requirement
+        // textViewSMSSender is connected to "address" of arrayColumns
+        // textViewMessageBody is connected to "body"of arrayColumns
+        int[] arrayViewIDs = new int[]{com.example.smartnote_demo.R.id.text1};
+        Cursor cursor;
+        cursor = handler.GetCursor();
+       //cursor = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.drawer_list_item, cursor,arrayColumns,arrayViewIDs,CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+       // SimpleCursorAdapter a = new Sim
         // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mPlanetTitles));
+        mDrawerList.setAdapter(adapter);
+        		//new ArrayAdapter<String>(this,
+               // R.layout.drawer_list_item, mPlanetTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 		//------------------------------------
 		// UI Setting
@@ -203,29 +216,27 @@ public class CanvasActivity extends ActivityWithSPenLayer {
 		// Caution:
 		// Do NOT load file or start animation here because we don't know canvas size here.
 		// Start such SCanvasView Task at onInitialized() of SCanvasInitializeListener
-	}
+        }
 
 	/* The click listner for ListView in the navigation drawer */
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
+
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
         }
     }	
 	
     private void selectItem(int position) {
-        // update the main content by replacing fragments
-        Fragment fragment = new PlanetFragment();
-        Bundle args = new Bundle();
-        args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-        fragment.setArguments(args);
-
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
+    	//set new bitmap
+        android.database.sqlite.SQLiteCursor c =(SQLiteCursor) mDrawerList.getItemAtPosition(position);
+    	Log.v("loading",c.getString(2));
+    	String filename = c.getString(2);
+    	loadCanvasImage(filename,true);
+    	
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
-      //  setTitle(mPlanetTitles[position]);
+
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
@@ -355,8 +366,7 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 		}
 		else if(nBtnID == mSaveBtn.getId()){
 
-			if(
-			saveSAMMFile()==false)
+			if(saveSAMMFile()==false)
 				Log.e("smart","failed to save samm file");
 		
 			//temporary zoom testing			
@@ -375,7 +385,18 @@ private boolean saveSAMMFile()
 {    
 	//we get the whole bitmap - not only the foreground (arg0 ==false)
 	Bitmap bmCanvas = mSCanvas.getCanvasBitmap(false);
-	  return saveImageToInternalStorage(bmCanvas);
+	 String current_date = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+	 String filename = current_date+".png";
+	  if(saveImageToInternalStorage(bmCanvas,current_date))
+	  {
+		  	MemoDatabaseHandler db = new MemoDatabaseHandler(this);
+		  	Log.d("Insert: ", "Inserting ...");	 
+	        db.addMemo(new Memo(filename,current_date));
+	        Log.d("Insert",filename + "inserted ");
+	        return true;
+	  }
+	  return false;
+		  //add to database
 
 	
 }       
@@ -389,7 +410,7 @@ private boolean loadCanvasImage(String fileName, boolean loadAsForegroundImage) 
 	File filePath = getFileStreamPath(fileName);
 	FileInputStream fi = new FileInputStream(filePath);
 	bmForeground =  BitmapFactory.decodeStream(fi);
-	if(bmForeground==null) Log.e("smart","no bitmap");
+	if(bmForeground==null) Log.e("loadCanvasImage","no bitmap");
 	} catch (Exception ex) {
 	Log.e("getThumbnail() on internal storage", ex.getMessage());
 	}
@@ -403,12 +424,12 @@ private boolean loadCanvasImage(String fileName, boolean loadAsForegroundImage) 
 	
 }
 
-public boolean saveImageToInternalStorage(Bitmap image) {
+public boolean saveImageToInternalStorage(Bitmap image,String filename) {
 
     try {
     // Use the compress method on the Bitmap object to write image to
     // the OutputStream
-    FileOutputStream fos = openFileOutput("desiredFilename.png", Context.MODE_PRIVATE);
+    FileOutputStream fos = openFileOutput(filename+".png", Context.MODE_PRIVATE);
 
     // Writing the bitmap to the output stream
     image.compress(Bitmap.CompressFormat.PNG, 100, fos);
