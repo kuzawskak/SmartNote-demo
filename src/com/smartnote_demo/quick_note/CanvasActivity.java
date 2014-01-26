@@ -15,18 +15,23 @@ import com.samsung.spensdk.SCanvasConstants;
 import com.samsung.spensdk.SCanvasView;
 import com.samsung.spensdk.applistener.HistoryUpdateListener;
 import com.samsung.spensdk.applistener.SCanvasInitializeListener;
+import com.smartnote_demo.quick_note.QuickNoteActivity.PlanetFragment;
 import com.smartnote_demo.spen_tools.SPenSDKUtils;
 
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -34,14 +39,19 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class CanvasActivity extends ActivityWithSPenLayer {
 
-	
+	private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private String[] mPlanetTitles;
 	//==============================
 	// Variables
 	//==============================
@@ -71,7 +81,17 @@ public class CanvasActivity extends ActivityWithSPenLayer {
 		setContentView(R.layout.editor_basic_ui);
 		
 		mContext = this;
-
+		
+		mPlanetTitles = getResources().getStringArray(R.array.planets_array);
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        
+        
+        mDrawerLayout.setDrawerShadow(R.drawable.notepad, GravityCompat.START);
+        // set up the drawer's list view with items and click listener
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, mPlanetTitles));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 		//------------------------------------
 		// UI Setting
 		//------------------------------------
@@ -126,7 +146,7 @@ public class CanvasActivity extends ActivityWithSPenLayer {
 
 		
 		
-		
+	
 		//====================================================================================
 		//
 		// Set Callback Listener(Interface)
@@ -185,8 +205,29 @@ public class CanvasActivity extends ActivityWithSPenLayer {
 		// Start such SCanvasView Task at onInitialized() of SCanvasInitializeListener
 	}
 
-		
+	/* The click listner for ListView in the navigation drawer */
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }	
 	
+    private void selectItem(int position) {
+        // update the main content by replacing fragments
+        Fragment fragment = new PlanetFragment();
+        Bundle args = new Bundle();
+        args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
+        fragment.setArguments(args);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
+        // update selected item and title, then close the drawer
+        mDrawerList.setItemChecked(position, true);
+      //  setTitle(mPlanetTitles[position]);
+        mDrawerLayout.closeDrawer(mDrawerList);
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

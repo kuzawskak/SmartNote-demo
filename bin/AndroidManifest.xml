@@ -23,6 +23,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.smartnote_demo.quick_note.QuickNoteActivity" 
+            android:label="@string/title_activity_canvas">
+        </activity>
+        <activity
             android:name="com.smartnote_demo.quick_note.CanvasActivity"
             android:label="@string/title_activity_canvas" >
         </activity>
@@ -40,7 +44,7 @@
         <activity
             android:name="com.smartnote_demo.events_menu.Calendar" >
         </activity>
-        
+       
     </application>
 
 </manifest>

@@ -14,6 +14,7 @@ public final class R {
     public static final class array {
         public static final int entries=0x7f050000;
         public static final int names=0x7f050001;
+        public static final int planets_array=0x7f050002;
     }
     public static final class attr {
         /** <p>Must be an integer value, such as "<code>100</code>".
@@ -149,44 +150,48 @@ containing a value of this type.
         public static final int wood_background=0x7f02003e;
     }
     public static final class id {
-        public static final int NotepadSitesContainer=0x7f0a001d;
-        public static final int NotepadSkinsContainer=0x7f0a001b;
-        public static final int Spinner01=0x7f0a001a;
-        public static final int action_settings=0x7f0a0025;
-        public static final int b1=0x7f0a0018;
-        public static final int b2=0x7f0a0019;
+        public static final int NotepadSitesContainer=0x7f0a0020;
+        public static final int NotepadSkinsContainer=0x7f0a001e;
+        public static final int Spinner01=0x7f0a001d;
+        public static final int action_settings=0x7f0a0029;
+        public static final int b1=0x7f0a001b;
+        public static final int b2=0x7f0a001c;
         public static final int button_ok=0x7f0a0002;
         public static final int calendarView1=0x7f0a000b;
         public static final int cancelButton=0x7f0a0008;
         public static final int canvas_container=0x7f0a000c;
-        public static final int canvas_default_background=0x7f0a0015;
+        public static final int canvas_default_background=0x7f0a0016;
         public static final int carousel=0x7f0a0006;
+        public static final int content_frame=0x7f0a0023;
         public static final int createButton=0x7f0a0007;
         public static final int createItemButton=0x7f0a000a;
+        public static final int drawer_layout=0x7f0a000d;
         public static final int editText1=0x7f0a0001;
-        public static final int eraseBtn=0x7f0a000f;
-        public static final int exitButton=0x7f0a0020;
-        public static final int header=0x7f0a0021;
+        public static final int eraseBtn=0x7f0a0010;
+        public static final int exitButton=0x7f0a0024;
+        public static final int header=0x7f0a0025;
         public static final int homeButton=0x7f0a0009;
         public static final int horizontalScrollView1=0x7f0a0004;
-        public static final int horizontalScrollView2=0x7f0a001c;
-        public static final int icon=0x7f0a0023;
-        public static final int item_image=0x7f0a0016;
-        public static final int item_text=0x7f0a0017;
-        public static final int layout_container=0x7f0a0014;
+        public static final int horizontalScrollView2=0x7f0a001f;
+        public static final int icon=0x7f0a0027;
+        public static final int image=0x7f0a0018;
+        public static final int item_image=0x7f0a0019;
+        public static final int item_text=0x7f0a001a;
+        public static final int layout_container=0x7f0a0015;
+        public static final int left_drawer=0x7f0a0017;
         public static final int linearLayoutInsideScroll=0x7f0a0005;
-        public static final int myselector=0x7f0a0024;
-        public static final int notepad_image=0x7f0a001e;
-        public static final int notepad_skin_name=0x7f0a001f;
-        public static final int penBtn=0x7f0a000e;
-        public static final int redoBtn=0x7f0a0012;
-        public static final int saveBtn=0x7f0a0013;
-        public static final int textBtn=0x7f0a0010;
+        public static final int myselector=0x7f0a0028;
+        public static final int notepad_image=0x7f0a0021;
+        public static final int notepad_skin_name=0x7f0a0022;
+        public static final int penBtn=0x7f0a000f;
+        public static final int redoBtn=0x7f0a0013;
+        public static final int saveBtn=0x7f0a0014;
+        public static final int textBtn=0x7f0a0011;
         public static final int textView1=0x7f0a0000;
-        public static final int title=0x7f0a0022;
-        public static final int tool_menu=0x7f0a000d;
+        public static final int title=0x7f0a0026;
+        public static final int tool_menu=0x7f0a000e;
         public static final int topMenu=0x7f0a0003;
-        public static final int undoBtn=0x7f0a0011;
+        public static final int undoBtn=0x7f0a0012;
     }
     public static final class layout {
         public static final int activity_canvas=0x7f030000;
@@ -197,18 +202,21 @@ containing a value of this type.
         public static final int bottom_menu=0x7f030005;
         public static final int calendar_view=0x7f030006;
         public static final int clear_canvas=0x7f030007;
-        public static final int editor_basic_ui=0x7f030008;
-        public static final int item=0x7f030009;
-        public static final int main=0x7f03000a;
-        public static final int mspinner=0x7f03000b;
-        public static final int mspinnertext=0x7f03000c;
-        public static final int mspinnertext_tablet=0x7f03000d;
-        public static final int notepad_creator=0x7f03000e;
-        public static final int notepad_dir=0x7f03000f;
-        public static final int notepad_item=0x7f030010;
-        public static final int notepad_skin=0x7f030011;
-        public static final int top_menu=0x7f030012;
-        public static final int window_title=0x7f030013;
+        public static final int drawer_list_item=0x7f030008;
+        public static final int editor_basic_ui=0x7f030009;
+        public static final int fragment_planet=0x7f03000a;
+        public static final int item=0x7f03000b;
+        public static final int main=0x7f03000c;
+        public static final int mspinner=0x7f03000d;
+        public static final int mspinnertext=0x7f03000e;
+        public static final int mspinnertext_tablet=0x7f03000f;
+        public static final int notepad_creator=0x7f030010;
+        public static final int notepad_dir=0x7f030011;
+        public static final int notepad_item=0x7f030012;
+        public static final int notepad_skin=0x7f030013;
+        public static final int quick_note_activity=0x7f030014;
+        public static final int top_menu=0x7f030015;
+        public static final int window_title=0x7f030016;
     }
     public static final class menu {
         public static final int canvas=0x7f090000;
@@ -218,6 +226,7 @@ containing a value of this type.
     }
     public static final class string {
         public static final int action_settings=0x7f070001;
+        public static final int action_websearch=0x7f0700c5;
         public static final int adjust_saving_contents_by_cropping_off=0x7f070060;
         public static final int adjust_saving_contents_by_cropping_on=0x7f070061;
         public static final int align_center_desc=0x7f0700c0;
@@ -226,6 +235,7 @@ containing a value of this type.
         public static final int align_left_desc=0x7f0700bf;
         public static final int align_right_desc=0x7f0700c1;
         public static final int app_name=0x7f070000;
+        public static final int app_not_available=0x7f0700c6;
         public static final int background_audio_auto_replay_off=0x7f070072;
         public static final int background_audio_auto_replay_on=0x7f070073;
         public static final int background_audio_play_off=0x7f070070;
@@ -247,6 +257,8 @@ containing a value of this type.
         public static final int defined_color_desc=0x7f070096;
         public static final int done=0x7f07002e;
         public static final int down=0x7f07002b;
+        public static final int drawer_close=0x7f0700c4;
+        public static final int drawer_open=0x7f0700c3;
         public static final int dropperview_color_desc=0x7f0700a5;
         public static final int encode_foreground_image_off=0x7f070066;
         public static final int encode_foreground_image_on=0x7f070067;

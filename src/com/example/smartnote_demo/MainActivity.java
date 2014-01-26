@@ -8,6 +8,7 @@ import com.smartnote_demo.carouselmenu.CarouselItem;
 import com.smartnote_demo.directories_menu.Directories;
 import com.smartnote_demo.events_menu.Calendar;
 import com.smartnote_demo.quick_note.CanvasActivity;
+import com.smartnote_demo.quick_note.QuickNoteActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -78,8 +79,12 @@ public class MainActivity extends Activity {
 				case 4:
 				//	txt.setText("Quick notes chosen - show panel with canvas");
 					Log.e("smart","1");
+
+	
+
 					Intent canvas_intent = new Intent(MainActivity.this,CanvasActivity.class);			
-					Log.e("smart","failure 2");
+					
+					//Log.e("smart","failure 2");
 					//else
 						
 					startActivity(canvas_intent);
