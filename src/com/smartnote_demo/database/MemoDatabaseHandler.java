@@ -62,7 +62,7 @@ public class MemoDatabaseHandler extends SQLiteOpenHelper{
 
 	
 
-    // Adding new contact
+    // Adding new memo
 public void addMemo(Memo memo) {
     SQLiteDatabase db = this.getWritableDatabase();
  
@@ -77,7 +77,7 @@ public void addMemo(Memo memo) {
 	
 	
 //getMemo()
-// Getting single contact
+// Getting single memo
 public Memo getMemo(int id) {
 SQLiteDatabase db = this.getReadableDatabase();
 
@@ -89,12 +89,12 @@ if (cursor != null)
 
 Memo memo = new Memo(Integer.parseInt(cursor.getString(0)),
         cursor.getString(1), cursor.getString(2));
-// return contact
+// return memo
 return memo;
 }
 
 
-//Getting All Contacts
+//Getting All Memos
 public List<Memo> getAllMemos() {
     List<Memo> memoList = new ArrayList<Memo>();
     // Select All Query
@@ -119,8 +119,8 @@ public List<Memo> getAllMemos() {
     return memoList;
 }
 
-// Updating single contact
-public int updateContact(Memo memo) {
+// Updating single memo
+public int updateMemo(Memo memo) {
     SQLiteDatabase db = this.getWritableDatabase();
 
     ContentValues values = new ContentValues();
@@ -132,8 +132,8 @@ public int updateContact(Memo memo) {
             new String[] { String.valueOf(memo.getID()) });
 }
 
-// Deleting single contact
-public void deleteContact(Memo memo) {
+// Deleting single memo
+public void deleteMemo(Memo memo) {
     SQLiteDatabase db = this.getWritableDatabase();
     db.delete(TABLE_MEMOS, KEY_ID + " = ?",
             new String[] { String.valueOf(memo.getID()) });
@@ -141,8 +141,8 @@ public void deleteContact(Memo memo) {
 }
 
 
-// Getting contacts Count
-public int getContactsCount() {
+// Getting memos Count
+public int getMemosCount() {
     String countQuery = "SELECT  * FROM " + TABLE_MEMOS;
     SQLiteDatabase db = this.getReadableDatabase();
     Cursor cursor = db.rawQuery(countQuery, null);

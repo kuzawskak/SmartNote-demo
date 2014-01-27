@@ -1,8 +1,12 @@
 package com.smartnote_demo.directories_menu;
 
 
-	import android.content.Context;
+	import java.util.Calendar;
+
+import android.R.string;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.util.AttributeSet;
@@ -17,12 +21,15 @@ import android.widget.TextView;
 
 import com.example.smartnote_demo.MainActivity;
 import com.example.smartnote_demo.R;
+import com.smartnote_demo.database.Notepad;
+import com.smartnote_demo.database.NotepadDatabaseHandler;
 import com.smartnote_demo.notepad_creator.NotepadCreator;
 
 	public class BottomMenu extends LinearLayout {
-		
+		private Context mContext;
 		public BottomMenu(Context context, AttributeSet attrs) {
 			super(context, attrs);
+			mContext = context;
 			// TODO Auto-generated constructor stub
 			LinearLayout.LayoutParams params = 
 					new LinearLayout.LayoutParams(
@@ -45,8 +52,13 @@ import com.smartnote_demo.notepad_creator.NotepadCreator;
 				public void onClick(View v) {
 					Intent create_notepad_intent = new Intent(v.getContext(),NotepadCreator.class);
 					v.getContext().startActivity(create_notepad_intent);
-
-					
+					SharedPreferences sp  = mContext.getSharedPreferences("NEW_NOTEPAD", 0);			        
+			        int site_id = sp.getInt("site_id", 0);
+			        int template_id = sp.getInt("template_id", 0);
+			        String name = sp.getString("name", "new_notepad");
+			        String current_date = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+			        NotepadDatabaseHandler db = new NotepadDatabaseHandler(mContext);
+			        db.addNotepad(new Notepad(name,template_id,site_id,current_date));
 				}
 			});
 			

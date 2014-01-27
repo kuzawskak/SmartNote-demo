@@ -44,14 +44,13 @@ import com.samsung.spensdk.applistener.HistoryUpdateListener;
 import com.samsung.spensdk.applistener.SCanvasInitializeListener;
 import com.smartnote_demo.database.Memo;
 import com.smartnote_demo.database.MemoDatabaseHandler;
-import com.smartnote_demo.quick_note.QuickNoteActivity.PlanetFragment;
 import com.smartnote_demo.spen_tools.SPenSDKUtils;
 import android.widget.CursorAdapter;
 public class CanvasActivity extends ActivityWithSPenLayer {
 
 	private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
-    private String[] mPlanetTitles;
+
 	//==============================
 	// Variables
 	//==============================
@@ -82,7 +81,6 @@ public class CanvasActivity extends ActivityWithSPenLayer {
 		
 		mContext = this;
 		
-		mPlanetTitles = getResources().getStringArray(R.array.planets_array);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         
@@ -269,18 +267,23 @@ public class CanvasActivity extends ActivityWithSPenLayer {
 		AlertDialog.Builder ad = new AlertDialog.Builder(mContext);		
 		ad.setIcon(getResources().getDrawable(android.R.drawable.ic_dialog_alert));	// Android Resource
 		ad.setTitle(getResources().getString(R.string.app_name))
-		.setMessage("Exit this program")
-		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		.setMessage("Save the note?")
+		.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {				
+				//save note				
+				saveSAMMFile();
 				// finish dialog
 				dialog.dismiss();
 				setResult(RESULT_OK, getIntent());
 				finish();
 			}
 		})
-		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		.setNegativeButton("NO", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 
+				dialog.dismiss();
+				setResult(RESULT_OK, getIntent());
+				finish();
 			}
 		})
 		.show();

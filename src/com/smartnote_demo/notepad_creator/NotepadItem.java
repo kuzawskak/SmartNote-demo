@@ -5,8 +5,10 @@ import com.example.smartnote_demo.R;
 import com.example.smartnote_demo.R.id;
 import com.example.smartnote_demo.R.layout;
 
+import android.R.bool;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.gesture.GestureOverlayView.OnGestureListener;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -19,6 +21,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.FrameLayout.LayoutParams;
 import android.view.View.OnTouchListener;
 import android.view.View.DragShadowBuilder;
 import android.view.View.OnDragListener;
@@ -29,23 +32,28 @@ public class NotepadItem extends FrameLayout {
 
 	private ImageView mImage;
 	private TextView mText;
+	private int mIndex;
 	
-	private int index;
-	
-
-
+    private SharedPreferences sp;
+    private Context mContext;
 	// It's needed to find screen coordinates
 	private Matrix mCIMatrix;
+	private boolean mIsNotepad;
 	
-	public NotepadItem(Context context,String skin_name,int height,int resId) {
+	public NotepadItem(Context context,String skin_name,int height,int resId,int index,boolean is_notepad) {
 		
 		super(context);
-
+		mContext = context;
 		String h = ""+height;
-
-		FrameLayout.LayoutParams params = 
-				new FrameLayout.LayoutParams(50,50);
-
+		mIsNotepad = is_notepad;
+		LinearLayout.LayoutParams params = 
+				new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 
+				LayoutParams.MATCH_PARENT);
+				//(200,300);
+						//LayoutParams.MATCH_PARENT, 
+						//LayoutParams.MATCH_PARENT);	
+		params.weight = 1;
+		
 		this.setLayoutParams(params);
 	 	LayoutInflater inflater = LayoutInflater.from(context);
 		View itemTemplate = inflater.inflate(R.layout.notepad_skin, this, true);
@@ -57,6 +65,8 @@ public class NotepadItem extends FrameLayout {
 		mText.setText("  ");
 		
 		mImage.setAlpha(0.5f);
+		mIndex = index; 
+		this.setOnClickListener(new NotepadClickListener());
 				
 	}	
 	
@@ -65,14 +75,15 @@ public class NotepadItem extends FrameLayout {
 	}	
 	
 	public void setIndex(int index) {
-		this.index = index;
+		this.mIndex = index;
 	}
 
 	public int getIndex() {
-		return index;
+		return mIndex;
 	}
 	
 
+	
 	public void setImageBitmap(Bitmap bitmap){
 		mImage.setImageBitmap(bitmap);
 		
@@ -90,11 +101,23 @@ public class NotepadItem extends FrameLayout {
 		this.mCIMatrix = mMatrix;
 	}
 
+	public void setChosen(boolean chosen) {
+		mImage.setAlpha(chosen?1.0f:0.5f);
+	}
+	
+
+	
+	
 	private final class NotepadClickListener implements OnClickListener {
 
 		@Override
 		public void onClick(View v) {
-			//open view for new notepad create			
+			//send notification to parent to unchose the item
+			Log.v("click","item clicked");
+			mImage.setAlpha(1.0f);
+			NotepadCreator creator = (NotepadCreator)mContext;
+			//open view for new notepad create	
+			creator.setChosen(mIsNotepad, mIndex);
 		}
 	
 	}

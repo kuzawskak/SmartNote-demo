@@ -35,22 +35,22 @@ public class Memo {
 			this._id = id;
 		}
  
-	// getting name
+	// getting filename
 	public String getFileName(){
 			return this._filename;
 		}
  
-	// setting name
+	// setting filename
 	public void setName(String filename){
 			this._filename = filename;
 		}
  
-	// getting phone number
+	// getting creation date
 	public String getCreationDate(){
 			return this._creation_date;
 		}
  
-	// setting phone number
+	// setting creation date
 	public void setCreationDate(String creation_date){
 			this._creation_date = creation_date;
 		}

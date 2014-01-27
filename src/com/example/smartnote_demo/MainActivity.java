@@ -8,7 +8,6 @@ import com.smartnote_demo.carouselmenu.CarouselItem;
 import com.smartnote_demo.directories_menu.Directories;
 import com.smartnote_demo.events_menu.Calendar;
 import com.smartnote_demo.quick_note.CanvasActivity;
-import com.smartnote_demo.quick_note.QuickNoteActivity;
 import com.smartnote_demo.database.MemoDatabaseHandler;
 import android.app.Activity;
 import android.content.Intent;
