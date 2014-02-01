@@ -4,9 +4,11 @@ package com.smartnote_demo.directories_menu;
 import java.io.File;
 import java.io.FileInputStream;
 
+import com.example.smartnote_demo.MainActivity;
 import com.example.smartnote_demo.R;
 import com.example.smartnote_demo.R.id;
 import com.example.smartnote_demo.R.layout;
+import com.smartnote_demo.carouselmenu.CarouselItem;
 
 import android.content.ClipData;
 import android.content.Context;
@@ -24,11 +26,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.view.View.OnTouchListener;
 import android.view.View.DragShadowBuilder;
 import android.view.View.OnDragListener;
 import android.view.DragEvent;
 import android.graphics.drawable.Drawable;
+import android.net.nsd.NsdManager.RegistrationListener;
 
 
 
@@ -38,6 +42,7 @@ public class DirItem extends FrameLayout {
 
 	private ImageView mImage;
 	private TextView mText;
+	private String mName;
 	private Context mContext;
 	private int index;
 	private float itemX;
@@ -47,10 +52,11 @@ public class DirItem extends FrameLayout {
 	// It's needed to find screen coordinates
 	private Matrix mCIMatrix;
 	
-	public DirItem(Context context,String filename,int height,int skin_id, int site_id) {
+	public DirItem(Context context,String filename,int height,int skin_id, int site_id,String name) {
 		
 		super(context);
 		mContext = context;
+		mName = name;
 		String h = ""+height;
 		Log.d("heightinside",h);
 		
@@ -66,17 +72,23 @@ public class DirItem extends FrameLayout {
 	 	LayoutInflater inflater = LayoutInflater.from(context);
 		View itemTemplate = inflater.inflate(R.layout.notepad_dir, this, true);
 
-
-		
-		 mImage = (ImageView)itemTemplate.findViewById(R.id.item_image);
-		 Log.d("directories","creating dir item: "+skin_id);
-		 mImage.setImageResource(skin_id);
-		mText = (TextView)itemTemplate.findViewById(R.id.item_text);
+		mImage = (ImageView)itemTemplate.findViewById(R.id.item_image);
+		Log.d("directories","creating dir item: "+skin_id);
+		mImage.setImageResource(skin_id);
+		mText = (TextView)itemTemplate.findViewById(R.id.grid_item_label);
+		mText.setText(mName);
 	
-		//mText.setText(h);
-	
-	    //this.setOnTouchListener(new MyTouchListener());
-	
+	   // this.setOnTouchListener(new MyTouchListener());
+	    this.setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				// TODO Auto-generated method stub
+				Toast.makeText(mContext, "long click", 
+						Toast.LENGTH_SHORT).show();	
+				return false;
+			}
+		});
 	   
 				
 	}	

@@ -2,52 +2,25 @@ package com.smartnote_demo.directories_menu;
 import java.util.List;
 
 import com.example.smartnote_demo.R;
-import com.example.smartnote_demo.R.id;
-import com.example.smartnote_demo.R.layout;
-import com.example.smartnote_demo.R.menu;
-import com.smartnote_demo.database.Memo;
-import com.smartnote_demo.database.MemoDatabaseHandler;
 import com.smartnote_demo.database.Notepad;
 import com.smartnote_demo.database.NotepadDatabaseHandler;
-import com.smartnote_demo.notepad.NotepadItem;
 
-import android.R.string;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
 import android.os.Bundle;
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Point;
 import android.view.Display;
 import android.view.DragEvent;
-import android.view.Gravity;
 import android.view.Menu;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnDragListener;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
 
 
 public class Directories extends Activity implements OnItemClickListener {
-	
-	
-	private int[]NotepadSkinIds;
-	private int[]SiteSkinIds;
-	
 	
 	int count =0;
 	@Override
@@ -55,17 +28,11 @@ public class Directories extends Activity implements OnItemClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_directories);
 
-        NotepadSkinIds = getResources().getIntArray(R.array.notepad_skins);
-        SiteSkinIds = getResources().getIntArray(R.array.site_templates);
 		
-        //getting all saved items
-        
+        //getting all saved notepads from database        
         NotepadDatabaseHandler db = new NotepadDatabaseHandler(this);
         List<Notepad> notepads = db.getAllNotepads();      
-        
-
-        
-        
+                       
 		LinearLayout layoutInsideScrollview = (LinearLayout)findViewById(R.id.linearLayoutInsideScroll);
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
@@ -75,18 +42,21 @@ public class Directories extends Activity implements OnItemClickListener {
 		layoutInsideScrollview.setPadding(10, 10, 10, 10);
 		
         for (Notepad n : notepads) {
-            String log = "Id: "+n.getID()+" ,Name: " +
-        n.getFileName() +"template id:" + n.getTemplateID() 
-        + " site id: "+ n.getSiteID();
-                // Writing Contacts to log
-        	//count = i;
-            Log.d("directories",log);
             int skin_id = n.getTemplateID();
             int site_id = n.getSiteID();
-			layoutInsideScrollview.addView(createNotePad((int)(height*0.9),skin_id,site_id));
-			String h= ""+height;
-			Log.d("height",h);
-        Log.d("Name: ", log);
+            String  name = n.getFileName();
+            
+            String log = 
+            		"Id: "+n.getID()
+            		+" ,Name: " + skin_id
+            		+", template id:" + site_id
+            		+ ", site id: "+ name;
+
+
+					DirItem dir= createNotePad((int)(height*0.9),skin_id,site_id,name);
+					layoutInsideScrollview.addView(dir);
+
+        Log.d("directories", log);
         }
 //		for(int i=0;i<20;i++)
 //		{
@@ -112,13 +82,15 @@ public class Directories extends Activity implements OnItemClickListener {
 		});
 		*/
 		layoutInsideScrollview.setOnDragListener(new MyDragListener());
+		
+	
 	}
 
 
 
 
-	public DirItem createNotePad(int height,int skin_id, int site_id){
-		DirItem notePadView = new DirItem(this,"filename",height,skin_id,site_id);
+	public DirItem createNotePad(int height,int skin_id, int site_id, String name){
+		DirItem notePadView = new DirItem(this,"filename",height,skin_id,site_id,name);
 
 	//	notePadView.setImageResource(R.drawable.notepad);
 		

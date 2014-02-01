@@ -67,8 +67,8 @@ public void addMemo(Memo memo) {
     SQLiteDatabase db = this.getWritableDatabase();
  
     ContentValues values = new ContentValues();
-    values.put(KEY_FILENAME, memo.getFileName()); // Contact Name
-    values.put(KEY_DATE, memo.getCreationDate()); // Contact Phone Number
+    values.put(KEY_FILENAME, memo.getFileName()); // filename
+    values.put(KEY_DATE, memo.getCreationDate()); // creation date
  
     // Inserting Row
     db.insert(TABLE_MEMOS, null, values);
@@ -115,7 +115,7 @@ public List<Memo> getAllMemos() {
         } while (cursor.moveToNext());
     }
 
-    // return contact list
+    // return memo list
     return memoList;
 }
 
