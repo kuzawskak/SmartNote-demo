@@ -22,11 +22,13 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
+	private boolean init_block;
 	
 	private ImageButton ExitButton;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	init_block = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Carousel carousel = (Carousel)findViewById(R.id.carousel);
@@ -40,7 +42,9 @@ public class MainActivity extends Activity {
        
 			public void onItemClick(CarouselAdapter<?> parent, View view,
 					int position, long id) {	
-				
+				if(position==0 && init_block) {
+					init_block = false;
+				}
 				Toast.makeText(MainActivity.this, 
 						String.format("%s has been clicked", 
 						((CarouselItem)parent.getChildAt(position)).getName()), 
@@ -57,26 +61,30 @@ public class MainActivity extends Activity {
 		        
 				switch(position){
 				case 0:
+					if(!init_block) {
 					//txt.setText("Events chosen - show calendar");
 					Intent events_intent = new Intent(MainActivity.this,Calendar.class);	
 					startActivity(events_intent);
+					}
 	
-					
-
 			
 					break;
 				case 1:
+					init_block = false;
 					Intent directories_intent = new Intent(MainActivity.this,Directories.class);
 					startActivity(directories_intent);
 		
 					break;
 				case 2:
+					init_block = false;
 					//txt.setText("Others chosen - ...");
 					break;
 				case 3:
+					init_block = false;
 					//txt.setText("Pictures chosen - show gallery");
 					break;
 				case 4:
+					init_block = false;
 				//	txt.setText("Quick notes chosen - show panel with canvas");
 					Log.e("smart","1");
 
@@ -91,6 +99,7 @@ public class MainActivity extends Activity {
 					Log.e("smart","3");
 					break;
 				case 5:
+					init_block = false;
 					//txt.setText("Records chosen  -show folder with records");
 					break;
 					

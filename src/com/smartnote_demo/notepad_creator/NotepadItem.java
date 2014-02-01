@@ -31,7 +31,7 @@ import android.graphics.drawable.Drawable;
 public class NotepadItem extends FrameLayout {
 
 	private ImageView mImage;
-	private TextView mText;
+
 	//mIndex represents index for parent
 	private int mIndex;
 	//mResId represents value in resources for bitmap
@@ -62,10 +62,7 @@ public class NotepadItem extends FrameLayout {
 		
 		mImage = (ImageView)itemTemplate.findViewById(R.id.notepad_image);
 		mImage.setImageResource(resId);
-		mText = (TextView)itemTemplate.findViewById(R.id.notepad_skin_name);
-
-		mText.setText("  ");
-		
+			
 		mImage.setAlpha(0.5f);
 		mIndex = index;
 		mResId = resId; 
@@ -73,11 +70,7 @@ public class NotepadItem extends FrameLayout {
 		this.setOnClickListener(new NotepadClickListener());
 				
 	}	
-	
-	public String getName(){
-		return mText.getText().toString();
-	}	
-	
+		
 	public void setIndex(int index) {
 		this.mIndex = index;
 	}
@@ -85,18 +78,12 @@ public class NotepadItem extends FrameLayout {
 	public int getIndex() {
 		return mIndex;
 	}
-	
-
-	
+		
 	public void setImageBitmap(Bitmap bitmap){
 		mImage.setImageBitmap(bitmap);
 		
 	}
-	
-	public void setText(String txt){
-		mText.setText(txt);
-	}
-	
+		
 	Matrix getCIMatrix() {
 		return mCIMatrix;
 	}

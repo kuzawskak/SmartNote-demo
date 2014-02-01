@@ -45,18 +45,7 @@ public class BottomButtons extends LinearLayout {
 	  	LayoutInflater inflater = LayoutInflater.from(context);
 		View itemTemplate = inflater.inflate(R.layout.bottom_buttons, this, true);
 	  	
-		CancelButton = (ImageButton)itemTemplate.findViewById(R.id.cancelButton);
-		
-		CancelButton.setOnClickListener(new OnClickListener() {
-		
-			
-			@Override
-			public void onClick(View v) {
-					
-
-				
-			}
-		});
+	
 		
 		CreateButton = (ImageButton)itemTemplate.findViewById(R.id.createButton);
 		
@@ -102,10 +91,10 @@ public class BottomButtons extends LinearLayout {
 	  	LayoutInflater inflater = LayoutInflater.from(context);
 		View itemTemplate = inflater.inflate(R.layout.bottom_buttons, this, true);
 	  	
-		CancelButton = (ImageButton)itemTemplate.findViewById(R.id.createButton);
-		CreateButton = (ImageButton)itemTemplate.findViewById(R.id.cancelButton);
+		CreateButton = (ImageButton)itemTemplate.findViewById(R.id.createButton);
+
 		
-		CancelButton.setOnClickListener(new OnClickListener() {
+		CreateButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
