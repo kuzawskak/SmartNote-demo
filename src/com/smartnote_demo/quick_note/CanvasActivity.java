@@ -36,6 +36,11 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
+import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.android.AndroidAuthSession;
+import com.dropbox.client2.session.AppKeyPair;
+import com.dropbox.client2.session.TokenPair;
+import com.example.smartnote_demo.MainActivity;
 import com.example.smartnote_demo.R;
 import com.samsung.spenemulatorlibrary.ActivityWithSPenLayer;
 import com.samsung.spensdk.SCanvasConstants;
@@ -45,9 +50,24 @@ import com.samsung.spensdk.applistener.SCanvasInitializeListener;
 import com.smartnote_demo.database.Memo;
 import com.smartnote_demo.database.MemoDatabaseHandler;
 import com.smartnote_demo.spen_tools.SPenSDKUtils;
+import com.smartnote_demo.share.*;
 import android.widget.CursorAdapter;
 public class CanvasActivity extends ActivityWithSPenLayer {
 
+	//for DROPBOX share
+	
+    private final String PHOTO_DIR = "/SmartNote-demo/";
+    final static private String APP_KEY = "18zpadpciv1g63b";
+    final static private String APP_SECRET = "gppsfv7gb0944xt";
+	DropboxAPI<AndroidAuthSession> mApi;
+
+    private static final boolean USE_OAUTH1 = false;
+	
+	
+	
+	
+	
+	
 	private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
 
@@ -80,6 +100,15 @@ public class CanvasActivity extends ActivityWithSPenLayer {
 		setContentView(R.layout.editor_basic_ui);
 		
 		mContext = this;
+		
+		// We create a new AuthSession so that we can use the Dropbox API.
+        AndroidAuthSession session = buildSession();
+        mApi = new DropboxAPI<AndroidAuthSession>(session);
+    	
+        checkAppKeySetup();
+		
+		
+		
 		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -238,6 +267,33 @@ public class CanvasActivity extends ActivityWithSPenLayer {
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
+    
+    @Override
+    protected void onResume()
+    {
+           super.onResume();
+           AndroidAuthSession session = mApi.getSession();
+
+           // The next part must be inserted in the onResume() method of the
+           // activity from which session.startAuthentication() was called, so
+           // that Dropbox authentication completes properly.
+           if (session.authenticationSuccessful())
+           {
+                  try {
+                        // Mandatory call to complete the auth
+                        session.finishAuthentication();
+
+                        // Store it locally in our app for later use
+                        TokenPair tokens = session.getAccessTokenPair();
+                        //storeKeys(tokens.key, tokens.secret);
+                        //setLoggedIn(true);
+                  } catch (IllegalStateException e) {
+                        showToast("Couldn't authenticate with Dropbox:" + e.getLocalizedMessage());
+                       
+                  }
+           }
+    }
+    
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -380,8 +436,53 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 	}
 };
 
+/*
+ * DROPBOX share function
+ */
 
+private boolean shareOnDropbox(String fileName ) {
+	if (USE_OAUTH1) {
+        mApi.getSession().startAuthentication(CanvasActivity.this);
+    } else {
+        mApi.getSession().startOAuth2Authentication(CanvasActivity.this);
+    }
+	
+	File filePath = getFileStreamPath(fileName);
+	
+	DropboxUploadPicture upload = new DropboxUploadPicture(this, mApi,PHOTO_DIR,filePath);
+    upload.execute();
+	
+	
+	return true;
+}
 
+private void checkAppKeySetup() {
+    // Check to make sure that we have a valid app key
+    if (APP_KEY.startsWith("CHANGE") ||
+            APP_SECRET.startsWith("CHANGE")) {
+        showToast("You must apply for an app key and secret from developers.dropbox.com, and add them to the DBRoulette ap before trying it.");
+        finish();
+        return;
+    }
+}
+
+private AndroidAuthSession buildSession() {
+    AppKeyPair appKeyPair = new AppKeyPair(APP_KEY, APP_SECRET);
+
+    AndroidAuthSession session = new AndroidAuthSession(appKeyPair);
+    loadAuth(session);
+    return session;
+}
+
+private void showToast(String msg) {
+    Toast error = Toast.makeText(this, msg, Toast.LENGTH_LONG);
+    error.show();
+}
+
+private void loadAuth(AndroidAuthSession session) {
+	// TODO Auto-generated method stub
+	
+}
 
 
 private boolean saveSAMMFile() 
@@ -396,6 +497,7 @@ private boolean saveSAMMFile()
 		  	Log.d("Insert: ", "Inserting ...");	 
 	        db.addMemo(new Memo(filename,current_date));
 	        Log.d("Insert",filename + "inserted ");
+	        shareOnDropbox(filename);
 	        return true;
 	  }
 	  return false;

@@ -1,5 +1,8 @@
 package com.example.smartnote_demo;
 
+import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.android.AndroidAuthSession;
+import com.dropbox.client2.session.AppKeyPair;
 import com.smartnote_demo.carouselmenu.Carousel;
 import com.smartnote_demo.carouselmenu.CarouselAdapter;
 import com.smartnote_demo.carouselmenu.CarouselAdapter.OnItemClickListener;
@@ -22,12 +25,17 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
+	
+
+
 	private boolean init_block;
 	
 	private ImageButton ExitButton;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	
+        
     	init_block = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -76,7 +84,7 @@ public class MainActivity extends Activity {
 		
 					break;
 				case 2:
-					init_block = false;
+					init_block = false;					
 					//txt.setText("Others chosen - ...");
 					break;
 				case 3:
@@ -114,7 +122,10 @@ public class MainActivity extends Activity {
         );
         
     }
-    @Override
+    
+   
+
+	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	// TODO Auto-generated method stub
     	super.onActivityResult(requestCode, resultCode, data);
