@@ -16,4 +16,19 @@
 	    <item>Quick Notes</item>
 	    <item>Records</item>
 	</array>
+	<array name="notepad_skins">
+	    <item>@drawable/skin1</item>
+		<item>@drawable/skin2</item>
+		<item>@drawable/skin3</item>
+		<item>@drawable/skin4</item>
+		<item>@drawable/skin5</item>
+		<item>@drawable/skin6</item>					
+	</array>
+	<array name="site_templates">
+	    <item>@drawable/page1</item>
+	    <item>@drawable/page2</item>
+	    <item>@drawable/page3</item>
+	    <item>@drawable/page4</item>
+	    <item>@drawable/page5</item>
+	</array>
 </resources>

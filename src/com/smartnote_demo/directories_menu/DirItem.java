@@ -47,7 +47,7 @@ public class DirItem extends FrameLayout {
 	// It's needed to find screen coordinates
 	private Matrix mCIMatrix;
 	
-	public DirItem(Context context,String filename,int height) {
+	public DirItem(Context context,String filename,int height,int skin_id, int site_id) {
 		
 		super(context);
 		mContext = context;
@@ -69,7 +69,8 @@ public class DirItem extends FrameLayout {
 
 		
 		 mImage = (ImageView)itemTemplate.findViewById(R.id.item_image);
-
+		 Log.d("directories","creating dir item: "+skin_id);
+		 mImage.setImageResource(skin_id);
 		mText = (TextView)itemTemplate.findViewById(R.id.item_text);
 	
 		//mText.setText(h);

@@ -20,11 +20,15 @@ public class Notepad {
 	 public Notepad (int id, String filename, int template_id,int site_id,String creation_date){
 	        this._id = id;
 	        this._filename = filename;
+	        this._template_id = template_id;
+	        this._site_id = site_id;
 	        this._creation_date = creation_date;
 	    }
 	//constructor
 	 public Notepad ( String filename, int template_id,int site_id,String creation_date) {
 		        this._filename = filename;
+		        this._template_id = template_id;
+		        this._site_id = site_id;
 		        this._creation_date = creation_date;
 		    }
 	//getting ID

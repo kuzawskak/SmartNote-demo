@@ -54,6 +54,7 @@ import com.smartnote_demo.notepad_creator.NotepadCreator;
 					v.getContext().startActivity(create_notepad_intent);
 					SharedPreferences sp  = mContext.getSharedPreferences("NEW_NOTEPAD", 0);			        
 			        int site_id = sp.getInt("site_id", 0);
+			        Log.v("directories",""+site_id);
 			        int template_id = sp.getInt("template_id", 0);
 			        String name = sp.getString("name", "new_notepad");
 			        String current_date = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());

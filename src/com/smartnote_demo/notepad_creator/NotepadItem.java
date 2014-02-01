@@ -32,8 +32,10 @@ public class NotepadItem extends FrameLayout {
 
 	private ImageView mImage;
 	private TextView mText;
+	//mIndex represents index for parent
 	private int mIndex;
-	
+	//mResId represents value in resources for bitmap
+	private int mResId;
     private SharedPreferences sp;
     private Context mContext;
 	// It's needed to find screen coordinates
@@ -65,7 +67,9 @@ public class NotepadItem extends FrameLayout {
 		mText.setText("  ");
 		
 		mImage.setAlpha(0.5f);
-		mIndex = index; 
+		mIndex = index;
+		mResId = resId; 
+		
 		this.setOnClickListener(new NotepadClickListener());
 				
 	}	
@@ -105,9 +109,6 @@ public class NotepadItem extends FrameLayout {
 		mImage.setAlpha(chosen?1.0f:0.5f);
 	}
 	
-
-	
-	
 	private final class NotepadClickListener implements OnClickListener {
 
 		@Override
@@ -117,7 +118,7 @@ public class NotepadItem extends FrameLayout {
 			mImage.setAlpha(1.0f);
 			NotepadCreator creator = (NotepadCreator)mContext;
 			//open view for new notepad create	
-			creator.setChosen(mIsNotepad, mIndex);
+			creator.setChosen(mIsNotepad, mIndex,mResId);
 		}
 	
 	}
@@ -140,10 +141,6 @@ public class NotepadItem extends FrameLayout {
 		boolean start  = false;
     	float x1, x2, y1, y2;
 	    public boolean onTouch(View view, MotionEvent motionEvent) {
-	    	
-
-	    	
-
 	      if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 	    	 Log.v("motion","action down");
 	    	  x1=motionEvent.getX();

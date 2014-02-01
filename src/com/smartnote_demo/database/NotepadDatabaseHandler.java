@@ -37,12 +37,20 @@ public class NotepadDatabaseHandler extends SQLiteOpenHelper{
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_NOTEPADS + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_FILENAME + " TEXT,"
+        String CREATE_CONTACTS_TABLE = "CREATE TABLE " 
+    + TABLE_NOTEPADS + "("
+                + KEY_ID + " INTEGER PRIMARY KEY," 
+        		+ KEY_FILENAME + " TEXT," 
+        		+ KEY_TEMPLATE_ID + " INTEGER,"
+        		+ KEY_SITE_ID + " INTEGER,"
                 + KEY_DATE + " TEXT" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
  
+    
+    
+    
+    
     // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -64,10 +72,13 @@ public void addNotepad(Notepad notepad) {
     SQLiteDatabase db = this.getWritableDatabase();
  
     ContentValues values = new ContentValues();
-    values.put(KEY_FILENAME, notepad.getFileName()); // Contact Name
-    values.put(KEY_DATE, notepad.getCreationDate()); // Contact Phone Number
- 
-    // Inserting Row
+    values.put(KEY_FILENAME, notepad.getFileName()); // Notepad name
+    values.put(KEY_TEMPLATE_ID, notepad.getTemplateID());
+    values.put(KEY_SITE_ID, notepad.getSiteID());
+    values.put(KEY_DATE, notepad.getCreationDate()); // Notepad creation date
+
+
+//insert row
     db.insert(TABLE_NOTEPADS, null, values);
     db.close(); // Closing database connection
 }
@@ -92,7 +103,7 @@ return notepad;
 
 
 //Getting All Contacts
-public List<Notepad> getAllMemos() {
+public List<Notepad> getAllNotepads() {
     List<Notepad> notepadList = new ArrayList<Notepad>();
     // Select All Query
     String selectQuery = "SELECT  * FROM " + TABLE_NOTEPADS;
@@ -106,7 +117,9 @@ public List<Notepad> getAllMemos() {
             Notepad notepad = new Notepad();
             notepad.setID(Integer.parseInt(cursor.getString(0)));
             notepad.setName(cursor.getString(1));
-            notepad.setCreationDate(cursor.getString(2));
+            notepad.setTemplateID(Integer.parseInt(cursor.getString(2)));
+            notepad.setSiteID(Integer.parseInt(cursor.getString(3)));
+            notepad.setCreationDate(cursor.getString(4));
             // Adding contact to list
             notepadList.add(notepad);
         } while (cursor.moveToNext());
@@ -123,7 +136,8 @@ public int updateNotepad(Notepad notepad) {
     ContentValues values = new ContentValues();
     values.put(KEY_FILENAME, notepad.getFileName());
     values.put(KEY_DATE, notepad.getCreationDate());
-
+    values.put(KEY_SITE_ID,notepad.getSiteID());
+    values.put(KEY_TEMPLATE_ID,notepad.getTemplateID());
     // updating row
     return db.update(TABLE_NOTEPADS, values, KEY_ID + " = ?",
             new String[] { String.valueOf(notepad.getID()) });

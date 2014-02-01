@@ -6,6 +6,7 @@ import com.smartnote_demo.directories_menu.DirItem;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.text.Editable;
@@ -24,42 +25,43 @@ public class NotepadCreator extends Activity {
 	
 	private Context mContext;
 
-	private Button mCreateButton;
-	private Button mCancelButton;
-	private EditText mEditText;
+	private EditText mNotepadName;
 	private int chosen_notepadskin_no = 0;
 	private int chosen_siteskin_no = 0;
 	private LinearLayout NotepadSkins;
 	private LinearLayout SiteSkins;
-	private int[] NotepadSkinIds={
-			R.drawable.skin1,
-			R.drawable.skin2,
-			R.drawable.skin3,
-			R.drawable.skin4,
-			R.drawable.skin5,
-			R.drawable.skin6,
-		
-	};
+	private TypedArray NotepadSkinIds;
 	
-	private int[] SiteSkinIds={
-			R.drawable.page1,
-			R.drawable.page2,
-			R.drawable.page3,
-			R.drawable.page4,
-			R.drawable.page5,
-			
-	};
+	private TypedArray SiteSkinIds;
 	
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	        setContentView(R.layout.notepad_creator);
 	        mContext = this;
-	        mEditText = (EditText)findViewById(R.id.editText1);
+	        
+	        //getting resources from array from skin and site templates
+	        NotepadSkinIds = getResources().obtainTypedArray(R.array.notepad_skins);	        		
+	        SiteSkinIds =getResources().obtainTypedArray(R.array.site_templates);
+
+	         //filling tables with resources ids for template bitmaps
+	        int[] notepadResIds = new int[NotepadSkinIds.length()];  	        
+	        for (int i = 0; i < notepadResIds.length; i++)      {
+	            notepadResIds[i] = NotepadSkinIds.getResourceId(i, 0);
+	            Log.v("directories",""+notepadResIds[i]);
+	        }
+	        
+	        int[] sitesResIds = new int[SiteSkinIds.length()];  
+	        for (int i = 0; i < sitesResIds.length; i++)   {  
+	            sitesResIds[i] = SiteSkinIds.getResourceId(i, 0);
+	            Log.v("directories",""+sitesResIds[i]);
+	        }
+	        
+	        mNotepadName = (EditText)findViewById(R.id.new_notepad_name);
 	        SharedPreferences sp  = getSharedPreferences("NEW_NOTEPAD", 0);
 	        SharedPreferences.Editor editor = sp.edit();
-	        editor.putInt("template_id", 0);
-	        editor.putInt("site_id", 0);
+	        editor.putInt("template_id", notepadResIds[0]);
+	        editor.putInt("site_id",sitesResIds[0]);
 	        editor.putString("name", "");
 	        editor.commit();
 	        	        
@@ -83,16 +85,16 @@ public class NotepadCreator extends Activity {
 			
 			//NotepadSkins.setPadding(10, 10, 10, 10);
 			//SiteSkins.setPadding(10, 10, 10, 10);
-			for(int i=0;i<NotepadSkinIds.length;i++)
+			for(int i=0;i<NotepadSkinIds.length();i++)
 			{		
-				NotepadSkins.addView(createNotePad((int)(height*0.9),NotepadSkinIds[i],i,true));
+				NotepadSkins.addView(createNotePad((int)(height*0.9),notepadResIds[i],i,true));
 				String h= ""+height;
 				Log.d("height",h);
 			}
 			
-			for(int i=0;i<SiteSkinIds.length;i++)
+			for(int i=0;i<SiteSkinIds.length();i++)
 			{	
-				SiteSkins.addView(createNotePad((int)(height*0.9),SiteSkinIds[i],i,false));
+				SiteSkins.addView(createNotePad((int)(height*0.9),sitesResIds[i],i,false));
 				String h= ""+height;
 				Log.d("height",h);
 			}
@@ -103,7 +105,9 @@ public class NotepadCreator extends Activity {
 			first_item  = (NotepadItem)SiteSkins.getChildAt(0);
 			first_item.setChosen(true);
 			
-			mEditText.addTextChangedListener(new TextWatcher() {
+			
+			/* manipulating data for editetxt with app name*/
+			mNotepadName.addTextChangedListener(new TextWatcher() {
 				
 				@Override
 				public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -135,20 +139,23 @@ public class NotepadCreator extends Activity {
 		return notePadView;		
 	}
 	
-	public void setChosen(boolean notepad, int number) {
+	public void setChosen(boolean notepad, int number, int res_id) {
 		if(notepad && number!=chosen_notepadskin_no) {
 			   SharedPreferences sp  = getSharedPreferences("NEW_NOTEPAD", 0);
 		        SharedPreferences.Editor editor = sp.edit();
-		        editor.putInt("template_id", number);
+		        editor.putInt("template_id", res_id);
+		        Log.v("directories",""+res_id);
 		        editor.commit();
 			NotepadItem item = (NotepadItem)NotepadSkins.getChildAt(chosen_notepadskin_no);
 			item.setChosen(false);
 			chosen_notepadskin_no = number;
 		}
 		else if (!notepad && number!=chosen_siteskin_no) {
-			   SharedPreferences sp  = getSharedPreferences("NEW_NOTEPAD", 0);
+			   SharedPreferences sp  = getSharedPreferences("NEW_NOTEPAD",0);
 		        SharedPreferences.Editor editor = sp.edit();
-		        editor.putInt("site_id", number);
+		        editor.putInt("site_id", res_id);
+		        Log.v("directories",""+res_id);
+		        
 		        editor.commit();
 			NotepadItem item = (NotepadItem)SiteSkins.getChildAt(chosen_siteskin_no);
 			item.setChosen(false);
