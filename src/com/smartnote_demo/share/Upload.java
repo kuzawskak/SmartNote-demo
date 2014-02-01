@@ -22,12 +22,6 @@ import com.dropbox.client2.exception.DropboxUnlinkedException;
 public class Upload extends AsyncTask<Void, Long, Boolean>
 {
 
-	@Override
-	protected Boolean doInBackground(Void... arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-/*
       private DropboxAPI<?> mApi;
       private String mPath;
 
@@ -182,5 +176,5 @@ public class Upload extends AsyncTask<Void, Long, Boolean>
              Toast error = Toast.makeText(mContext, msg, Toast.LENGTH_LONG);
              error.show();
       }
-*/
+
 }

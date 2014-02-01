@@ -11,6 +11,9 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
@@ -38,7 +41,9 @@ import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
+import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.AppKeyPair;
+import com.dropbox.client2.session.Session.AccessType;
 import com.dropbox.client2.session.TokenPair;
 import com.example.smartnote_demo.MainActivity;
 import com.example.smartnote_demo.R;
@@ -52,7 +57,7 @@ import com.smartnote_demo.database.MemoDatabaseHandler;
 import com.smartnote_demo.spen_tools.SPenSDKUtils;
 import com.smartnote_demo.share.*;
 import android.widget.CursorAdapter;
-public class CanvasActivity extends ActivityWithSPenLayer {
+public class CanvasActivity extends ActivityWithSPenLayer implements API_Listener {
 
 	//for DROPBOX share
 	
@@ -60,7 +65,17 @@ public class CanvasActivity extends ActivityWithSPenLayer {
     final static private String APP_KEY = "18zpadpciv1g63b";
     final static private String APP_SECRET = "gppsfv7gb0944xt";
 	DropboxAPI<AndroidAuthSession> mApi;
+    private boolean mLoggedIn;
 
+    
+    // If you'd like to change the access type to the full Dropbox instead of
+   // an app folder, change this value.
+   final static private AccessType ACCESS_TYPE = AccessType.APP_FOLDER;
+
+   // You don't need to change these, leave them alone.
+   final static private String ACCOUNT_PREFS_NAME = "prefs";
+   final static private String ACCESS_KEY_NAME = "ACCESS_KEY";
+   final static private String ACCESS_SECRET_NAME = "ACCESS_SECRET";
     private static final boolean USE_OAUTH1 = false;
 	
 	
@@ -285,14 +300,23 @@ public class CanvasActivity extends ActivityWithSPenLayer {
 
                         // Store it locally in our app for later use
                         TokenPair tokens = session.getAccessTokenPair();
-                        //storeKeys(tokens.key, tokens.secret);
-                        //setLoggedIn(true);
+                        if(tokens!=null)
+                        {
+                        storeKeys(tokens.key, tokens.secret);
+                        setLoggedIn(true);
+                        }
                   } catch (IllegalStateException e) {
                         showToast("Couldn't authenticate with Dropbox:" + e.getLocalizedMessage());
                        
                   }
            }
     }
+    
+    
+    
+    
+    
+    
     
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -451,8 +475,8 @@ private boolean shareOnDropbox(String fileName ) {
 	
 	DropboxUploadPicture upload = new DropboxUploadPicture(this, mApi,PHOTO_DIR,filePath);
     upload.execute();
-	
-	
+	//Upload upload = new Upload(1,this,mApi, PHOTO_DIR,filePath);
+	//upload.execute();
 	return true;
 }
 
@@ -466,13 +490,13 @@ private void checkAppKeySetup() {
     }
 }
 
-private AndroidAuthSession buildSession() {
+/*private AndroidAuthSession buildSession() {
     AppKeyPair appKeyPair = new AppKeyPair(APP_KEY, APP_SECRET);
 
     AndroidAuthSession session = new AndroidAuthSession(appKeyPair);
     loadAuth(session);
     return session;
-}
+}*/
 
 private void showToast(String msg) {
     Toast error = Toast.makeText(this, msg, Toast.LENGTH_LONG);
@@ -584,5 +608,121 @@ Rect getMaximumCanvasRect(Rect rectImage, int nMarginWidth, int nMarginHeight){
 	int nResizeWidth = (int)(nImageWidth*fResizeRatio);
 	int nResizeHeight = (int)(0.5 + (nResizeWidth * nImageHeight)/(float)nImageWidth);		
 	return new Rect(0,0, nResizeWidth, nResizeHeight);
+}
+
+
+
+// This is what gets called on finishing a media piece to import
+
+
+private void logOut()
+{
+       // Remove credentials from the session
+       mApi.getSession().unlink();
+
+       // Clear our stored keys
+       clearKeys();
+       // Change UI state to display logged out version
+       setLoggedIn(false);
+}
+
+/**
+ * Convenience function to change UI state based on being logged in
+ */
+private void setLoggedIn(boolean loggedIn)
+{
+
+       mLoggedIn = loggedIn;     
+    
+}
+
+/**
+* Shows keeping the access keys returned from Trusted Authenticator in a local
+* store, rather than storing user name & password, and re-authenticating each
+* time (which is not to be done, ever).
+*
+* @return Array of [access_key, access_secret], or null if none stored
+*/
+private String[] getKeys() {
+      SharedPreferences prefs = getSharedPreferences(ACCOUNT_PREFS_NAME, 0);
+      String key = prefs.getString(ACCESS_KEY_NAME, null);
+      String secret = prefs.getString(ACCESS_SECRET_NAME, null);
+      if (key != null && secret != null) {
+             String[] ret = new String[2];
+             ret[0] = key;
+             ret[1] = secret;
+             return ret;
+      } else {
+             return null;
+      }
+}
+
+
+
+/**
+ * Shows keeping the access keys returned from Trusted Authenticator in a local
+ * store, rather than storing user name & password, and re-authenticating each
+ * time (which is not to be done, ever).
+ */
+private void storeKeys(String key, String secret) {
+       // Save the access key for later
+       SharedPreferences prefs = getSharedPreferences(ACCOUNT_PREFS_NAME, 0);
+       Editor edit = prefs.edit();
+       edit.putString(ACCESS_KEY_NAME, key);
+       edit.putString(ACCESS_SECRET_NAME, secret);
+       edit.commit();
+}
+
+private void clearKeys() {
+       SharedPreferences prefs = getSharedPreferences(ACCOUNT_PREFS_NAME, 0);
+       Editor edit = prefs.edit();
+       edit.clear();
+       edit.commit();
+}
+
+private AndroidAuthSession buildSession() {
+       AppKeyPair appKeyPair = new AppKeyPair(APP_KEY, APP_SECRET);
+       AndroidAuthSession session;
+
+       String[] stored = getKeys();
+       if (stored != null) {
+              AccessTokenPair accessToken = new AccessTokenPair(stored[0], stored[1]);
+              session = new AndroidAuthSession(appKeyPair, ACCESS_TYPE, accessToken);
+       } else {
+              session = new AndroidAuthSession(appKeyPair, ACCESS_TYPE);
+       }
+
+       return session;
+}      
+
+@Override
+public void onSuccess(int requestnumber, Object obj) {
+	// TODO Auto-generated method stub
+	 try
+     {
+            if(requestnumber == Constants.UploadPhotos_Code)
+            {
+                  boolean sucess=(Boolean) obj;
+                  if(sucess)
+                  {
+                         Toast.makeText(CanvasActivity.this, "Photos uploaded successfully", Toast.LENGTH_LONG).show();
+                         Intent i=new Intent(CanvasActivity.this,CanvasActivity.class);
+                         startActivity(i);
+                         finish();
+                  }
+            }
+     }
+     catch (Exception e)
+     {
+            e.printStackTrace();
+     }
+     
+}
+
+
+@Override
+public void onFail(String errormessage) {
+	// TODO Auto-generated method stub
+	
 }	
 }
