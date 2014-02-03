@@ -52,7 +52,7 @@ import com.smartnote_demo.notepad_creator.NotepadCreator;
 				public void onClick(View v) {
 					Intent create_notepad_intent = new Intent(v.getContext(),NotepadCreator.class);
 					v.getContext().startActivity(create_notepad_intent);
-					SharedPreferences sp  = mContext.getSharedPreferences("NEW_NOTEPAD", 0);			        
+					/*SharedPreferences sp  = mContext.getSharedPreferences("NEW_NOTEPAD", 0);			        
 			        int site_id = sp.getInt("site_id", 0);
 			        Log.v("directories",""+site_id);
 			        int template_id = sp.getInt("template_id", 0);
@@ -60,6 +60,7 @@ import com.smartnote_demo.notepad_creator.NotepadCreator;
 			        String current_date = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 			        NotepadDatabaseHandler db = new NotepadDatabaseHandler(mContext);
 			        db.addNotepad(new Notepad(name,template_id,site_id,current_date));
+			        */
 				}
 			});
 			

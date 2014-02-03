@@ -45,15 +45,15 @@ public class Directories extends Activity implements OnItemClickListener {
             int skin_id = n.getTemplateID();
             int site_id = n.getSiteID();
             String  name = n.getFileName();
-            
+            int database_id = n.getID();
             String log = 
-            		"Id: "+n.getID()
+            		"Id: "+ database_id
             		+" ,Name: " + skin_id
             		+", template id:" + site_id
             		+ ", site id: "+ name;
 
 
-					DirItem dir= createNotePad((int)(height*0.9),skin_id,site_id,name);
+					DirItem dir= createNotePad((int)(height*0.9),skin_id,site_id,name,database_id);
 					layoutInsideScrollview.addView(dir);
 
         Log.d("directories", log);
@@ -89,8 +89,8 @@ public class Directories extends Activity implements OnItemClickListener {
 
 
 
-	public DirItem createNotePad(int height,int skin_id, int site_id, String name){
-		DirItem notePadView = new DirItem(this,"filename",height,skin_id,site_id,name);
+	public DirItem createNotePad(int height,int skin_id, int site_id, String name,int database_id){
+		DirItem notePadView = new DirItem(this,"filename",height,skin_id,site_id,name,database_id);
 
 	//	notePadView.setImageResource(R.drawable.notepad);
 		

@@ -1,0 +1,150 @@
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="match_parent"
+	android:background="@drawable/main_background">
+	
+	<LinearLayout
+	    android:id="@+id/tool_menu"
+		android:orientation="horizontal"
+		android:layout_gravity="top|right"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		
+		<ImageView
+            android:id="@+id/penBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dip"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tool_bg"
+            android:src="@drawable/selector_pen" />
+
+        <ImageView
+            android:id="@+id/eraseBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dip"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tool_bg"
+            android:src="@drawable/selector_eraser" />
+
+        <ImageView
+            android:id="@+id/textBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dip"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tool_bg"
+            android:src="@drawable/selector_text" />
+
+        <ImageView
+            android:id="@+id/undoBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dip"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tool_bg"
+            android:src="@drawable/selector_undo" />
+
+        <ImageView
+            android:id="@+id/redoBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dip"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tool_bg"
+            android:src="@drawable/selector_redo" />
+        
+        <ImageView
+            android:id="@+id/saveBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dip"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tool_bg"
+            android:src="@drawable/selector_redo" />
+	</LinearLayout>	
+
+	<FrameLayout 
+		android:id="@+id/layout_container"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_gravity="center"
+		>
+		<RelativeLayout 
+				android:id="@+id/canvas_container"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_gravity="center">
+			<ImageView
+			    android:id="@+id/canvas_default_background"
+			    android:layout_width="match_parent"
+				android:layout_height="match_parent"				
+				/>
+
+		
+		</RelativeLayout>	
+	</FrameLayout>	    
+</LinearLayout>
+    <!-- The navigation drawer -->
+    <ListView 
+        android:id="@+id/left_drawer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity ="start"
+        android:choiceMode ="singleChoice"
+        android:divider ="@android:color/transparent"
+        android:dividerHeight ="0dp"
+        android:background ="#111"/>
+    
+    <LinearLayout
+	    android:id="@+id/right_drawer"
+	    android:choiceMode="singleChoice"
+	    android:divider="@android:color/transparent"
+	    android:dividerHeight="0dp"
+		android:orientation="vertical"
+		android:layout_gravity="end"
+		android:layout_width="50dp"
+		android:background="#111"
+		android:layout_height="match_parent">
+		
+		
+
+
+        <ImageView
+            android:id="@+id/share_button"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dip"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tool_bg"
+            android:src="@drawable/selector_undo" />
+
+        <ImageView
+            android:id="@+id/export_button"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dip"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tool_bg"
+            android:src="@drawable/selector_redo" />
+        
+        <ImageView
+            android:id="@+id/new_site"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dip"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tool_bg"
+            android:src="@drawable/selector_redo" />
+	</LinearLayout>	
+    
+    
+    
+    
+</android.support.v4.widget.DrawerLayout>

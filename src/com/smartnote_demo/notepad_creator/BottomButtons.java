@@ -24,6 +24,8 @@ import com.smartnote_demo.database.Memo;
 import com.smartnote_demo.database.MemoDatabaseHandler;
 import com.smartnote_demo.database.Notepad;
 import com.smartnote_demo.database.NotepadDatabaseHandler;
+import com.smartnote_demo.notepad.CanvasActivity;
+import com.smartnote_demo.notepad.NoteActivity;
 import com.smartnote_demo.notepad_creator.NotepadCreator;
 
 public class BottomButtons extends LinearLayout {
@@ -69,6 +71,10 @@ public class BottomButtons extends LinearLayout {
 				  	Log.d("Insert: ", "Inserting ...");	 
 			        db.addNotepad(new_notepad);
 			        Log.d("Insert",name + "inserted ");
+			        
+			        //open new notepad
+					Intent notepad_intent = new Intent(v.getContext(),CanvasActivity.class);
+					v.getContext().startActivity(notepad_intent);
 			    
 				
 			}

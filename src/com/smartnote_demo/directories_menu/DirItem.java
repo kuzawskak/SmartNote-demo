@@ -45,6 +45,7 @@ public class DirItem extends FrameLayout {
 	private String mName;
 	private Context mContext;
 	private int index;
+	private int mDatabaseId;
 	private float itemX;
 	private float itemY;
 	private boolean drawn;	
@@ -52,11 +53,13 @@ public class DirItem extends FrameLayout {
 	// It's needed to find screen coordinates
 	private Matrix mCIMatrix;
 	
-	public DirItem(Context context,String filename,int height,int skin_id, int site_id,String name) {
+	public DirItem(Context context,String filename,int height,int skin_id, int site_id,String name,int id_in_database) {
 		
 		super(context);
 		mContext = context;
+		mDatabaseId = id_in_database;
 		mName = name;
+		
 		String h = ""+height;
 		Log.d("heightinside",h);
 		
@@ -110,6 +113,11 @@ public class DirItem extends FrameLayout {
 	}
 	
 	
+	public int getDatabaseId() {
+		return mDatabaseId;
+	}
+	
+
 	
 	public String getName(){
 		return mText.getText().toString();

@@ -84,8 +84,7 @@ public void addNotepad(Notepad notepad) {
 }
 	
 	
-//getMemo()
-// Getting single contact
+//get notepad by idn in database
 public Notepad getNotepad(int id) {
 SQLiteDatabase db = this.getReadableDatabase();
 
@@ -100,6 +99,8 @@ Notepad notepad = new Notepad(Integer.parseInt(cursor.getString(0)),
 // return contact
 return notepad;
 }
+
+
 
 
 //Getting All Contacts
