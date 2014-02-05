@@ -2,7 +2,10 @@ package com.smartnote_demo.notepad;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -25,7 +28,10 @@ import android.drm.DrmStore.RightsStatus;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
@@ -42,6 +48,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
@@ -50,15 +57,22 @@ import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.AppKeyPair;
 import com.dropbox.client2.session.Session.AccessType;
 import com.dropbox.client2.session.TokenPair;
+import com.example.smartnote_demo.MainActivity;
 import com.example.smartnote_demo.R;
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.facebook.Session.StatusCallback;
 import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.Session;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 import com.facebook.model.GraphObject;
+import com.facebook.model.GraphUser;
 import com.facebook.model.OpenGraphAction;
 import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.FacebookDialog.PendingCall;
@@ -81,18 +95,21 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
     
 	DropboxAPI<AndroidAuthSession> mApi;
     private boolean mLoggedIn;
-    private UiLifecycleHelper uiHelper;
+
     
-    // Your Facebook APP ID
+    //  Facebook APP ID
     final static private String APPL_ID = "242229975950290"; // Replace your App ID here
- 
     // Instance of Facebook Class
-    private Facebook facebook;
+    private Facebook fb;
+    
+    private SharedPreferences preferences_for_fb;
+    
+    
     private AsyncFacebookRunner mAsyncRunner;
     String FILENAME = "AndroidSSO_data";
     private SharedPreferences mPrefs;
     
-
+    
 
     
     // If you'd like to change the access type to the full Dropbox instead of
@@ -135,10 +152,8 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	private ImageView		mShareBtn;	
 	private ImageView		mExportBtn;
 	private ImageView		mNewSiteBtn;
-	
-	
-	
-	
+
+		
 	private File mFolder = null;
 	private float mZoomValue = 1f;
 	
@@ -148,24 +163,60 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		setContentView(R.layout.editor_extended_ui);
 		
 		mContext = this;
-		Log.v("facebook","still alive");
 		// We create a new AuthSession so that we can use the Dropbox API.
         AndroidAuthSession session = buildSession();
         mApi = new DropboxAPI<AndroidAuthSession>(session);
-    	
+    	//temporary solution
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy); 
+        
+        fb = new Facebook(APPL_ID);
+        preferences_for_fb = getPreferences(MODE_PRIVATE);
+        String access_token = preferences_for_fb.getString("access_token",null);
+        long expires = preferences_for_fb.getLong("acces_expires", 0);
+        
+        if(access_token!=null) {
+        	fb.setAccessToken(access_token);
+        }
+        if(expires!=0) {
+        	fb.setAccessExpires(expires);
+        }
+        
+//     // start Facebook Login
+//        Session.openActiveSession(this, true, new Session.StatusCallback() {
+//
+//			@Override
+//			public void call(Session session, SessionState state,
+//					Exception exception) {
+//				if (session.isOpened()) {
+//		              // make request to;2 the /me API
+//		                 Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+//
+//							@Override
+//							public void onCompleted(GraphUser user, Response response) {
+//								// TODO Auto-generated method stub
+//								
+//							}
+//		               });
+//		              }
+//				
+//			}
+//        	
+//
+//        });
+        
+        
+        
+        
+        
+        
+        
         checkAppKeySetup();
-        Log.v("facebook","still alive");
-        //facebook = new Facebook
-        //mAsyncRunner = new AsyncFacebookRunner(facebook);
-        uiHelper = new UiLifecycleHelper(this,null);
-    	Log.v("facebook","still alive");
-       // uiHelper.onCreate(savedInstanceState);
-		Log.v("facebook","still alive");
+       
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mRightDrawer = (LinearLayout)findViewById(R.id.right_drawer);
         
-        Log.v("facebook","still alive");
         mDrawerLayout.setDrawerShadow(R.drawable.notepad, GravityCompat.START);
         MemoDatabaseHandler handler = new MemoDatabaseHandler(this);
         String[] arrayColumns = new String[]{"date"};
@@ -332,7 +383,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
     protected void onResume()
     {
            super.onResume();
-           uiHelper.onResume();
            AndroidAuthSession session = mApi.getSession();
 
            // The next part must be inserted in the onResume() method of the
@@ -358,11 +408,35 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
            }
     }
     
-    
-    
-    
-    
-    
+    public class UiAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        public void onPreExecute() {
+            // On first execute
+        }
+
+        public Void doInBackground(Void... unused) {
+            // Background Work
+             Log.d("Tests", "Testing graph API wall post");
+             try {
+                    //String response = fb.request("me");
+                    Bundle parameters = new Bundle();
+                    parameters.putString("message", "This test message for wall post");
+                    parameters.putString("description", "test test test");
+                    String response = fb.request("feed", parameters, "POST");
+                    Log.d("Tests", "got response: " + response);
+                    if (response == null || response.equals("") || response.equals("false")) {
+                       Log.v("Error", "Blank response");
+                    }
+             } catch(Exception e) {
+                 e.printStackTrace();
+             }
+            return null;
+        }
+
+        public void onPostExecute(Void unused) {
+             // Result
+        }
+    }
     
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -380,7 +454,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		uiHelper.onDestroy();
 		// Release SCanvasView resources
 		if(!mSCanvas.closeSCanvasView())
 			Log.e("smart", "Fail to close SCanvasView");
@@ -509,9 +582,13 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 						
 		}
 		else if(nBtnID == mExportBtn.getId()) {
-			List<Bitmap> list = new ArrayList<Bitmap>();
+			shareOnFacebook();
+			
+			
+			
+	/*		List<Bitmap> list = new ArrayList<Bitmap>();
 			list.add((Bitmap) mSCanvas.getCanvasBitmap(false));
-			shareOnFacebook(list);
+			shareOnFacebook(list);*/
 			//export to pdf
 						
 		}
@@ -523,99 +600,72 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 };
 
 
-private void publishPhoto(String imageURL) {
-    Log.d("FACEBOOK", "Post to Facebook!");
 
-    try {
-
-        JSONObject attachment = new JSONObject();
-        attachment.put("message","text");
-        attachment.put("name", "MyGreatAndroidAppTest");
-        attachment.put("href", "http://stackoverflow.com/users/909317/sunny");
-        attachment.put("description","Test Test TEst");
-
-        JSONObject media = new JSONObject();
-        media.put("type", "image");
-        media.put("src",  imageURL);
-        media.put("href",imageURL);
-        attachment.put("media", new JSONArray().put(media));
-
-        JSONObject properties = new JSONObject();
-
-        JSONObject prop1 = new JSONObject();
-        prop1.put("text", "Text or captionText to Post");
-        prop1.put("href", imageURL);
-        properties.put("text", prop1);
-
-        // u can make any number of prop object and put on "properties" for    ex:    //prop2,prop3
-
-        attachment.put("properties", properties);
-
-        Log.d("FACEBOOK", attachment.toString());
-
-        Bundle params = new Bundle();
-        params.putString("attachment", attachment.toString());
-        facebook.dialog(CanvasActivity.this, "stream.publish", params, new DialogListener() {
-
-            @Override
-            public void onFacebookError(FacebookError e) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onError(DialogError e) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onComplete(Bundle values) {
-                final String postId = values.getString("post_id");
-                if (postId != null) {
-                    Log.d("FACEBOOK", "Dialog Success! post_id=" + postId);
-                    Toast.makeText(CanvasActivity.this, "Successfully shared on Facebook!", Toast.LENGTH_LONG).show();
-
-                } else {
-                    Log.d("FACEBOOK", "No wall post made");
-                }
-
-            }
-
-            @Override
-            public void onCancel() {
-                // TODO Auto-generated method stub
-
-            }
-        });      
-
-    } catch (JSONException e) {
-        Log.e("FACEBOOK", e.getLocalizedMessage(), e);
-    }
-}
 
 
 /*FACEBOOK share function*/
-private boolean shareOnFacebook(List<Bitmap> bitmaps) {
-	Log.v("facebook","share activated");
-	 Session session = Session.getActiveSession();
-	 Log.v("facebook","share activated");
-	 if (session.isOpened()) {
-		 Log.v("facebook","share activated");
-	        OpenGraphAction action = GraphObject.Factory.create(OpenGraphAction.class);
-	        //action.setProperty("meal", "https://example.com/cooking-app/meal/Lamb-Vindaloo.html");
-	        Log.v("facebook","share activated");
-	        action.setType("feed");
-	  
-	        Log.v("facebook","share activated");
-	        FacebookDialog shareDialog = new FacebookDialog.OpenGraphActionDialogBuilder(this, action, "meal")
-	        .setImageAttachmentsForAction(bitmaps,true)
-	        .build();
-	        Log.v("facebook","share activated");
-	        uiHelper.trackPendingDialogCall(shareDialog.present());
-	     
-	  
-	        }
+private boolean shareOnFacebook() {
+if(fb.isSessionValid()) {
+	try {
+		fb.logout(getApplicationContext());
+	} catch (MalformedURLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+}else {
+	//login to facebook
+	fb.authorize(CanvasActivity.this, new DialogListener() {
+		
+		@Override
+		public void onFacebookError(FacebookError e) {
+			// TODO Auto-generated method stub
+			Toast.makeText(CanvasActivity.this,"onFacebookError", Toast.LENGTH_SHORT).show();
+		}
+		
+		@Override
+		public void onError(DialogError e) {
+			// TODO Auto-generated method stub
+			Toast.makeText(CanvasActivity.this,"onError", Toast.LENGTH_SHORT).show();
+		}
+		
+		@Override
+		public void onComplete(Bundle values) {
+			// TODO Auto-generated method stub
+			Editor  editor = preferences_for_fb.edit();
+			editor.putString("access_token",fb.getAccessToken());
+			editor.putLong("acccess_expires", fb.getAccessExpires());
+			editor.commit();
+			Toast.makeText(CanvasActivity.this,"onComplete", Toast.LENGTH_SHORT).show();
+			try {
+				postToWall();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//UiAsyncTask task = new UiAsyncTask();
+			//task.doInBackground(null);
+		}
+		
+		@Override
+		public void onCancel() {
+			// TODO Auto-generated method stub
+			Toast.makeText(CanvasActivity.this,"onCancel", Toast.LENGTH_SHORT).show();
+		}
+	});
+
+}
+
+
 
 return true;
 }
@@ -623,66 +673,52 @@ return true;
 
 
 
-public void loginToFacebook() {
-    mPrefs = getPreferences(MODE_PRIVATE);
-    String access_token = mPrefs.getString("access_token", null);
-    long expires = mPrefs.getLong("access_expires", 0);
- 
-    if (access_token != null) {
-        facebook.setAccessToken(access_token);
-    }
- 
-    if (expires != 0) {
-        facebook.setAccessExpires(expires);
-    }
- 
-    if (!facebook.isSessionValid()) {
-        facebook.authorize(
-        		this,
-                new String[] { "email", "publish_stream" },
-                new DialogListener() {
- 
-                    @Override
-                    public void onCancel() {
-                        // Function to handle cancel event
-                    }
- 
-                    @Override
-                    public void onComplete(Bundle values) {
-                        // Function to handle complete event
-                        // Edit Preferences and update facebook acess_token
-                        SharedPreferences.Editor editor = mPrefs.edit();
-                        editor.putString("access_token",
-                                facebook.getAccessToken());
-                        editor.putLong("access_expires",
-                                facebook.getAccessExpires());
-                        editor.commit();
-                    }
- 
-                    @Override
-                    public void onError(DialogError error) {
-                        // Function to handle error
- 
-                    }
- 
-                    @Override
-                    public void onFacebookError(FacebookError fberror) {
-                        // Function to handle Facebook errors
- 
-                    }
- 
-                });
-    }
+void postToWall() throws FileNotFoundException, MalformedURLException, IOException {
+	Bitmap bmCanvas = mSCanvas.getCanvasBitmap(false);
+	 String current_date = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+	 String filename = current_date+".png";
+	  if(saveImageToInternalStorage(bmCanvas,current_date))
+	  {
+		  	MemoDatabaseHandler db = new MemoDatabaseHandler(this);
+		  	Log.d("Insert: ", "Inserting ...");	 
+	        db.addMemo(new Memo(filename,current_date));
+	        Log.d("Insert",filename + "inserted ");
+	      
+	  }
+
+	Bundle parameters = new Bundle();
+	String internal = getFilesDir()+"/"+filename;
+	Log.v("facebook",internal);
+	Log.v("facebook", Uri.parse(internal).toString());
+	parameters.putString("picture", Uri.parse(internal).toString());
+//	fb.request("feed", parameters, "POST");
+	fb.dialog(CanvasActivity.this, "feed",new DialogListener() {
+	
+		@Override
+		public void onFacebookError(FacebookError e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void onError(DialogError e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void onComplete(Bundle values) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void onCancel() {
+			// TODO Auto-generated method stub
+			
+		}
+	});
 }
-
-
-
-
-
-
-
-
-
 
 /*
  * DROPBOX share function
@@ -767,6 +803,7 @@ private boolean saveAndSharePngFile()
 	        shareOnDropbox(filename);
 	        return true;
 	  }
+	  
 	  return false;
 		  //add to database
 
