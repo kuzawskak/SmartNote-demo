@@ -112,13 +112,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
     private SharedPreferences preferences_for_fb;
     
     
-    private AsyncFacebookRunner mAsyncRunner;
-    String FILENAME = "AndroidSSO_data";
-    private SharedPreferences mPrefs;
-    
-    
-
-    
     // If you'd like to change the access type to the full Dropbox instead of
    // an app folder, change this value.
    final static private AccessType ACCESS_TYPE = AccessType.APP_FOLDER;
@@ -153,11 +146,13 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	private ImageView		mUndoBtn;
 	private ImageView		mRedoBtn;	
 	private ImageView		mTextBtn;
-	private ImageView		mSaveBtn;	
-	
-	
-	private ImageView		mShareBtn;	
+	private ImageView		mAddSiteButton;
+	private ImageView		mFacebookBtn;
+	private ImageView		mDropboxBtn;
+	private ImageView		mSaveBtn;
+	private ImageView		mEventBtn;
 	private ImageView		mExportBtn;
+	
 	private ImageView		mNewSiteBtn;
 
 		
@@ -188,36 +183,7 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
         if(expires!=0) {
         	fb.setAccessExpires(expires);
         }
-        
-//     // start Facebook Login
-//        Session.openActiveSession(this, true, new Session.StatusCallback() {
-//
-//			@Override
-//			public void call(Session session, SessionState state,
-//					Exception exception) {
-//				if (session.isOpened()) {
-//		              // make request to;2 the /me API
-//		                 Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
-//
-//							@Override
-//							public void onCompleted(GraphUser user, Response response) {
-//								// TODO Auto-generated method stub
-//								
-//							}
-//		               });
-//		              }
-//				
-//			}
-//        	
-//
-//        });
-        
-        
-        
-        
-        
-        
-        
+  
         checkAppKeySetup();
        
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -260,16 +226,26 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		mRedoBtn = (ImageView) findViewById(R.id.redoBtn);
 		mRedoBtn.setOnClickListener(undoNredoBtnClickListener);
 
-		mSaveBtn = (ImageView) findViewById(R.id.saveBtn);
+		mSaveBtn = (ImageView) findViewById(R.id.save_notepad_button);
 		mSaveBtn.setOnClickListener(mBtnClickListener);
 		
-		mShareBtn = (ImageView) findViewById(R.id.share_button);
-		mShareBtn.setOnClickListener(mBtnClickListener);
+		mAddSiteButton = (ImageView) findViewById(R.id.addSiteBtn);
+		mAddSiteButton.setOnClickListener(mBtnClickListener);
+		
+		mFacebookBtn = (ImageView) findViewById(R.id.facebook_button);
+		mFacebookBtn.setOnClickListener(mBtnClickListener);
+		
+		mDropboxBtn = (ImageView) findViewById(R.id.dropbox_button);
+		mDropboxBtn.setOnClickListener(mBtnClickListener);
+		
+		mEventBtn = (ImageView) findViewById(R.id.event_button);
+		mEventBtn.setOnClickListener(mBtnClickListener);
+		
 		
 		mExportBtn = (ImageView) findViewById(R.id.export_button);
 		mExportBtn.setOnClickListener(mBtnClickListener);
 		
-		mNewSiteBtn = (ImageView) findViewById(R.id.new_site);
+		mNewSiteBtn = (ImageView) findViewById(R.id.addSiteBtn);
 		mNewSiteBtn.setOnClickListener(mBtnClickListener);
 		//------------------------------------
 		// Create SCanvasView
@@ -302,9 +278,7 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		// Create Setting View
 		mSCanvas.createSettingView(mLayoutContainer, settingResourceMapInt, settingResourceMapString);
 
-		
-		
-	
+
 		//====================================================================================
 		//
 		// Set Callback Listener(Interface)
@@ -391,7 +365,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
     {
            super.onResume();
            AndroidAuthSession session = mApi.getSession();
-
            // The next part must be inserted in the onResume() method of the
            // activity from which session.startAuthentication() was called, so
            // that Dropbox authentication completes properly.
@@ -552,7 +525,6 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 				mSCanvas.setSettingViewSizeOption(SCanvasConstants.SCANVAS_SETTINGVIEW_ERASER, SCanvasConstants.SCANVAS_SETTINGVIEW_SIZE_NORMAL);
 				mSCanvas.toggleShowSettingView(SCanvasConstants.SCANVAS_SETTINGVIEW_ERASER);
 			}
-
 			else {
 				mSCanvas.setCanvasMode(SCanvasConstants.SCANVAS_MODE_INPUT_ERASER);
 				mSCanvas.showSettingView(SCanvasConstants.SCANVAS_SETTINGVIEW_ERASER, false);
@@ -571,8 +543,12 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 				Toast.makeText(mContext, "Tap Canvas to insert Text", Toast.LENGTH_SHORT).show();
 			}
 		}
+		else if(nBtnID == mNewSiteBtn.getId()) {
+			//add new site in editor			
+		}
+		/**********RIGHT DRAWER**********/
 		else if(nBtnID == mSaveBtn.getId()){
-
+			//save current state of notepad
 			if(saveSAMMFile()==false)
 				Log.e("smart","failed to save samm file");
 		
@@ -581,10 +557,12 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 		//	mSCanvas.setCanvasZoomScale(mZoomValue += 0.2, false);
 		//	mSCanvas.setCanvasZoomScale(mZoomValue, true);			
 		}
-		else if(nBtnID == mShareBtn.getId()) {
+		else if(nBtnID == mDropboxBtn.getId()) {
+			//login and share on dropbox
 			saveAndSharePngFile();						
 		}
-		else if(nBtnID == mExportBtn.getId()) {	
+		else if(nBtnID == mFacebookBtn.getId()) {
+			//login and upload as photo in fb
 				try {
 					shareOnFacebook();
 				} catch (FileNotFoundException e) {
@@ -601,8 +579,11 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 					e.printStackTrace();
 				}					
 		}
-		else if(nBtnID == mNewSiteBtn.getId()) {
-			//add new site in editor			
+		else if(nBtnID == mExportBtn.getId()) {
+			//export to pdf			
+		}
+		else if(nBtnID == mEventBtn.getId()) {
+			//add an event associated with notepad
 		}
 	}
 };
@@ -618,12 +599,10 @@ if(fb.isSessionValid()) {
 	FacebookLogin fb_login_async_task = new FacebookLogin(mSCanvas, CanvasActivity.this, fb,preferences_for_fb);
 	fb_login_async_task.execute();
 }else 
-
 //{
 //	FacebookLogin fb_login_async_task = new FacebookLogin(mSCanvas, CanvasActivity.this, fb,preferences_for_fb);
 //	fb_login_async_task.execute();
 //}
-
 {
 	//login to facebook
 	String[] perm = {"publish_stream","photo_upload"};
@@ -649,10 +628,8 @@ if(fb.isSessionValid()) {
 			editor.putLong("acccess_expires", fb.getAccessExpires());
 			editor.commit();
 			Toast.makeText(CanvasActivity.this,"onComplete", Toast.LENGTH_SHORT).show();
-
 					FacebookLogin fb_login_async_task = new FacebookLogin(mSCanvas, CanvasActivity.this, fb,preferences_for_fb);
-					fb_login_async_task.execute();
-					
+					fb_login_async_task.execute();					
 		}
 		
 		@Override
@@ -662,15 +639,12 @@ if(fb.isSessionValid()) {
 		}
 	});
 }
-
 return true;
 }
-
+/*  THE SAME AS IN ASYNC TASK FOR UPLOAD ON FACEBOOK
 void postToWall() throws FileNotFoundException, MalformedURLException, IOException, JSONException {
-	Bitmap bmCanvas = mSCanvas.getCanvasBitmap(false);
-	  
-	     String albumId = "me";	    	 
-//works!!!!!!!!!!!!!!!!!!!
+	Bitmap bmCanvas = mSCanvas.getCanvasBitmap(false);	  
+	    String albumId = "me";	    	 
 	    ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	    bmCanvas.compress(Bitmap.CompressFormat.JPEG,100,bos);
 	    byte[] photoBytes = bos.toByteArray();
@@ -680,8 +654,7 @@ void postToWall() throws FileNotFoundException, MalformedURLException, IOExcepti
 	     
 	    try {
 	        String resp = fb.request(albumId + "/photos", params, "POST");
-	        JSONObject json = Util.parseJson(resp);
-	
+	        JSONObject json = Util.parseJson(resp);	
 	    } catch ( IOException e ) {
 	    	Log.v("facebook","IOException");
 	    } catch ( FacebookError e ) {
@@ -689,15 +662,13 @@ void postToWall() throws FileNotFoundException, MalformedURLException, IOExcepti
 	    } catch ( JSONException e ) {
 	    	Log.v("facebook","JSONException");
 	    }
-
 }
-	
+	*/
 
 
 /*
  * DROPBOX share function
  */
-
 private boolean shareOnDropbox(String fileName ) {
 	if (USE_OAUTH1) {
         mApi.getSession().startAuthentication(CanvasActivity.this);
@@ -742,8 +713,10 @@ private void loadAuth(AndroidAuthSession session) {
 	
 }
 
-
-
+/**
+ * Save current site
+ * @return
+ */
 private boolean saveSAMMFile() 
 {    
 	//we get the whole bitmap - not only the foreground (arg0 ==false)
@@ -759,9 +732,8 @@ private boolean saveSAMMFile()
 	  }
 	  return false;
 		  //add to database
+}   
 
-	
-}       
 private boolean saveAndSharePngFile() 
 {    
 	//we get the whole bitmap - not only the foreground (arg0 ==false)
@@ -779,9 +751,7 @@ private boolean saveAndSharePngFile()
 	  }
 	  
 	  return false;
-		  //add to database
 
-	
 }   
 
 //it will be used rather in Directories menu when we will be loading saved notepad

@@ -61,7 +61,7 @@
             android:src="@drawable/selector_redo" />
         
         <ImageView
-            android:id="@+id/saveBtn"
+            android:id="@+id/addSiteBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="1dip"
@@ -117,7 +117,23 @@
 
 
         <ImageView
-            android:id="@+id/share_button"
+            android:id="@+id/save_notepad_button"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dip"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tool_bg"
+            android:src="@drawable/selector_undo" />
+        <ImageView
+            android:id="@+id/dropbox_button"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dip"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tool_bg"
+            android:src="@drawable/selector_undo" />
+        <ImageView
+            android:id="@+id/facebook_button"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_margin="1dip"
@@ -135,7 +151,7 @@
             android:src="@drawable/selector_redo" />
         
         <ImageView
-            android:id="@+id/new_site"
+            android:id="@+id/event_button"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_margin="1dip"
