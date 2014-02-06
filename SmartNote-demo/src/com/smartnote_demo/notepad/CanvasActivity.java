@@ -1,5 +1,7 @@
 package com.smartnote_demo.notepad;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,11 +28,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
 import android.drm.DrmStore.RightsStatus;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -67,10 +71,12 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.Session.StatusCallback;
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.Session;
+import com.facebook.android.AsyncFacebookRunner.RequestListener;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
+import com.facebook.android.Util;
 import com.facebook.model.GraphObject;
 import com.facebook.model.GraphUser;
 import com.facebook.model.OpenGraphAction;
@@ -85,6 +91,7 @@ import com.smartnote_demo.database.Memo;
 import com.smartnote_demo.database.MemoDatabaseHandler;
 import com.smartnote_demo.spen_tools.SPenSDKUtils;
 import com.smartnote_demo.share.*;
+
 import android.widget.CursorAdapter;
 public class CanvasActivity extends ActivityWithSPenLayer implements API_Listener {
 
@@ -460,7 +467,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	}	
 
 	
-
 	private void exitActivity(){
 		// TODO Auto-generated method stub		
 		//change it and ask if the user wants to SAVE the file
@@ -492,7 +498,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 
 @Override
 public void onConfigurationChanged(Configuration newConfig) {
-
 	setSCanvasViewLayout();
 	super.onConfigurationChanged(newConfig);
 }
@@ -552,8 +557,7 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 				mSCanvas.setCanvasMode(SCanvasConstants.SCANVAS_MODE_INPUT_ERASER);
 				mSCanvas.showSettingView(SCanvasConstants.SCANVAS_SETTINGVIEW_ERASER, false);
 				updateModeState();
-			}
-			
+			}			
 		}
 		else if(nBtnID == mTextBtn.getId()){
 			if(mSCanvas.getCanvasMode()==SCanvasConstants.SCANVAS_MODE_INPUT_TEXT){
@@ -578,47 +582,52 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 		//	mSCanvas.setCanvasZoomScale(mZoomValue, true);			
 		}
 		else if(nBtnID == mShareBtn.getId()) {
-			saveAndSharePngFile();
-						
+			saveAndSharePngFile();						
 		}
-		else if(nBtnID == mExportBtn.getId()) {
-			shareOnFacebook();
-			
-			
-			
-	/*		List<Bitmap> list = new ArrayList<Bitmap>();
-			list.add((Bitmap) mSCanvas.getCanvasBitmap(false));
-			shareOnFacebook(list);*/
-			//export to pdf
-						
+		else if(nBtnID == mExportBtn.getId()) {	
+				try {
+					shareOnFacebook();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}					
 		}
 		else if(nBtnID == mNewSiteBtn.getId()) {
-			//add new site in editor
-			
+			//add new site in editor			
 		}
 	}
 };
 
 
-
-
-
 /*FACEBOOK share function*/
-private boolean shareOnFacebook() {
+private boolean shareOnFacebook() throws FileNotFoundException, MalformedURLException, IOException, JSONException {
+
+
 if(fb.isSessionValid()) {
-	try {
-		fb.logout(getApplicationContext());
-	} catch (MalformedURLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	
-}else {
+
+	//postToWall();
+	FacebookLogin fb_login_async_task = new FacebookLogin(mSCanvas, CanvasActivity.this, fb,preferences_for_fb);
+	fb_login_async_task.execute();
+}else 
+
+//{
+//	FacebookLogin fb_login_async_task = new FacebookLogin(mSCanvas, CanvasActivity.this, fb,preferences_for_fb);
+//	fb_login_async_task.execute();
+//}
+
+{
 	//login to facebook
-	fb.authorize(CanvasActivity.this, new DialogListener() {
+	String[] perm = {"publish_stream","photo_upload"};
+	fb.authorize(CanvasActivity.this,perm, new DialogListener() {
 		
 		@Override
 		public void onFacebookError(FacebookError e) {
@@ -640,20 +649,10 @@ if(fb.isSessionValid()) {
 			editor.putLong("acccess_expires", fb.getAccessExpires());
 			editor.commit();
 			Toast.makeText(CanvasActivity.this,"onComplete", Toast.LENGTH_SHORT).show();
-			try {
-				postToWall();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			//UiAsyncTask task = new UiAsyncTask();
-			//task.doInBackground(null);
+
+					FacebookLogin fb_login_async_task = new FacebookLogin(mSCanvas, CanvasActivity.this, fb,preferences_for_fb);
+					fb_login_async_task.execute();
+					
 		}
 		
 		@Override
@@ -662,63 +661,38 @@ if(fb.isSessionValid()) {
 			Toast.makeText(CanvasActivity.this,"onCancel", Toast.LENGTH_SHORT).show();
 		}
 	});
-
 }
-
-
 
 return true;
 }
 
-
-
-
-void postToWall() throws FileNotFoundException, MalformedURLException, IOException {
+void postToWall() throws FileNotFoundException, MalformedURLException, IOException, JSONException {
 	Bitmap bmCanvas = mSCanvas.getCanvasBitmap(false);
-	 String current_date = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-	 String filename = current_date+".png";
-	  if(saveImageToInternalStorage(bmCanvas,current_date))
-	  {
-		  	MemoDatabaseHandler db = new MemoDatabaseHandler(this);
-		  	Log.d("Insert: ", "Inserting ...");	 
-	        db.addMemo(new Memo(filename,current_date));
-	        Log.d("Insert",filename + "inserted ");
-	      
-	  }
-
-	Bundle parameters = new Bundle();
-	String internal = getFilesDir()+"/"+filename;
-	Log.v("facebook",internal);
-	Log.v("facebook", Uri.parse(internal).toString());
-	parameters.putString("picture", Uri.parse(internal).toString());
-//	fb.request("feed", parameters, "POST");
-	fb.dialog(CanvasActivity.this, "feed",new DialogListener() {
+	  
+	     String albumId = "me";	    	 
+//works!!!!!!!!!!!!!!!!!!!
+	    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	    bmCanvas.compress(Bitmap.CompressFormat.JPEG,100,bos);
+	    byte[] photoBytes = bos.toByteArray();
+	     
+	    Bundle params = new Bundle();
+	    params.putByteArray("picture", photoBytes);
+	     
+	    try {
+	        String resp = fb.request(albumId + "/photos", params, "POST");
+	        JSONObject json = Util.parseJson(resp);
 	
-		@Override
-		public void onFacebookError(FacebookError e) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void onError(DialogError e) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void onComplete(Bundle values) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void onCancel() {
-			// TODO Auto-generated method stub
-			
-		}
-	});
+	    } catch ( IOException e ) {
+	    	Log.v("facebook","IOException");
+	    } catch ( FacebookError e ) {
+	    	Log.v("facebook","FacebookError");
+	    } catch ( JSONException e ) {
+	    	Log.v("facebook","JSONException");
+	    }
+
 }
+	
+
 
 /*
  * DROPBOX share function
