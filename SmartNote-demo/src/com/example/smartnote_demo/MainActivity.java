@@ -25,97 +25,90 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
-	
-
-
-	private boolean init_block;
-	
 	private ImageButton ExitButton;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	
-        
-    	init_block = true;
+    	        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Carousel carousel = (Carousel)findViewById(R.id.carousel);
-        ExitButton = (ImageButton)findViewById(R.id.exitButton);
-                
-        ExitButton.setOnClickListener(new ExitButtonListener());
         
-        MemoDatabaseHandler db = new MemoDatabaseHandler(this);
-                
+        Carousel carousel = (Carousel)findViewById(R.id.carousel);
+        
+        ExitButton = (ImageButton)findViewById(R.id.exitButton);                
+        ExitButton.setOnClickListener(new ExitButtonListener());
+                       
         carousel.setOnItemClickListener(new OnItemClickListener(){
        
 			public void onItemClick(CarouselAdapter<?> parent, View view,
 					int position, long id) {	
-				if(position==0 && init_block) {
-					init_block = false;
+
+				switch(position) {
+				case 0:
+					/***EVENTS***/
+					Intent events_intent = new Intent(MainActivity.this,Calendar.class);	
+					startActivity(events_intent);
+					break;					
+				case 1:
+					/***NOTEPADS***/
+					Intent directories_intent = new Intent(MainActivity.this,Directories.class);
+					startActivity(directories_intent);	
+					break;					
+				case 2:
+					/***OTHERS***/
+					break;					
+				case 3:
+					/***PICTURES***/				
+					break;
+				case 4:
+					/***QUICK NOTES***/
+					Intent canvas_intent = new Intent(MainActivity.this,CanvasActivity.class);			
+					startActivity(canvas_intent);					
+					break;
+				case 5:
+					/***RECORDS***/					
+					break;					
 				}
-				Toast.makeText(MainActivity.this, 
-						String.format("%s has been clicked", 
-						((CarouselItem)parent.getChildAt(position)).getName()), 
-						Toast.LENGTH_SHORT).show();				
+		
 			}		
         });
 
         carousel.setOnItemSelectedListener(new OnItemSelectedListener(){
-
+       	
+        	//show toast with functionality of selected item
 			public void onItemSelected(CarouselAdapter<?> parent, View view,
 					int position, long id) {
-				
-		   //     final TextView txt = (TextView)(findViewById(R.id.selected_item));
-		        
+
 				switch(position){
 				case 0:
-					if(!init_block) {
-					//txt.setText("Events chosen - show calendar");
-					Intent events_intent = new Intent(MainActivity.this,Calendar.class);	
-					startActivity(events_intent);
-					}
-	
-			
+					//Events 						
+					Toast.makeText(MainActivity.this,"Check events", Toast.LENGTH_SHORT).show();								
 					break;
 				case 1:
-					init_block = false;
-					Intent directories_intent = new Intent(MainActivity.this,Directories.class);
-					startActivity(directories_intent);
-		
+					//Notepads
+					Toast.makeText(MainActivity.this,"Check your notepads", Toast.LENGTH_SHORT).show();
 					break;
 				case 2:
-					init_block = false;					
-					//txt.setText("Others chosen - ...");
+					//Others
+					Toast.makeText(MainActivity.this,"Others - not implemented yet", Toast.LENGTH_SHORT).show();
 					break;
 				case 3:
-					init_block = false;
-					//txt.setText("Pictures chosen - show gallery");
+					//Gallery
+					Toast.makeText(MainActivity.this,"Check and import images", Toast.LENGTH_SHORT).show();
 					break;
 				case 4:
-					init_block = false;
-				//	txt.setText("Quick notes chosen - show panel with canvas");
-					Log.e("smart","1");
-
-	
-
-					Intent canvas_intent = new Intent(MainActivity.this,CanvasActivity.class);			
-					
-					//Log.e("smart","failure 2");
-					//else
-						
-					startActivity(canvas_intent);
-					Log.e("smart","3");
+					//Quick notes
+					Toast.makeText(MainActivity.this,"Create quick note", Toast.LENGTH_SHORT).show();
 					break;
 				case 5:
-					init_block = false;
-					//txt.setText("Records chosen  -show folder with records");
-					break;
-					
-				}
-				
+					//Records
+					Toast.makeText(MainActivity.this,"Check and import records", Toast.LENGTH_SHORT).show();
+					break;					
+				}				
 			}
 
 			public void onNothingSelected(CarouselAdapter<?> parent) {
+				
 			}
         	
         }

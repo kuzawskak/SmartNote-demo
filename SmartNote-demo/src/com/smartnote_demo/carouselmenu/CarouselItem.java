@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.smartnote_demo.R;
@@ -32,8 +33,8 @@ public class CarouselItem extends FrameLayout
 		
 		super(context);
 		
-		FrameLayout.LayoutParams params = 
-				new FrameLayout.LayoutParams(
+		LinearLayout.LayoutParams params = 
+				new LinearLayout.LayoutParams(
 						LayoutParams.WRAP_CONTENT, 
 						LayoutParams.WRAP_CONTENT);
 		

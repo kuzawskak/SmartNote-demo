@@ -11,20 +11,20 @@
         android:id="@+id/item_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-			android:layout_marginLeft="50dp"
-			android:layout_marginRight="50dp"
-			android:layout_gravity="top"
-           android:layout_weight="0.9"
+		android:layout_marginLeft="50dp"
+		android:layout_marginRight="50dp"
+		android:layout_gravity="top"
+        android:layout_weight="0.9"
         android:scaleType="fitXY"
         android:src="@drawable/skin1" />
 
   <TextView  
-    android:id="@+id/grid_item_label"
-    android:gravity="bottom|center_horizontal|center_vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-        android:textSize="12pt"
-        android:textColor="@android:color/white"
+    	android:id="@+id/grid_item_label"
+    	android:gravity="bottom|center_horizontal|center_vertical"
+    	android:layout_width="match_parent"
+    	android:layout_height="match_parent" 
+    	android:textSize="12pt"
+    	android:textColor="@android:color/white"
    />
 
 </merge>

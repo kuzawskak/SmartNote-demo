@@ -25,6 +25,7 @@
                  
 			<com.smartnote_demo.carouselmenu.Carousel
 			    android:layout_width="fill_parent"
+			    android:layout_marginBottom="50dp"
 			    android:layout_height="0dp"
         		android:layout_weight="0.90"
 			    android:id="@+id/carousel"  
