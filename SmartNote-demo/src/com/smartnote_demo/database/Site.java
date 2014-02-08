@@ -6,7 +6,7 @@ public class Site {
 	
 	//private variables
 	int _id;
-	int _notepad_id;
+	String _notepad_name;
 	String _filename;
 	int _site_number;
 
@@ -17,15 +17,15 @@ public class Site {
 	}
 	
 	//constructor
-	 public Site (int id,int notepad_id ,String filename, int site_number){
+	 public Site (int id,String notepad_name ,String filename, int site_number){
 	        this._id = id;
-	        this._notepad_id = notepad_id;
+	        this._notepad_name = notepad_name;
 	        this._filename = filename;
 	        this._site_number = site_number;
 	    }
 	//constructor
-	 public Site ( int notepad_id ,String filename, int site_number) {
-	        this._notepad_id = notepad_id;
+	 public Site ( String notepad_name ,String filename, int site_number) {
+	        this._notepad_name = notepad_name;
 	        this._filename = filename;
 	        this._site_number = site_number;
 		    }
@@ -41,13 +41,13 @@ public class Site {
 	
 	
 	//getting template_id
-		public int getNotepadID(){
-				return this._notepad_id;
+		public String getNotepadName(){
+				return this._notepad_name;
 			}
 	 
 		// setting id
-		public void setNotepadID(int notepad_id){
-				this._notepad_id = notepad_id;
+		public void setNotepadName(String notepad_name){
+				this._notepad_name = notepad_name;
 			}
 	
 		//getting site_number

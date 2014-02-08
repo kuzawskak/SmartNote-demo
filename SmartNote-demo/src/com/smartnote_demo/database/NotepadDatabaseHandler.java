@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class NotepadDatabaseHandler extends SQLiteOpenHelper{
 
@@ -85,22 +86,31 @@ public void addNotepad(Notepad notepad) {
 	
 	
 //get notepad by idn in database
-public Notepad getNotepad(int id) {
+public Notepad getNotepad(String name) {
 SQLiteDatabase db = this.getReadableDatabase();
+Log.v("notepad",String.format("%s",name));
+//String selectQuery = "SELECT  * FROM " + TABLE_NOTEPADS;
+String query = "SELECT * FROM " +TABLE_NOTEPADS+" WHERE "+KEY_FILENAME+" LIKE '%" +name+ "%'";
 
-Cursor cursor = db.query(TABLE_NOTEPADS, new String[] { KEY_ID,
-        KEY_FILENAME, KEY_TEMPLATE_ID,KEY_SITE_ID ,KEY_DATE }, KEY_ID + "=?",
-        new String[] { String.valueOf(id) }, null, null, null, null);
-if (cursor != null)
-    cursor.moveToFirst();
+Cursor cursor = db.rawQuery(query, null);
+if (cursor != null) {
+    if(cursor.moveToFirst()) {
+    	Log.v("notepad","cursor is not empty");
+    }
+    else {
+    	Log.v("notepad","cursor is empty");
+    }
+    }
+else Log.v("notepad","cursor is null");
+
+if(cursor==null) {
+
+}
 
 Notepad notepad = new Notepad(Integer.parseInt(cursor.getString(0)),
         cursor.getString(1),Integer.parseInt(cursor.getString(2)),Integer.parseInt(cursor.getString(3)), cursor.getString(4));
-// return contact
 return notepad;
 }
-
-
 
 
 //Getting All Contacts

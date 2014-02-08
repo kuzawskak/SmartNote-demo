@@ -70,14 +70,15 @@ public class BottomButtons extends LinearLayout {
 				    NotepadDatabaseHandler db = new NotepadDatabaseHandler(mContext);
 				  	Log.d("Insert: ", "Inserting ...");	 
 			        db.addNotepad(new_notepad);
-			        Log.d("Insert",name + "inserted ");
-			        
+			        Log.v("Insert",name + String.format("inserted with values:%d  %s, %d, %d, %s ",new_notepad.getID(),name,template_id,site_id,current_date));
+			       
 			        //open new notepad
-			        CanvasActivity.notepad_id=new_notepad.getID();
 					Intent notepad_intent = new Intent(v.getContext(),CanvasActivity.class);
+					CanvasActivity.notepad_name=new_notepad.getFileName();
+					//
 					
 					v.getContext().startActivity(notepad_intent);
-			    
+					 db.close();
 				
 			}
 		});

@@ -89,14 +89,19 @@ import com.samsung.spensdk.applistener.HistoryUpdateListener;
 import com.samsung.spensdk.applistener.SCanvasInitializeListener;
 import com.smartnote_demo.database.Memo;
 import com.smartnote_demo.database.MemoDatabaseHandler;
+import com.smartnote_demo.database.Notepad;
+import com.smartnote_demo.database.NotepadDatabaseHandler;
+import com.smartnote_demo.database.Site;
+import com.smartnote_demo.database.SiteDatabaseHandler;
 import com.smartnote_demo.spen_tools.SPenSDKUtils;
 import com.smartnote_demo.share.*;
 
 import android.widget.CursorAdapter;
 public class CanvasActivity extends ActivityWithSPenLayer implements API_Listener {
 
-	
-	public static int notepad_id;
+	//===============================
+	// App settings for share in Dropbox and Facebook
+	//===============================
 	
 	//for DROPBOX share	
     private final String PHOTO_DIR = "/SmartNote-demo/";
@@ -106,41 +111,28 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	DropboxAPI<AndroidAuthSession> mApi;
     private boolean mLoggedIn;
 
-    
-    //  Facebook APP ID
-    final static private String APPL_ID = "242229975950290"; // Replace your App ID here
-    // Instance of Facebook Class
-    private Facebook fb;
-    
-    private SharedPreferences preferences_for_fb;
-    
-    
     // If you'd like to change the access type to the full Dropbox instead of
    // an app folder, change this value.
    final static private AccessType ACCESS_TYPE = AccessType.APP_FOLDER;
-
+    //  Facebook APP ID
+    final static private String APPL_ID = "242229975950290"; // Replace your App ID here
+    // Instance of Facebook Class
+    private Facebook fb;  
+    private SharedPreferences preferences_for_fb;
+    
+  
    // You don't need to change these, leave them alone.
    final static private String ACCOUNT_PREFS_NAME = "prefs";
    final static private String ACCESS_KEY_NAME = "ACCESS_KEY";
    final static private String ACCESS_SECRET_NAME = "ACCESS_SECRET";
     private static final boolean USE_OAUTH1 = false;
 	
-	
+	//================================
+    //UI controls
+    //================================
 	private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private LinearLayout mRightDrawer;
-
-	//==============================
-	// Variables
-	//==============================
-	Context mContext = null;
-
-	private Bitmap 	mBGBitmap;
-	private Rect	mSrcImageRect = null;
-
-	private final static int    CANVAS_HEIGHT_MARGIN = 160; // Top,Bottom margin  
-	private final static int    CANVAS_WIDTH_MARGIN = 50; // Left,Right margin
-
 	private FrameLayout	mLayoutContainer;
 	private RelativeLayout	mCanvasContainer;
 	private SCanvasView		mSCanvas;
@@ -162,6 +154,24 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	private TextView 		mSiteNumberTextview;
 
 
+
+	//==============================
+	// Variables
+	//==============================
+	Context mContext = null;
+	public static String notepad_name;
+	
+	
+	private int sites_count = 1;
+	//needed for new site creation
+	private int site_template_id;
+	private Site current_site;
+	
+	private Bitmap 	mBGBitmap;
+	private Rect	mSrcImageRect = null;
+
+	private final static int    CANVAS_HEIGHT_MARGIN = 160; // Top,Bottom margin  
+	private final static int    CANVAS_WIDTH_MARGIN = 50; // Left,Right margin
 		
 	private File mFolder = null;
 	private float mZoomValue = 1f;
@@ -170,6 +180,8 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editor_extended_ui);
+		
+	
 		
 		mContext = this;
 		// We create a new AuthSession so that we can use the Dropbox API.
@@ -216,7 +228,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
                // R.layout.drawer_list_item, mPlanetTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         
-        
 		//------------------------------------
 		// UI Setting
 		//------------------------------------
@@ -252,13 +263,43 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		
 		mEventBtn = (ImageView) findViewById(R.id.event_button);
 		mEventBtn.setOnClickListener(mBtnClickListener);
-		
-		
+				
 		mAddSiteBtn = (ImageView) findViewById(R.id.addSiteBtn);
 		mAddSiteBtn.setOnClickListener(mBtnClickListener);
 		
 		mSiteNumberTextview = (TextView) findViewById(R.id.site_textview);
 
+		
+		NotepadDatabaseHandler notepad_handler = new NotepadDatabaseHandler(this);		
+		Notepad current_notepad = notepad_handler.getNotepad(notepad_name);//3);
+		site_template_id = current_notepad.getSiteID();
+		notepad_handler.close();
+		SiteDatabaseHandler site_handler = new SiteDatabaseHandler(this);
+		//List<Site> sites = site_handler.getAllSitesFromNotepad(notepad_id);
+		//add new site when notepad is opened
+		
+			Log.v("notepad","EMPTY NOTEPAD");
+			String notepad_name = current_notepad.getFileName();
+			Log.v("notepad","after name");
+			current_site = new Site(notepad_name,notepad_name+String.format("%d",sites_count),sites_count);
+			Log.v("notepad","after site");
+			site_handler.addSite(current_site);
+			site_handler.close();
+			Log.v("notepad","after site handler");
+			site_handler = new SiteDatabaseHandler(this);
+			List<Site> sites = site_handler.getAllSitesFromNotepad(notepad_name);
+			Log.v("notepad","after second site handler");
+			sites_count = sites.size();
+			mSiteNumberTextview.setText(String.format("%d",sites_count)+ " / " + String.format("%d",sites_count,sites_count));
+				
+		
+			
+			//LOAD THE NEW SITE
+		
+		
+		
+		
+		
 		//------------------------------------
 		// Create SCanvasView
 		//------------------------------------
@@ -268,7 +309,7 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		mSCanvas = new SCanvasView(mContext);        
 		mCanvasContainer.addView(mSCanvas);
 
-		mBGBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.page4);
+		mBGBitmap = BitmapFactory.decodeResource(getResources(), site_template_id);
 		if(mBGBitmap != null){
 			mSrcImageRect = new Rect(0,0,mBGBitmap.getWidth(), mBGBitmap.getHeight());
 		}
