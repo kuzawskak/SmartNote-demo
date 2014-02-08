@@ -160,8 +160,8 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	//==============================
 	Context mContext = null;
 	public static String notepad_name;
-	
-	
+	private int current_site_number;
+	private String lastModifDate;
 	private int sites_count = 1;
 	//needed for new site creation
 	private int site_template_id;
@@ -252,8 +252,8 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		mNextSiteBtn = (ImageView) findViewById(R.id.next_site_button);
 		mNextSiteBtn.setOnClickListener(mBtnClickListener);
 		
-		mNextSiteBtn = (ImageView) findViewById(R.id.prev_site_button);
-		mNextSiteBtn.setOnClickListener(mBtnClickListener);
+		mPrevSiteBtn = (ImageView) findViewById(R.id.prev_site_button);
+		mPrevSiteBtn.setOnClickListener(mBtnClickListener);
 		
 		mFacebookBtn = (ImageView) findViewById(R.id.facebook_button);
 		mFacebookBtn.setOnClickListener(mBtnClickListener);
@@ -287,14 +287,11 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 			List<Site> sites = site_handler.getAllSitesFromNotepad(notepad_name);
 			Log.v("notepad","after second site handler");
 			sites_count = sites.size();
+			current_site_number = sites.size();
 			mSiteNumberTextview.setText(String.format("%d",sites_count)+ " / " + String.format("%d",sites_count,sites_count));
 				
 			site_handler.close();
-			
-			//LOAD THE NEW SITE
-		
-		
-		
+
 		
 		
 		//------------------------------------
@@ -500,7 +497,7 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {				
 				//save note				
-				saveSAMMFile();
+				savePNGFile(notepad_name+current_site_number);
 				// finish dialog
 				dialog.dismiss();
 				setResult(RESULT_OK, getIntent());
@@ -593,22 +590,28 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 				Toast.makeText(mContext, "Tap Canvas to insert Text", Toast.LENGTH_SHORT).show();
 			}
 		}
+		else if(nBtnID == mAddSiteBtn.getId()) {
+			AddNewSite();
+			//add new site in editor			
+		}
 		//bottom menu
 		else if(nBtnID == mPrevSiteBtn.getId()){
 			//switch to previous site if possible
+			Log.v("add_new_site","clicked");
+			switchToPrevSite();
 		}
 		else if(nBtnID == mNextSiteBtn.getId()){
 			//switch to next site if possible
+			switchToNextSite();
 		}
+	
 		/**********RIGHT DRAWER**********/
-		else if(nBtnID == mAddSiteBtn.getId()) {
-			//add new site in editor			
-		}
 	
 		else if(nBtnID == mSaveBtn.getId()){
 			//save current state of notepad
-			if(saveSAMMFile()==false)
-				Log.e("smart","failed to save samm file");
+			if(savePNGFile(notepad_name+current_site_number)==false) {
+				Log.e("smart","failed to save png file");
+			}
 		
 			//temporary zoom testing			
 			//thats works! but we want probably canvas to fill the whole place
@@ -775,21 +778,12 @@ private void loadAuth(AndroidAuthSession session) {
  * Save current site
  * @return
  */
-private boolean saveSAMMFile() 
+private boolean savePNGFile(String filename) 
 {    
 	//we get the whole bitmap - not only the foreground (arg0 ==false)
 	Bitmap bmCanvas = mSCanvas.getCanvasBitmap(false);
-	 String current_date = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-	 String filename = current_date+".png";
-	  if(saveImageToInternalStorage(bmCanvas,current_date))
-	  {
-		  	MemoDatabaseHandler db = new MemoDatabaseHandler(this);
-		  	Log.d("Insert: ", "Inserting ...");	 
-	        db.addMemo(new Memo(filename,current_date));
-	        return true;
-	  }
-	  return false;
-		  //add to database
+	lastModifDate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+	return saveImageToInternalStorage(bmCanvas,filename);
 }   
 
 private boolean saveAndSharePngFile() 
@@ -1002,6 +996,75 @@ public void onSuccess(int requestnumber, Object obj) {
      
 }
 
+public boolean saveCurrentSite() {
+	savePNGFile(notepad_name+current_site_number);
+	return true;
+}
+
+public void switchToNextSite() {
+	if(saveCurrentSite()&&current_site_number!=sites_count) {
+		++current_site_number;
+		//the filename is : notepad_name+current_site_number
+		loadCanvasImage(notepad_name+String.format("%d",current_site_number)+".png",true);
+		//load bitmap from saved file
+		//mSCanvas.setClearImageBitmap(mBGBitmap);
+		refreshSiteNumberTextView();
+	}
+	else {
+		Log.d("notepad","failed to save current site");
+	}
+}
+
+public void switchToPrevSite() {
+	Log.v("add_new_site","0");
+	if(saveCurrentSite()&&current_site_number!=0) {
+		Log.v("add_new_site","1");
+		--current_site_number;
+		//the filename is : notepad_name+current_site_number
+		Log.v("add_new_site","2");
+		loadCanvasImage(notepad_name+String.format("%d",current_site_number)+".png",true);
+		//load bitmap from saved file
+		Log.v("add_new_site","3");
+		//mSCanvas.setClearImageBitmap(mBGBitmap);
+		Log.v("add_new_site","4");
+		refreshSiteNumberTextView();
+		Log.v("add_new_site","5");
+	}
+	else {
+		Log.d("notepad","failed to save current site");
+	}
+
+}
+
+public void AddNewSite() {
+	if(saveCurrentSite()) {
+		sites_count++;
+		Log.v("add_new_site","1");
+		current_site_number++;
+		Log.v("add_new_site","2");
+		SiteDatabaseHandler db = new SiteDatabaseHandler(this);
+		Log.v("add_new_site","3");
+		Site new_site = new Site(notepad_name,notepad_name+String.format("%d",sites_count),sites_count);	
+		Log.v("add_new_site","4");
+		db.addSite(new_site);
+		Log.v("add_new_site","5");
+		db.close();
+		Log.v("add_new_site","6");
+		mSCanvas.setClearImageBitmap(mBGBitmap);
+		Log.v("add_new_site","7");
+		refreshSiteNumberTextView();
+	}
+	else {
+		Log.d("notepad","failed to save current site");
+	}
+}
+
+public void refreshSiteNumberTextView() {
+	mSiteNumberTextview.setText
+			(String.format("%d",current_site_number)
+			+" / "
+			+String.format("%d", sites_count));
+}
 
 @Override
 public void onFail(String errormessage) {
