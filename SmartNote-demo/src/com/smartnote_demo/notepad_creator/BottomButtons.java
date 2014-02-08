@@ -73,7 +73,9 @@ public class BottomButtons extends LinearLayout {
 			        Log.d("Insert",name + "inserted ");
 			        
 			        //open new notepad
+			        CanvasActivity.notepad_id=new_notepad.getID();
 					Intent notepad_intent = new Intent(v.getContext(),CanvasActivity.class);
+					
 					v.getContext().startActivity(notepad_intent);
 			    
 				

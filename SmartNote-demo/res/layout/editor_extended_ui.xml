@@ -68,6 +68,7 @@
             android:layout_weight="1"
             android:background="@drawable/selector_tool_bg"
             android:src="@drawable/selector_redo" />
+        
 	</LinearLayout>	
 
 	<FrameLayout 
@@ -89,8 +90,57 @@
 
 		
 		</RelativeLayout>	
-	</FrameLayout>	    
-</LinearLayout>
+		
+		<!-- the bottom menu with site number and button to switch site-->
+	<RelativeLayout 
+	    android:id="@+id/notepad_bottom_menu"
+	    android:layout_width = "fill_parent"
+	    android:layout_height = "wrap_content"
+	    android:layout_gravity = "bottom"
+	    android:orientation = "horizontal">		
+	    <ImageView 
+	        android:id="@+id/prev_site_button"
+	        android:layout_width = "wrap_content"
+	    	android:layout_height = "wrap_content"
+	    	android:layout_gravity = "bottom|left"
+	    	android:layout_marginBottom="5dp"   
+ 			android:layout_marginLeft="5dp" 
+			android:layout_alignParentLeft="true"
+	    	android:background="@drawable/selector_tool_bg"
+            android:src="@drawable/selector_redo" 
+	    	>	        
+	    </ImageView>
+	       	
+	    <TextView 
+	        android:id="@+id/site_textview"
+	        android:layout_width = "wrap_content"
+	    	android:layout_height = "wrap_content"
+	    	android:layout_centerInParent = "true"
+	    	android:text ="0"
+	    	android:textColor="#0000ff">	        
+	    </TextView>
+
+	    
+	    <ImageView 
+	        android:id="@+id/next_site_button"
+	        android:layout_width = "wrap_content"
+	    	android:layout_height = "wrap_content"
+	    	android:layout_gravity = "bottom|right"
+			android:layout_marginBottom="5dp"   
+ 			android:layout_marginRight="5dp" 
+	    	android:layout_alignParentRight="true"
+	    	android:background="@drawable/selector_tool_bg"
+            android:src="@drawable/selector_redo" 
+		>	        
+	    </ImageView>
+
+		</RelativeLayout>
+		
+	</FrameLayout>	
+	
+	    
+	</LinearLayout>    
+
     <!-- The navigation drawer -->
     <ListView 
         android:id="@+id/left_drawer"
@@ -115,7 +165,6 @@
 		
 		
 
-
         <ImageView
             android:id="@+id/save_notepad_button"
             android:layout_width="50dp"
@@ -139,17 +188,7 @@
             android:layout_margin="1dip"
             android:layout_weight="1"
             android:background="@drawable/selector_tool_bg"
-            android:src="@drawable/selector_undo" />
-
-        <ImageView
-            android:id="@+id/export_button"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="1dip"
-            android:layout_weight="1"
-            android:background="@drawable/selector_tool_bg"
-            android:src="@drawable/selector_redo" />
-        
+            android:src="@drawable/selector_undo" />  
         <ImageView
             android:id="@+id/event_button"
             android:layout_width="50dp"

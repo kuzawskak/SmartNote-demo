@@ -95,6 +95,9 @@ import com.smartnote_demo.share.*;
 import android.widget.CursorAdapter;
 public class CanvasActivity extends ActivityWithSPenLayer implements API_Listener {
 
+	
+	public static int notepad_id;
+	
 	//for DROPBOX share	
     private final String PHOTO_DIR = "/SmartNote-demo/";
     final static private String APP_KEY = "18zpadpciv1g63b";
@@ -146,14 +149,18 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	private ImageView		mUndoBtn;
 	private ImageView		mRedoBtn;	
 	private ImageView		mTextBtn;
-	private ImageView		mAddSiteButton;
+	private ImageView		mAddSiteBtn;
+	//right drawer buttons
 	private ImageView		mFacebookBtn;
 	private ImageView		mDropboxBtn;
 	private ImageView		mSaveBtn;
 	private ImageView		mEventBtn;
 	private ImageView		mExportBtn;
-	
-	private ImageView		mNewSiteBtn;
+	//bottom buttons and textview with site number
+	private ImageView 		mNextSiteBtn;
+	private ImageView		mPrevSiteBtn;
+	private TextView 		mSiteNumberTextview;
+
 
 		
 	private File mFolder = null;
@@ -175,7 +182,7 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
         fb = new Facebook(APPL_ID);
         preferences_for_fb = getPreferences(MODE_PRIVATE);
         String access_token = preferences_for_fb.getString("access_token",null);
-        long expires = preferences_for_fb.getLong("acces_expires", 0);
+        long expires = preferences_for_fb.getLong("access_expires", 0);
         
         if(access_token!=null) {
         	fb.setAccessToken(access_token);
@@ -208,6 +215,8 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
         		//new ArrayAdapter<String>(this,
                // R.layout.drawer_list_item, mPlanetTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        
+        
 		//------------------------------------
 		// UI Setting
 		//------------------------------------
@@ -229,8 +238,11 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		mSaveBtn = (ImageView) findViewById(R.id.save_notepad_button);
 		mSaveBtn.setOnClickListener(mBtnClickListener);
 		
-		mAddSiteButton = (ImageView) findViewById(R.id.addSiteBtn);
-		mAddSiteButton.setOnClickListener(mBtnClickListener);
+		mNextSiteBtn = (ImageView) findViewById(R.id.next_site_button);
+		mNextSiteBtn.setOnClickListener(mBtnClickListener);
+		
+		mNextSiteBtn = (ImageView) findViewById(R.id.prev_site_button);
+		mNextSiteBtn.setOnClickListener(mBtnClickListener);
 		
 		mFacebookBtn = (ImageView) findViewById(R.id.facebook_button);
 		mFacebookBtn.setOnClickListener(mBtnClickListener);
@@ -242,11 +254,11 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		mEventBtn.setOnClickListener(mBtnClickListener);
 		
 		
-		mExportBtn = (ImageView) findViewById(R.id.export_button);
-		mExportBtn.setOnClickListener(mBtnClickListener);
+		mAddSiteBtn = (ImageView) findViewById(R.id.addSiteBtn);
+		mAddSiteBtn.setOnClickListener(mBtnClickListener);
 		
-		mNewSiteBtn = (ImageView) findViewById(R.id.addSiteBtn);
-		mNewSiteBtn.setOnClickListener(mBtnClickListener);
+		mSiteNumberTextview = (TextView) findViewById(R.id.site_textview);
+
 		//------------------------------------
 		// Create SCanvasView
 		//------------------------------------
@@ -543,10 +555,18 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 				Toast.makeText(mContext, "Tap Canvas to insert Text", Toast.LENGTH_SHORT).show();
 			}
 		}
-		else if(nBtnID == mNewSiteBtn.getId()) {
-			//add new site in editor			
+		//bottom menu
+		else if(nBtnID == mPrevSiteBtn.getId()){
+			//switch to previous site if possible
+		}
+		else if(nBtnID == mNextSiteBtn.getId()){
+			//switch to next site if possible
 		}
 		/**********RIGHT DRAWER**********/
+		else if(nBtnID == mAddSiteBtn.getId()) {
+			//add new site in editor			
+		}
+	
 		else if(nBtnID == mSaveBtn.getId()){
 			//save current state of notepad
 			if(saveSAMMFile()==false)
