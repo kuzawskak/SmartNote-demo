@@ -4,6 +4,7 @@ import java.util.List;
 import com.example.smartnote_demo.R;
 import com.smartnote_demo.database.Notepad;
 import com.smartnote_demo.database.NotepadDatabaseHandler;
+import com.smartnote_demo.database.SiteDatabaseHandler;
 
 import android.util.Log;
 import android.view.View;
@@ -11,9 +12,12 @@ import android.view.View;
 import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.Point;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Display;
 import android.view.DragEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View.OnDragListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -23,23 +27,27 @@ import android.widget.LinearLayout;
 public class Directories extends Activity implements OnItemClickListener {
 	
 	int count =0;
+	private String mSelectedName;
+	private DirItem mSelectedDir;
+	//layout inside ScrollView with directories (notepads)
+	private LinearLayout mDirectoriesContainer;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_directories);
 
-		
         //getting all saved notepads from database        
         NotepadDatabaseHandler db = new NotepadDatabaseHandler(this);
         List<Notepad> notepads = db.getAllNotepads();      
                        
-		LinearLayout layoutInsideScrollview = (LinearLayout)findViewById(R.id.linearLayoutInsideScroll);
+		mDirectoriesContainer = (LinearLayout)findViewById(R.id.linearLayoutInsideScroll);
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
 		int width = size.x;
 		int height = size.y;
-		layoutInsideScrollview.setPadding(10, 10, 10, 10);
+		mDirectoriesContainer.setPadding(10, 10, 10, 10);
 		
         for (Notepad n : notepads) {
             int skin_id = n.getTemplateID();
@@ -52,10 +60,9 @@ public class Directories extends Activity implements OnItemClickListener {
             		+", template id:" + site_id
             		+ ", site id: "+ name;
 
-
 					DirItem dir= createNotePad((int)(height*0.9),skin_id,site_id,name,database_id);
-					layoutInsideScrollview.addView(dir);
-
+					mDirectoriesContainer.addView(dir);
+					registerForContextMenu(dir);
         Log.d("directories", log);
         }
 //		for(int i=0;i<20;i++)
@@ -81,13 +88,49 @@ public class Directories extends Activity implements OnItemClickListener {
 			}
 		});
 		*/
-		layoutInsideScrollview.setOnDragListener(new MyDragListener());
+        
+        
+        
+		//mDirectoriesContainer.setOnDragListener(new MyDragListener());
 		
 	
 	}
 
 
 
+	
+	   @Override  
+	    public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo) {  
+	    super.onCreateContextMenu(menu, v, menuInfo);  
+	    	mSelectedDir = (DirItem)v;
+	    	
+	        menu.setHeaderTitle(mSelectedDir.getName()); 
+	        menu.add(0, v.getId(), 0, "Delete");  
+	        menu.add(0, v.getId(), 0, "Settings");  
+	    } 
+	
+	   
+	   
+	   
+	   @Override  
+	    public boolean onContextItemSelected(MenuItem item) {  
+	        if(item.getTitle()=="Delete")
+	        {//delete notepad;
+	        	 NotepadDatabaseHandler db = new NotepadDatabaseHandler(this);
+	        	 db.deleteNotepad(mSelectedDir.getName());
+	        	 db.close();
+	        	 SiteDatabaseHandler sites_db = new SiteDatabaseHandler(this);
+	        	 sites_db.deleteNotepadContent(mSelectedDir.getName());
+	        	 sites_db.close();
+	        	 mDirectoriesContainer.removeView(mSelectedDir);	        	 	        	 
+	        }
+	        else if(item.getTitle()=="Settings"){
+	        	//open notepad settings
+	        	//load Creator
+	        }  
+	        else {return false;}  
+	    return true;  
+	    }  
 
 	public DirItem createNotePad(int height,int skin_id, int site_id, String name,int database_id){
 		DirItem notePadView = new DirItem(this,"filename",height,skin_id,site_id,name,database_id);

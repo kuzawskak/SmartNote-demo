@@ -3,16 +3,22 @@ package com.smartnote_demo.directories_menu;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Calendar;
 
 import com.example.smartnote_demo.MainActivity;
 import com.example.smartnote_demo.R;
 import com.example.smartnote_demo.R.id;
 import com.example.smartnote_demo.R.layout;
 import com.smartnote_demo.carouselmenu.CarouselItem;
+import com.smartnote_demo.database.Notepad;
+import com.smartnote_demo.database.NotepadDatabaseHandler;
+import com.smartnote_demo.notepad.CanvasActivity;
 
 import android.content.ClipData;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.gesture.GestureOverlayView.OnGestureListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,10 +39,6 @@ import android.view.View.OnDragListener;
 import android.view.DragEvent;
 import android.graphics.drawable.Drawable;
 import android.net.nsd.NsdManager.RegistrationListener;
-
-
-
-
 
 public class DirItem extends FrameLayout {
 
@@ -82,13 +84,15 @@ public class DirItem extends FrameLayout {
 		mText.setText(mName);
 	
 	   // this.setOnTouchListener(new MyTouchListener());
+		this.setOnClickListener(new NotepadClickListener());
+		
 	    this.setOnLongClickListener(new OnLongClickListener() {
 			
 			@Override
 			public boolean onLongClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(mContext, "long click", 
-						Toast.LENGTH_SHORT).show();	
+				//SHOW CONTEXT MENU TO DELETE
+				//or change settings
 				return false;
 			}
 		});
@@ -178,10 +182,12 @@ public class DirItem extends FrameLayout {
 	private final class NotepadClickListener implements OnClickListener {
 
 		@Override
-		public void onClick(View v) {
-			//open view for new notepad create			
-		}
-	
+		public void onClick(View v) {		
+				//load notepad intent dedicated for the selected one
+				Intent notepad_intent = new Intent(v.getContext(),CanvasActivity.class);
+				CanvasActivity.notepad_name=mName;
+				v.getContext().startActivity(notepad_intent);
+		}	
 	}
 	
 	private final class NotepadGestureListener implements OnLongClickListener{

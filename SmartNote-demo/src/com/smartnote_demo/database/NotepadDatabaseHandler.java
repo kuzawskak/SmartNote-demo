@@ -155,10 +155,10 @@ public int updateNotepad(Notepad notepad) {
 }
 
 // Deleting single notepad
-public void deleteContact(Notepad notepad) {
+public void deleteNotepad(String name) {
     SQLiteDatabase db = this.getWritableDatabase();
-    db.delete(TABLE_NOTEPADS, KEY_ID + " = ?",
-            new String[] { String.valueOf(notepad.getID()) });
+    db.delete(TABLE_NOTEPADS, KEY_FILENAME + " = ?",
+            new String[] { name });
     db.close();
 }
 

@@ -284,15 +284,12 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 			current_site = new Site(notepad_name,notepad_name+String.format("%d",sites_count),sites_count);
 			Log.v("notepad","after site");
 			site_handler.addSite(current_site);
-			site_handler.close();
-			Log.v("notepad","after site handler");
-			site_handler = new SiteDatabaseHandler(this);
 			List<Site> sites = site_handler.getAllSitesFromNotepad(notepad_name);
 			Log.v("notepad","after second site handler");
 			sites_count = sites.size();
 			mSiteNumberTextview.setText(String.format("%d",sites_count)+ " / " + String.format("%d",sites_count,sites_count));
 				
-		
+			site_handler.close();
 			
 			//LOAD THE NEW SITE
 		

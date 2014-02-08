@@ -145,13 +145,19 @@ public int updateSite(Site site) {
 }
 
 // Deleting single site
-public void deleteContact(Site site) {
+public void deleteSite(Site site) {
     SQLiteDatabase db = this.getWritableDatabase();
     db.delete(TABLE_SITES, KEY_ID + " = ?",
             new String[] { String.valueOf(site.getID()) });
     db.close();
 }
 
+public void deleteNotepadContent(String name) {
+    SQLiteDatabase db = this.getWritableDatabase();
+    db.delete(TABLE_SITES, KEY_NOTEPAD_NAME + " = ?",
+            new String[] { name });
+    db.close();
+}
 
 // Getting sites Count
 public int getNotepadsCount() {
@@ -163,6 +169,8 @@ public int getNotepadsCount() {
     // return count
     return cursor.getCount();
 }
+
+
 
 public Cursor GetCursor() {
 	    // Select All Query
