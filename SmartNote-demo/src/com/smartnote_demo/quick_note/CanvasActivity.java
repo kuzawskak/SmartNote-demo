@@ -7,13 +7,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
@@ -21,7 +16,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -31,7 +25,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -39,13 +32,6 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.session.AccessTokenPair;
-import com.dropbox.client2.session.AppKeyPair;
-import com.dropbox.client2.session.Session.AccessType;
-import com.dropbox.client2.session.TokenPair;
-import com.example.smartnote_demo.MainActivity;
 import com.example.smartnote_demo.R;
 import com.samsung.spenemulatorlibrary.ActivityWithSPenLayer;
 import com.samsung.spensdk.SCanvasConstants;
@@ -57,32 +43,9 @@ import com.smartnote_demo.database.MemoDatabaseHandler;
 import com.smartnote_demo.spen_tools.SPenSDKUtils;
 import com.smartnote_demo.share.*;
 import android.widget.CursorAdapter;
+
 public class CanvasActivity extends ActivityWithSPenLayer implements API_Listener {
 
-	//for DROPBOX share
-	
-    private final String PHOTO_DIR = "/SmartNote-demo/";
-    final static private String APP_KEY = "18zpadpciv1g63b";
-    final static private String APP_SECRET = "gppsfv7gb0944xt";
-	DropboxAPI<AndroidAuthSession> mApi;
-    private boolean mLoggedIn;
-
-    
-    // If you'd like to change the access type to the full Dropbox instead of
-   // an app folder, change this value.
-   final static private AccessType ACCESS_TYPE = AccessType.APP_FOLDER;
-
-   // You don't need to change these, leave them alone.
-   final static private String ACCOUNT_PREFS_NAME = "prefs";
-   final static private String ACCESS_KEY_NAME = "ACCESS_KEY";
-   final static private String ACCESS_SECRET_NAME = "ACCESS_SECRET";
-    private static final boolean USE_OAUTH1 = false;
-	
-	
-	
-	
-	
-	
 	private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
 
@@ -94,9 +57,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	private Bitmap 	mBGBitmap;
 	private Rect	mSrcImageRect = null;
 
-	private final static int    CANVAS_HEIGHT_MARGIN = 160; // Top,Bottom margin  
-	private final static int    CANVAS_WIDTH_MARGIN = 50; // Left,Right margin
-
 	private FrameLayout	mLayoutContainer;
 	private RelativeLayout	mCanvasContainer;
 	private SCanvasView		mSCanvas;
@@ -106,46 +66,17 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	private ImageView		mRedoBtn;	
 	private ImageView		mTextBtn;
 	private ImageView		mSaveBtn;	
-	private File mFolder = null;
-	private float mZoomValue = 1f;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.editor_basic_ui);
-		
-		mContext = this;
-		
-		// We create a new AuthSession so that we can use the Dropbox API.
-        AndroidAuthSession session = buildSession();
-        mApi = new DropboxAPI<AndroidAuthSession>(session);
-    	
-        checkAppKeySetup();
-		
-		
-		
-		
+			  
+		setContentView(R.layout.editor_basic_ui);	
+		mContext = this;		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        
-        
-        mDrawerLayout.setDrawerShadow(R.drawable.notepad, GravityCompat.START);
-        MemoDatabaseHandler handler = new MemoDatabaseHandler(this);
-        String[] arrayColumns = new String[]{"date"};
-        //arrayViewID contains the id of textViews
-        // you can add more Views as per Requirement
-        // textViewSMSSender is connected to "address" of arrayColumns
-        // textViewMessageBody is connected to "body"of arrayColumns
-        int[] arrayViewIDs = new int[]{com.example.smartnote_demo.R.id.text1};
-        Cursor cursor;
-        cursor = handler.GetCursor();
-       //cursor = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.drawer_list_item, cursor,arrayColumns,arrayViewIDs,CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-       // SimpleCursorAdapter a = new Sim
-        // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(adapter);
-        		//new ArrayAdapter<String>(this,
-               // R.layout.drawer_list_item, mPlanetTitles));
+        refreshListView();
+
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 		//------------------------------------
 		// UI Setting
@@ -177,7 +108,13 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		mSCanvas = new SCanvasView(mContext);        
 		mCanvasContainer.addView(mSCanvas);
 
-		mBGBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.page4);
+		if (savedInstanceState != null) {
+			mBGBitmap = savedInstanceState.getParcelable("bitmap");
+			}
+		else {
+			mBGBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.quick_note_yellow);		
+		}
+		
 		if(mBGBitmap != null){
 			mSrcImageRect = new Rect(0,0,mBGBitmap.getWidth(), mBGBitmap.getHeight());
 		}
@@ -185,7 +122,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		setSCanvasViewLayout();
 		// Set Background of layout container
 		//mLayoutContainer.setBackgroundResource(R.drawable.page4);
-
 		
 		//------------------------------------
 		// SettingView Setting
@@ -198,9 +134,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		HashMap<String,String> settingResourceMapString = SPenSDKUtils.getSettingLayoutStringResourceMap(true, true, false, false);
 		// Create Setting View
 		mSCanvas.createSettingView(mLayoutContainer, settingResourceMapInt, settingResourceMapString);
-
-		
-		
 	
 		//====================================================================================
 		//
@@ -278,46 +211,15 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
     	
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
-
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
-    
     @Override
     protected void onResume()
     {
-           super.onResume();
-           AndroidAuthSession session = mApi.getSession();
-
-           // The next part must be inserted in the onResume() method of the
-           // activity from which session.startAuthentication() was called, so
-           // that Dropbox authentication completes properly.
-           if (session.authenticationSuccessful())
-           {
-                  try {
-                        // Mandatory call to complete the auth
-                        session.finishAuthentication();
-
-                        // Store it locally in our app for later use
-                        TokenPair tokens = session.getAccessTokenPair();
-                        if(tokens!=null)
-                        {
-                        storeKeys(tokens.key, tokens.secret);
-                        setLoggedIn(true);
-                        }
-                  } catch (IllegalStateException e) {
-                        showToast("Couldn't authenticate with Dropbox:" + e.getLocalizedMessage());
-                       
-                  }
-           }
+           super.onResume();          
     }
-    
-    
-    
-    
-    
-    
-    
+       
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -336,9 +238,8 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		super.onDestroy();
 		// Release SCanvasView resources
 		if(!mSCanvas.closeSCanvasView())
-			Log.e("smart", "Fail to close SCanvasView");
+			Log.e("quick_note", "Fail to close SCanvasView");
 	}	
-
 	
 
 	private void exitActivity(){
@@ -351,7 +252,7 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {				
 				//save note				
-				saveSAMMFile();
+				savePNGFile();
 				// finish dialog
 				dialog.dismiss();
 				setResult(RESULT_OK, getIntent());
@@ -449,67 +350,14 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 		}
 		else if(nBtnID == mSaveBtn.getId()){
 
-			if(saveSAMMFile()==false)
-				Log.e("smart","failed to save samm file");
-		
-			//temporary zoom testing			
-			//thats works! but we want probably canvas to fill the whole place
-		//	mSCanvas.setCanvasZoomScale(mZoomValue += 0.2, false);
-		//	mSCanvas.setCanvasZoomScale(mZoomValue, true);			
+			if(savePNGFile()==false)
+				Log.e("quick_note","failed to save as png file");	
 		}
 	}
 };
 
-/*
- * DROPBOX share function
- */
 
-private boolean shareOnDropbox(String fileName ) {
-	if (USE_OAUTH1) {
-        mApi.getSession().startAuthentication(CanvasActivity.this);
-    } else {
-        mApi.getSession().startOAuth2Authentication(CanvasActivity.this);
-    }
-	
-	File filePath = getFileStreamPath(fileName);
-	
-	DropboxUploadPicture upload = new DropboxUploadPicture(this, mApi,PHOTO_DIR,filePath);
-    upload.execute();
-	//Upload upload = new Upload(1,this,mApi, PHOTO_DIR,filePath);
-	//upload.execute();
-	return true;
-}
-
-private void checkAppKeySetup() {
-    // Check to make sure that we have a valid app key
-    if (APP_KEY.startsWith("CHANGE") ||
-            APP_SECRET.startsWith("CHANGE")) {
-        showToast("You must apply for an app key and secret from developers.dropbox.com, and add them to the DBRoulette ap before trying it.");
-        finish();
-        return;
-    }
-}
-
-/*private AndroidAuthSession buildSession() {
-    AppKeyPair appKeyPair = new AppKeyPair(APP_KEY, APP_SECRET);
-
-    AndroidAuthSession session = new AndroidAuthSession(appKeyPair);
-    loadAuth(session);
-    return session;
-}*/
-
-private void showToast(String msg) {
-    Toast error = Toast.makeText(this, msg, Toast.LENGTH_LONG);
-    error.show();
-}
-
-private void loadAuth(AndroidAuthSession session) {
-	// TODO Auto-generated method stub
-	
-}
-
-
-private boolean saveSAMMFile() 
+private boolean savePNGFile() 
 {    
 	//we get the whole bitmap - not only the foreground (arg0 ==false)
 	Bitmap bmCanvas = mSCanvas.getCanvasBitmap(false);
@@ -518,16 +366,11 @@ private boolean saveSAMMFile()
 	  if(saveImageToInternalStorage(bmCanvas,current_date))
 	  {
 		  	MemoDatabaseHandler db = new MemoDatabaseHandler(this);
-		  	Log.d("Insert: ", "Inserting ...");	 
 	        db.addMemo(new Memo(filename,current_date));
-	        Log.d("Insert",filename + "inserted ");
-	        shareOnDropbox(filename);
+	        refreshListView();
 	        return true;
 	  }
 	  return false;
-		  //add to database
-
-	
 }       
 
 //it will be used rather in Directories menu when we will be loading saved notepad
@@ -542,35 +385,29 @@ private boolean loadCanvasImage(String fileName, boolean loadAsForegroundImage) 
 	if(bmForeground==null) Log.e("loadCanvasImage","no bitmap");
 	} catch (Exception ex) {
 	Log.e("getThumbnail() on internal storage", ex.getMessage());
-	}
-	
+	}	
 		int nWidth = mSCanvas.getWidth();
 		int nHeight = mSCanvas.getHeight();
-		Log.e("smart","load bm");
+		Log.e("quick_note","loading bitmap");
 		bmForeground=Bitmap.createScaledBitmap(bmForeground, nWidth, nHeight, true);		
 		return mSCanvas.setClearImageBitmap(bmForeground);
-	} 
-	
+	} 	
 }
 
 public boolean saveImageToInternalStorage(Bitmap image,String filename) {
-
     try {
     // Use the compress method on the Bitmap object to write image to
     // the OutputStream
     FileOutputStream fos = openFileOutput(filename+".png", Context.MODE_PRIVATE);
-
     // Writing the bitmap to the output stream
     image.compress(Bitmap.CompressFormat.PNG, 100, fos);
-    fos.close();
-	  
-       
+    fos.close();	         
     return true;
     } catch (Exception e) {
     Log.e("saveToInternalStorage()", e.getMessage());
     return false;
     }
-    }
+}
  
 // Update tool button
 private void updateModeState(){
@@ -578,7 +415,6 @@ private void updateModeState(){
 	mPenBtn.setSelected(nCurMode==SCanvasConstants.SCANVAS_MODE_INPUT_PEN);
 	mEraserBtn.setSelected(nCurMode==SCanvasConstants.SCANVAS_MODE_INPUT_ERASER);
 }
-
 
 // Get the minimum image scaled rect which is fit to current screen 
 Rect getMaximumCanvasRect(Rect rectImage, int nMarginWidth, int nMarginHeight){
@@ -609,120 +445,43 @@ Rect getMaximumCanvasRect(Rect rectImage, int nMarginWidth, int nMarginHeight){
 	int nResizeHeight = (int)(0.5 + (nResizeWidth * nImageHeight)/(float)nImageWidth);		
 	return new Rect(0,0, nResizeWidth, nResizeHeight);
 }
-
-
-
-// This is what gets called on finishing a media piece to import
-
-
-private void logOut()
-{
-       // Remove credentials from the session
-       mApi.getSession().unlink();
-
-       // Clear our stored keys
-       clearKeys();
-       // Change UI state to display logged out version
-       setLoggedIn(false);
-}
-
 /**
- * Convenience function to change UI state based on being logged in
+ * ListView helper
  */
-private void setLoggedIn(boolean loggedIn)
-{
+public void refreshListView() {
+	MemoDatabaseHandler handler = new MemoDatabaseHandler(this);
+    String[] arrayColumns = new String[]{"date"};
 
-       mLoggedIn = loggedIn;     
-    
+    int[] arrayViewIDs = new int[]{com.example.smartnote_demo.R.id.text1};
+    Cursor cursor;
+    cursor = handler.GetCursor();
+   
+    SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.drawer_list_item, cursor,arrayColumns,arrayViewIDs,CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+    // set up the drawer's list view with items and click listener
+    mDrawerList.setAdapter(adapter);
+    mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+    handler.close();
 }
 
-/**
-* Shows keeping the access keys returned from Trusted Authenticator in a local
-* store, rather than storing user name & password, and re-authenticating each
-* time (which is not to be done, ever).
-*
-* @return Array of [access_key, access_secret], or null if none stored
-*/
-private String[] getKeys() {
-      SharedPreferences prefs = getSharedPreferences(ACCOUNT_PREFS_NAME, 0);
-      String key = prefs.getString(ACCESS_KEY_NAME, null);
-      String secret = prefs.getString(ACCESS_SECRET_NAME, null);
-      if (key != null && secret != null) {
-             String[] ret = new String[2];
-             ret[0] = key;
-             ret[1] = secret;
-             return ret;
-      } else {
-             return null;
-      }
+//needed for saving current bitmap - we don't want 
+//to loose bitmap during orientation change!
+protected void onSaveInstanceState(Bundle outState) {
+	super.onSaveInstanceState(outState);
+    outState.putParcelable("bitmap", mSCanvas.getCanvasBitmap(false));
+};
+
+private void showToast(String msg) {
+    Toast error = Toast.makeText(this, msg, Toast.LENGTH_LONG);
+    error.show();
 }
-
-
-
-/**
- * Shows keeping the access keys returned from Trusted Authenticator in a local
- * store, rather than storing user name & password, and re-authenticating each
- * time (which is not to be done, ever).
- */
-private void storeKeys(String key, String secret) {
-       // Save the access key for later
-       SharedPreferences prefs = getSharedPreferences(ACCOUNT_PREFS_NAME, 0);
-       Editor edit = prefs.edit();
-       edit.putString(ACCESS_KEY_NAME, key);
-       edit.putString(ACCESS_SECRET_NAME, secret);
-       edit.commit();
-}
-
-private void clearKeys() {
-       SharedPreferences prefs = getSharedPreferences(ACCOUNT_PREFS_NAME, 0);
-       Editor edit = prefs.edit();
-       edit.clear();
-       edit.commit();
-}
-
-private AndroidAuthSession buildSession() {
-       AppKeyPair appKeyPair = new AppKeyPair(APP_KEY, APP_SECRET);
-       AndroidAuthSession session;
-
-       String[] stored = getKeys();
-       if (stored != null) {
-              AccessTokenPair accessToken = new AccessTokenPair(stored[0], stored[1]);
-              session = new AndroidAuthSession(appKeyPair, ACCESS_TYPE, accessToken);
-       } else {
-              session = new AndroidAuthSession(appKeyPair, ACCESS_TYPE);
-       }
-
-       return session;
-}      
 
 @Override
 public void onSuccess(int requestnumber, Object obj) {
-	// TODO Auto-generated method stub
-	 try
-     {
-            if(requestnumber == Constants.UploadPhotos_Code)
-            {
-                  boolean sucess=(Boolean) obj;
-                  if(sucess)
-                  {
-                         Toast.makeText(CanvasActivity.this, "Photos uploaded successfully", Toast.LENGTH_LONG).show();
-                         Intent i=new Intent(CanvasActivity.this,CanvasActivity.class);
-                         startActivity(i);
-                         finish();
-                  }
-            }
-     }
-     catch (Exception e)
-     {
-            e.printStackTrace();
-     }
-     
+	// TODO Auto-generated method stub	
 }
-
 
 @Override
 public void onFail(String errormessage) {
-	// TODO Auto-generated method stub
-	
+	// TODO Auto-generated method stub	
 }	
 }

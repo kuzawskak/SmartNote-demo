@@ -67,7 +67,7 @@
             android:layout_margin="1dip"
             android:layout_weight="1"
             android:background="@drawable/selector_tool_bg"
-            android:src="@drawable/selector_redo" />
+            android:src="@drawable/selector_add" />
         
 	</LinearLayout>	
 
@@ -106,8 +106,7 @@
 	    	android:layout_marginBottom="5dp"   
  			android:layout_marginLeft="5dp" 
 			android:layout_alignParentLeft="true"
-	    	android:background="@drawable/selector_tool_bg"
-            android:src="@drawable/selector_redo" 
+	    	android:background="@drawable/prev_button_disabled"
 	    	>	        
 	    </ImageView>
 	       	
@@ -129,8 +128,7 @@
 			android:layout_marginBottom="5dp"   
  			android:layout_marginRight="5dp" 
 	    	android:layout_alignParentRight="true"
-	    	android:background="@drawable/selector_tool_bg"
-            android:src="@drawable/selector_redo" 
+	    	android:background="@drawable/next_button_disabled"
 		>	        
 	    </ImageView>
 
@@ -166,34 +164,34 @@
         <ImageView
             android:id="@+id/save_notepad_button"
             android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_margin="1dip"
             android:layout_weight="1"
-            android:background="@drawable/selector_tool_bg"
-            android:src="@drawable/selector_undo" />
+            android:background="@drawable/selector_save"
+             />
         <ImageView
             android:id="@+id/dropbox_button"
             android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_margin="1dip"
             android:layout_weight="1"
-            android:background="@drawable/selector_tool_bg"
-            android:src="@drawable/selector_undo" />
+            android:background="@drawable/selector_dropbox"
+             />
         <ImageView
             android:id="@+id/facebook_button"
             android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_margin="1dip"
             android:layout_weight="1"
-            android:background="@drawable/selector_tool_bg"
-            android:src="@drawable/selector_undo" />  
+            android:background="@drawable/selector_facebook"
+			/>  
         <ImageView
             android:id="@+id/event_button"
             android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_margin="1dip"
             android:layout_weight="1"
-            android:background="@drawable/selector_tool_bg"
-            android:src="@drawable/selector_redo" />
+            android:background="@drawable/selector_events"
+			/>
 	</LinearLayout>	
 </android.support.v4.widget.DrawerLayout>

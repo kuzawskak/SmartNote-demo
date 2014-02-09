@@ -67,7 +67,7 @@
             android:layout_margin="1dip"
             android:layout_weight="1"
             android:background="@drawable/selector_tool_bg"
-            android:src="@drawable/selector_redo" />
+            android:src="@drawable/selector_add" />
 	</LinearLayout>	
 
 	<FrameLayout 

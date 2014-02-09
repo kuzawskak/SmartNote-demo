@@ -7,5 +7,5 @@
             android:layout_marginRight="10dp"
             android:layout_gravity="right"
       		android:scaleType="fitXY"
-            android:background="@drawable/exit" />      
+            android:background="@drawable/exit_button" />      
 </merge>

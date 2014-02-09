@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/wood_background" 
+    android:background="@drawable/main_background" 
     tools:context=".Directories" 
     >
 
@@ -24,7 +24,8 @@
         
      <HorizontalScrollView
         android:id="@+id/horizontalScrollView1"
-        android:layout_width="wrap_content"
+        android:background="@drawable/second_background"
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"

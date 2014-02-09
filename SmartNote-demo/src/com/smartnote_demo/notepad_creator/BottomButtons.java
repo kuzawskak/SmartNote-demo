@@ -25,7 +25,6 @@ import com.smartnote_demo.database.MemoDatabaseHandler;
 import com.smartnote_demo.database.Notepad;
 import com.smartnote_demo.database.NotepadDatabaseHandler;
 import com.smartnote_demo.notepad.CanvasActivity;
-import com.smartnote_demo.notepad.NoteActivity;
 import com.smartnote_demo.notepad_creator.NotepadCreator;
 
 public class BottomButtons extends LinearLayout {

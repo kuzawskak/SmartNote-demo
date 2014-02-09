@@ -212,7 +212,7 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mRightDrawer = (LinearLayout)findViewById(R.id.right_drawer);
         
-        mDrawerLayout.setDrawerShadow(R.drawable.notepad, GravityCompat.START);
+        //mDrawerLayout.setDrawerShadow(R.drawable.notepad, GravityCompat.START);
         MemoDatabaseHandler handler = new MemoDatabaseHandler(this);
         String[] arrayColumns = new String[]{"date"};
         //arrayViewID contains the id of textViews
