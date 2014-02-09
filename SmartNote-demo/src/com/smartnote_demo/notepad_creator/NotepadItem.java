@@ -49,8 +49,8 @@ public class NotepadItem extends FrameLayout {
 		String h = ""+height;
 		mIsNotepad = is_notepad;
 		LinearLayout.LayoutParams params = 
-				new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 
-				LayoutParams.MATCH_PARENT);
+				new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 
+				LayoutParams.WRAP_CONTENT);
 				//(200,300);
 						//LayoutParams.MATCH_PARENT, 
 						//LayoutParams.MATCH_PARENT);	

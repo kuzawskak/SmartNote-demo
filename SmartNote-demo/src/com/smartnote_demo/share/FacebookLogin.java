@@ -1,27 +1,15 @@
 package com.smartnote_demo.share;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
 
-import org.json.JSONException;
-
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionState;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.FacebookError;
 import com.facebook.android.Facebook.DialogListener;
-import com.facebook.model.GraphUser;
 import com.samsung.spensdk.SCanvasView;
 import com.smartnote_demo.notepad.CanvasActivity;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.database.CursorJoiner.Result;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;

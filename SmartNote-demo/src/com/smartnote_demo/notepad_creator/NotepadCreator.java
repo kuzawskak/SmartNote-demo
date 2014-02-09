@@ -23,22 +23,19 @@ import android.widget.LinearLayout;
 
 public class NotepadCreator extends Activity {
 	
-	private Context mContext;
-
-	private EditText mNotepadName;
+	//-----------Variables--------------//
 	private int chosen_notepadskin_no = 0;
 	private int chosen_siteskin_no = 0;
+	private TypedArray NotepadSkinIds;	
+	private TypedArray SiteSkinIds;
+	//-----------UI controls------------//
 	private LinearLayout NotepadSkins;
 	private LinearLayout SiteSkins;
-	private TypedArray NotepadSkinIds;
-	
-	private TypedArray SiteSkinIds;
-	
-	
+	private EditText mNotepadName;
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	        setContentView(R.layout.notepad_creator);
-	        mContext = this;
 	        
 	        //getting resources from array from skin and site templates
 	        NotepadSkinIds = getResources().obtainTypedArray(R.array.notepad_skins);	        		
@@ -83,8 +80,8 @@ public class NotepadCreator extends Activity {
 			int width = size.x;
 			int height = size.y;
 			
-			//NotepadSkins.setPadding(10, 10, 10, 10);
-			//SiteSkins.setPadding(10, 10, 10, 10);
+			NotepadSkins.setPadding(10, 10, 10, 10);
+			SiteSkins.setPadding(10, 10, 10, 10);
 			for(int i=0;i<NotepadSkinIds.length();i++)
 			{		
 				NotepadSkins.addView(createNotePad((int)(height*0.9),notepadResIds[i],i,true));
@@ -111,8 +108,7 @@ public class NotepadCreator extends Activity {
 				
 				@Override
 				public void onTextChanged(CharSequence s, int start, int before, int count) {
-					// TODO Auto-generated method stub
-					
+					// TODO Auto-generated method stub					
 				}
 				
 				@Override

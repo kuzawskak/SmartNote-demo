@@ -66,8 +66,7 @@ public class DirItem extends FrameLayout {
 		Log.d("heightinside",h);
 		
 		LinearLayout.LayoutParams params = 
-				new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 
-				LayoutParams.MATCH_PARENT);
+				new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.FILL_PARENT);
 				//(200,300);
 						//LayoutParams.MATCH_PARENT, 
 						//LayoutParams.MATCH_PARENT);	

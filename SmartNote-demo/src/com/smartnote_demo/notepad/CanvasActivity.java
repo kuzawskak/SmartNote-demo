@@ -48,7 +48,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,16 +69,14 @@ import com.samsung.spensdk.SCanvasConstants;
 import com.samsung.spensdk.SCanvasView;
 import com.samsung.spensdk.applistener.HistoryUpdateListener;
 import com.samsung.spensdk.applistener.SCanvasInitializeListener;
-import com.smartnote_demo.database.Memo;
-import com.smartnote_demo.database.MemoDatabaseHandler;
 import com.smartnote_demo.database.Notepad;
 import com.smartnote_demo.database.NotepadDatabaseHandler;
 import com.smartnote_demo.database.Site;
 import com.smartnote_demo.database.SiteDatabaseHandler;
+import com.smartnote_demo.directories_menu.Directories;
 import com.smartnote_demo.spen_tools.SPenSDKUtils;
 import com.smartnote_demo.share.*;
 
-import android.widget.CursorAdapter;
 public class CanvasActivity extends ActivityWithSPenLayer implements API_Listener {
 
 	//===============================
@@ -115,8 +112,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
     //UI controls
     //================================
 	private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private LinearLayout mRightDrawer;
 	private FrameLayout	mLayoutContainer;
 	private RelativeLayout	mCanvasContainer;
 	private SCanvasView		mSCanvas;
@@ -142,7 +137,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	Context mContext = null;
 	public static String notepad_name;
 	private int current_site_number;
-	private String lastModifDate;
 	private int sites_count = 1;
 	//needed for new site creation
 	private int site_template_id;
@@ -186,27 +180,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
         checkAppKeySetup();
        
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        mRightDrawer = (LinearLayout)findViewById(R.id.right_drawer);
-        
-        //mDrawerLayout.setDrawerShadow(R.drawable.notepad, GravityCompat.START);
-        MemoDatabaseHandler handler = new MemoDatabaseHandler(this);
-        String[] arrayColumns = new String[]{"date"};
-        //arrayViewID contains the id of textViews
-        // you can add more Views as per Requirement
-        // textViewSMSSender is connected to "address" of arrayColumns
-        // textViewMessageBody is connected to "body"of arrayColumns
-        int[] arrayViewIDs = new int[]{com.example.smartnote_demo.R.id.text1};
-        Cursor cursor;
-        cursor = handler.GetCursor();
-       //cursor = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.drawer_list_item, cursor,arrayColumns,arrayViewIDs,CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-       // SimpleCursorAdapter a = new Sim
-        // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(adapter);
-        		//new ArrayAdapter<String>(this,
-               // R.layout.drawer_list_item, mPlanetTitles));
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         
 		//------------------------------------
 		// UI Setting
@@ -249,9 +222,11 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		
 		mSiteNumberTextview = (TextView) findViewById(R.id.site_textview);
 
-		
+		if (savedInstanceState != null) {
+			notepad_name = savedInstanceState.getString("name");
+		}
 		NotepadDatabaseHandler notepad_handler = new NotepadDatabaseHandler(this);		
-		Notepad current_notepad = notepad_handler.getNotepad(notepad_name);//3);
+		Notepad current_notepad = notepad_handler.getNotepad(notepad_name);
 		site_template_id = current_notepad.getSiteID();
 		notepad_handler.close();
 		SiteDatabaseHandler site_handler = new SiteDatabaseHandler(this);
@@ -266,13 +241,21 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 			site_handler.addSite(current_site);
 			List<Site> sites = site_handler.getAllSitesFromNotepad(notepad_name);
 			Log.v("notepad","after second site handler");
-			sites_count = sites.size();
-			current_site_number = sites.size();
-			mSiteNumberTextview.setText(String.format("%d",sites_count)+ " / " + String.format("%d",sites_count,sites_count));
-				
-			site_handler.close();
+			
+			
 
-		
+			
+			if (savedInstanceState != null) {
+				Log.v("notepad","setting counters");
+				sites_count = savedInstanceState.getInt("sites_counter");
+				current_site_number =  savedInstanceState.getInt("current_site_no");
+			} else {
+				sites_count = sites.size();
+				current_site_number = sites.size();
+			}
+			mSiteNumberTextview.setText(String.format("%d",sites_count)+ " / " + String.format("%d",sites_count,sites_count));
+			
+			site_handler.close();
 		
 		//------------------------------------
 		// Create SCanvasView
@@ -280,18 +263,23 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		mLayoutContainer = (FrameLayout) findViewById(R.id.layout_container);
 		mCanvasContainer = (RelativeLayout) findViewById(R.id.canvas_container);
 
-		mSCanvas = new SCanvasView(mContext);        
+		mSCanvas = new SCanvasView(mContext);    
 		mCanvasContainer.addView(mSCanvas);
 
-		mBGBitmap = BitmapFactory.decodeResource(getResources(), site_template_id);
+		
+		if (savedInstanceState != null) {
+			Log.v("notepad","getting bitmap");
+			mBGBitmap = savedInstanceState.getParcelable("bitmap");			
+		} else {		
+				mBGBitmap = BitmapFactory.decodeResource(getResources(), site_template_id);
+		}
 		if(mBGBitmap != null){
 			mSrcImageRect = new Rect(0,0,mBGBitmap.getWidth(), mBGBitmap.getHeight());
 		}
-
+			
 		setSCanvasViewLayout();
 		// Set Background of layout container
-		//mLayoutContainer.setBackgroundResource(R.drawable.page4);
-
+		//	mLayoutContainer.setBackgroundResource(site_template_id);
 		updatePrevNextState();
 		//------------------------------------
 		// SettingView Setting
@@ -364,27 +352,9 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		// Start such SCanvasView Task at onInitialized() of SCanvasInitializeListener
         }
 
-	/* The click listner for ListView in the navigation drawer */
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
 
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
-        }
-    }	
 	
-    private void selectItem(int position) {
-    	//set new bitmap
-        android.database.sqlite.SQLiteCursor c =(SQLiteCursor) mDrawerList.getItemAtPosition(position);
-    	Log.v("loading",c.getString(2));
-    	String filename = c.getString(2);
-    	loadCanvasImage(filename,true);
-    	
-        // update selected item and title, then close the drawer
-        mDrawerList.setItemChecked(position, true);
 
-        mDrawerLayout.closeDrawer(mDrawerList);
-    }
 
     
     @Override
@@ -415,35 +385,7 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
            }
     }
     
-    public class UiAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        public void onPreExecute() {
-            // On first execute
-        }
-
-        public Void doInBackground(Void... unused) {
-            // Background Work
-             Log.d("Tests", "Testing graph API wall post");
-             try {
-                    //String response = fb.request("me");
-                    Bundle parameters = new Bundle();
-                    parameters.putString("message", "This test message for wall post");
-                    parameters.putString("description", "test test test");
-                    String response = fb.request("feed", parameters, "POST");
-                    Log.d("Tests", "got response: " + response);
-                    if (response == null || response.equals("") || response.equals("false")) {
-                       Log.v("Error", "Blank response");
-                    }
-             } catch(Exception e) {
-                 e.printStackTrace();
-             }
-            return null;
-        }
-
-        public void onPostExecute(Void unused) {
-             // Result
-        }
-    }
+    
     
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -456,6 +398,7 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		// TODO Auto-generated method stub
 		//super.onBackPressed();
 		exitActivity();	
+
 	}
 
 	@Override
@@ -490,6 +433,7 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 				dialog.dismiss();
 				setResult(RESULT_OK, getIntent());
 				finish();
+
 			}
 		})
 		.show();
@@ -663,12 +607,14 @@ if(fb.isSessionValid()) {
 		public void onFacebookError(FacebookError e) {
 			// TODO Auto-generated method stub
 			Toast.makeText(CanvasActivity.this,"onFacebookError", Toast.LENGTH_SHORT).show();
+			mDrawerLayout.closeDrawers();
 		}
 		
 		@Override
 		public void onError(DialogError e) {
 			// TODO Auto-generated method stub
 			Toast.makeText(CanvasActivity.this,"onError", Toast.LENGTH_SHORT).show();
+			mDrawerLayout.closeDrawers();
 		}
 		
 		@Override
@@ -680,13 +626,15 @@ if(fb.isSessionValid()) {
 			editor.commit();
 			Toast.makeText(CanvasActivity.this,"onComplete", Toast.LENGTH_SHORT).show();
 					FacebookLogin fb_login_async_task = new FacebookLogin(mSCanvas, CanvasActivity.this, fb,preferences_for_fb);
-					fb_login_async_task.execute();					
+					fb_login_async_task.execute();	
+					mDrawerLayout.closeDrawers();
 		}
 		
 		@Override
 		public void onCancel() {
 			// TODO Auto-generated method stub
 			Toast.makeText(CanvasActivity.this,"onCancel", Toast.LENGTH_SHORT).show();
+			mDrawerLayout.closeDrawers();
 		}
 	});
 }
@@ -771,7 +719,6 @@ private boolean savePNGFile(String filename)
 {    
 	//we get the whole bitmap - not only the foreground (arg0 ==false)
 	Bitmap bmCanvas = mSCanvas.getCanvasBitmap(false);
-	lastModifDate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 	return saveImageToInternalStorage(bmCanvas,filename);
 }   
 
@@ -1065,20 +1012,29 @@ private DatePickerDialog.OnDateSetListener datePickerListener
 // when dialog box is closed, below method will be called.
 public void onDateSet(DatePicker view, int selectedYear,
 int selectedMonth, int selectedDay) {
-int year = selectedYear;
-int month = selectedMonth;
-int day = selectedDay;
-
-Calendar beginTime = Calendar.getInstance();
-beginTime.set(year, month, day, 8, 0);
-long startMillis = beginTime.getTimeInMillis();
-setReminder(mContext, startMillis, notepad_name);
-
-}
-
-
+	int year = selectedYear;
+	int month = selectedMonth;
+	int day = selectedDay;
+	
+	Calendar beginTime = Calendar.getInstance();
+	beginTime.set(year, month, day, 8, 0);
+	long startMillis = beginTime.getTimeInMillis();
+	setReminder(mContext, startMillis, notepad_name);
+	
+	}
 };
 
+
+
+
+protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+	    outState.putParcelable("bitmap", mSCanvas.getCanvasBitmap(false));
+	    outState.putInt("current_site_no", current_site_number);
+	    outState.putInt("sites_counter", sites_count);
+	    outState.putString("name", notepad_name);
+	    
+};
 
 @Override
 protected Dialog onCreateDialog(int id) {

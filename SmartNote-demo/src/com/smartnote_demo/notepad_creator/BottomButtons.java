@@ -23,7 +23,6 @@ import com.smartnote_demo.notepad.CanvasActivity;
 public class BottomButtons extends LinearLayout {
 	
 	private Context mContext;
-	private Button CancelButton;
 	private Button CreateButton;
 	
 	public BottomButtons(Context context, AttributeSet attrs) {
@@ -68,8 +67,8 @@ public class BottomButtons extends LinearLayout {
 			        //open new notepad
 					Intent notepad_intent = new Intent(v.getContext(),CanvasActivity.class);
 					CanvasActivity.notepad_name=new_notepad.getFileName();
-					//
-					
+					//remove from history calling creator activity to prevent from going back
+					((NotepadCreator)mContext).finish();
 					v.getContext().startActivity(notepad_intent);
 					 db.close();
 				
