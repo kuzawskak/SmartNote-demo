@@ -18,6 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,6 +48,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -147,7 +150,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	private ImageView		mDropboxBtn;
 	private ImageView		mSaveBtn;
 	private ImageView		mEventBtn;
-	private ImageView		mExportBtn;
 	//bottom buttons and textview with site number
 	private ImageView 		mNextSiteBtn;
 	private ImageView		mPrevSiteBtn;
@@ -172,6 +174,7 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 
 	private final static int    CANVAS_HEIGHT_MARGIN = 160; // Top,Bottom margin  
 	private final static int    CANVAS_WIDTH_MARGIN = 50; // Left,Right margin
+	protected static final int DATE_DIALOG_ID = 0;
 		
 	private File mFolder = null;
 	private float mZoomValue = 1f;
@@ -640,15 +643,24 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 					e.printStackTrace();
 				}					
 		}
-		else if(nBtnID == mExportBtn.getId()) {
-			//export to pdf			
-		}
 		else if(nBtnID == mEventBtn.getId()) {
+			Log.v("event","event button clicked");
+			showDialog(DATE_DIALOG_ID);
 			//add an event associated with notepad
 		}
 	}
 };
 
+
+public static void setReminder(Context caller, long time, String message)
+{ 
+	Intent calIntent = new Intent(Intent.ACTION_EDIT); 
+	calIntent.setType("vnd.android.cursor.item/event"); 
+	calIntent.putExtra("beginTime", time); 
+	calIntent.putExtra("allDay", true);
+	calIntent.putExtra("title", message); 
+	caller.startActivity(calIntent); 
+}
 
 /*FACEBOOK share function*/
 private boolean shareOnFacebook() throws FileNotFoundException, MalformedURLException, IOException, JSONException {
@@ -996,6 +1008,17 @@ public void onSuccess(int requestnumber, Object obj) {
      
 }
 
+public void deleteCurrentSite() {
+	if(sites_count>0) {
+		SiteDatabaseHandler db = new SiteDatabaseHandler(this);
+	--sites_count;
+	
+	switchToNextSite();
+	}
+	
+}
+
+
 public boolean saveCurrentSite() {
 	savePNGFile(notepad_name+current_site_number);
 	return true;
@@ -1065,6 +1088,40 @@ public void refreshSiteNumberTextView() {
 			+" / "
 			+String.format("%d", sites_count));
 }
+
+private DatePickerDialog.OnDateSetListener datePickerListener 
+= new DatePickerDialog.OnDateSetListener() {
+
+// when dialog box is closed, below method will be called.
+public void onDateSet(DatePicker view, int selectedYear,
+int selectedMonth, int selectedDay) {
+int year = selectedYear;
+int month = selectedMonth;
+int day = selectedDay;
+
+Calendar beginTime = Calendar.getInstance();
+beginTime.set(year, month, day, 8, 0);
+long startMillis = beginTime.getTimeInMillis();
+setReminder(mContext, startMillis, notepad_name);
+
+}
+
+
+};
+
+
+@Override
+protected Dialog onCreateDialog(int id) {
+	switch (id) {
+	case DATE_DIALOG_ID:
+	   // set date picker as current date
+	   return new DatePickerDialog(this, datePickerListener,2014,1,1);
+	   
+	}
+	return null;
+}
+
+
 
 @Override
 public void onFail(String errormessage) {

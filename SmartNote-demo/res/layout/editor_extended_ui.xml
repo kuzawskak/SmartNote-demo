@@ -163,8 +163,6 @@
 		android:background="#111"
 		android:layout_height="match_parent">
 		
-		
-
         <ImageView
             android:id="@+id/save_notepad_button"
             android:layout_width="50dp"
@@ -198,8 +196,4 @@
             android:background="@drawable/selector_tool_bg"
             android:src="@drawable/selector_redo" />
 	</LinearLayout>	
-    
-    
-    
-    
 </android.support.v4.widget.DrawerLayout>
