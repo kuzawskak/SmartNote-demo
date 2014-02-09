@@ -147,6 +147,7 @@
 		android:background="#111"
 		android:showDividers="middle"
         android:divider="@drawable/right_drawer_divider"
+
 		android:layout_height="wrap_content">
 		
         <ImageView
