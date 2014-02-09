@@ -4,6 +4,7 @@ import java.util.List;
 import com.example.smartnote_demo.R;
 import com.smartnote_demo.database.Notepad;
 import com.smartnote_demo.database.NotepadDatabaseHandler;
+import com.smartnote_demo.database.Site;
 import com.smartnote_demo.database.SiteDatabaseHandler;
 
 import android.util.Log;
@@ -16,10 +17,12 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Display;
 import android.view.DragEvent;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View.OnDragListener;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 
@@ -27,10 +30,11 @@ import android.widget.LinearLayout;
 public class Directories extends Activity implements OnItemClickListener {
 	
 	int count =0;
-	private String mSelectedName;
 	private DirItem mSelectedDir;
 	//layout inside ScrollView with directories (notepads)
 	private LinearLayout mDirectoriesContainer;
+	private NotepadDatabaseHandler notepads_handler;
+	private SiteDatabaseHandler sites_handler;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +51,13 @@ public class Directories extends Activity implements OnItemClickListener {
 		display.getSize(size);
 		int width = size.x;
 		int height = size.y;
-		mDirectoriesContainer.setPadding(10, 10, 10, 10);
+		
+		mDirectoriesContainer.setPadding(20, 10, 20, 10);
+		
+		if(notepads.isEmpty()) {
+			Toast.makeText(this, "No notepads created yet.",Toast.LENGTH_SHORT).show();
+		}
+		
 		
         for (Notepad n : notepads) {
             int skin_id = n.getTemplateID();
@@ -65,68 +75,33 @@ public class Directories extends Activity implements OnItemClickListener {
 					registerForContextMenu(dir);
         Log.d("directories", log);
         }
-//		for(int i=0;i<20;i++)
-//		{
-//			count = i;
-//			layoutInsideScrollview.addView(createNotePad((int)(height*0.9),skin_id,site_id));
-//			String h= ""+height;
-//			Log.d("height",h);
-//		}
-		
 
-		
-		
-		
-	/*	new_dir_button.setOnClickListener(new View.OnClickListener() {
-						
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-				Intent create_dir_intent = new Intent(Directories.this,CreateDir.class);
-				startActivity(create_dir_intent);
-			}
-		});
-		*/
-        
-        
-        
+             
 		//mDirectoriesContainer.setOnDragListener(new MyDragListener());
-		
-	
+			
 	}
-
-
 
 	
 	   @Override  
 	    public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo) {  
 	    super.onCreateContextMenu(menu, v, menuInfo);  
-	    	mSelectedDir = (DirItem)v;
-	    	
+	    	mSelectedDir = (DirItem)v;	    	
 	        menu.setHeaderTitle(mSelectedDir.getName()); 
 	        menu.add(0, v.getId(), 0, "Delete");  
-	        menu.add(0, v.getId(), 0, "Settings");  
+	        menu.add(0, v.getId(), 0, "Info");  
 	    } 
 	
-	   
-	   
-	   
+	   	   
 	   @Override  
 	    public boolean onContextItemSelected(MenuItem item) {  
 	        if(item.getTitle()=="Delete")
 	        {//delete notepad;
-	        	 NotepadDatabaseHandler db = new NotepadDatabaseHandler(this);
-	        	 db.deleteNotepad(mSelectedDir.getName());
-	        	 db.close();
-	        	 SiteDatabaseHandler sites_db = new SiteDatabaseHandler(this);
-	        	 sites_db.deleteNotepadContent(mSelectedDir.getName());
-	        	 sites_db.close();
-	        	 mDirectoriesContainer.removeView(mSelectedDir);	        	 	        	 
+	        	 deleteNotepad();       	 	        	 
 	        }
-	        else if(item.getTitle()=="Settings"){
+	        else if(item.getTitle()=="Info"){
 	        	//open notepad settings
-	        	//load Creator
+	        	showInfo();
+	        	//show toast with info
 	        }  
 	        else {return false;}  
 	    return true;  
@@ -134,19 +109,70 @@ public class Directories extends Activity implements OnItemClickListener {
 
 	public DirItem createNotePad(int height,int skin_id, int site_id, String name,int database_id){
 		DirItem notePadView = new DirItem(this,"filename",height,skin_id,site_id,name,database_id);
-
-	//	notePadView.setImageResource(R.drawable.notepad);
-		
-	//	Display display = getWindowManager().getDefaultDisplay();
-	//	int height = display.getHeight();// ((display.getHeight()*30)/100)
-		
-		//int width =(int)( display.getHeight()*1.0f/2.0f); // ((display.getWidth()*20)/100)
-		//LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(
-		//		LayoutParams.WRAP_CONTENT,height);
-		//parms.gravity = Gravity.CENTER_HORIZONTAL;
-		//notePadView.setLayoutParams(parms);
-	//notePadView.setPadding(0, 0,0,0);
 		return notePadView;		
+	}
+	
+	
+	public void showInfo() {
+		String creation_date;
+		int sites_count ;
+		String name;
+		if(mSelectedDir!=null) {
+			name=mSelectedDir.getName();
+			notepads_handler = new NotepadDatabaseHandler(this);
+			Notepad current = notepads_handler.getNotepad(name);
+			creation_date = current.getCreationDate();
+			sites_handler = new SiteDatabaseHandler(this);
+			sites_count = sites_handler.getAllSitesFromNotepad(name).size();
+		} 
+		else
+		{
+			name = "unknown";
+			creation_date = "unknown";
+			sites_count = 0;
+		}
+		
+		String toast_text = String.format
+				("Name: %s \n Creation date: %s \n Sites: %d  ",
+						name,creation_date,sites_count);
+		Toast info_toast = Toast.makeText(this, toast_text, Toast.LENGTH_LONG);
+		info_toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 0);
+		info_toast.show();
+		
+	}
+	
+	public void deleteNotepad() {
+		notepads_handler = new NotepadDatabaseHandler(this);
+   	 	notepads_handler.deleteNotepad(mSelectedDir.getName());
+   	 
+   	 	sites_handler = new SiteDatabaseHandler(this);
+   	 	sites_handler.deleteNotepadContent(mSelectedDir.getName());
+   	
+   	 	mDirectoriesContainer.removeView(mSelectedDir);	 
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		if(notepads_handler!=null) {
+			notepads_handler.close();
+		}
+		if(sites_handler!=null) {
+			sites_handler.close();
+		}
+	}
+	
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		if(notepads_handler!=null) {
+		notepads_handler.close();
+		}
+		if(sites_handler!=null) {
+		sites_handler.close();
+		}
 	}
 	
 	private void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -194,10 +220,8 @@ public class Directories extends Activity implements OnItemClickListener {
 		  
 		    
 		        break;
-		      case DragEvent.ACTION_DRAG_ENDED:
-		    	  
+		      case DragEvent.ACTION_DRAG_ENDED:		    	  
 			        Log.v("motion","drag ended");
-
 		      break;
 
 		      default:

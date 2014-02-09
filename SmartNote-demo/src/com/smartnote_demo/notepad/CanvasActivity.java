@@ -183,9 +183,7 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editor_extended_ui);
-		
-	
-		
+				
 		mContext = this;
 		// We create a new AuthSession so that we can use the Dropbox API.
         AndroidAuthSession session = buildSession();

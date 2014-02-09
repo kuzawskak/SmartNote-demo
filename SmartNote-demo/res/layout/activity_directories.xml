@@ -24,7 +24,7 @@
         
      <HorizontalScrollView
         android:id="@+id/horizontalScrollView1"
-        android:background="@drawable/second_background"
+		android:background="@drawable/second_background"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_marginTop="30dp"
@@ -37,8 +37,10 @@
 		
         <LinearLayout
         android:id="@+id/linearLayoutInsideScroll"
-            android:layout_width="match_parent"             
-            android:layout_height="match_parent"  
+        	android:layout_marginLeft="20dp"
+        	android:layout_marginRight="20dp"
+            android:layout_width="wrap_content"             
+            android:layout_height="wrap_content"  
             android:orientation="horizontal" >
         </LinearLayout>
     </HorizontalScrollView>

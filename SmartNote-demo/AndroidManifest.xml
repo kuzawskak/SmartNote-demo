@@ -24,20 +24,11 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.smartnote_demo.quick_note.QuickNoteActivity" 
-            android:label="@string/title_activity_canvas">
-        </activity>
-        <activity
             android:name="com.smartnote_demo.quick_note.CanvasActivity"
-            android:label="@string/title_activity_canvas" >
-        </activity>
-        <activity
-            android:name="com.smartnote_demo.notepad.NoteActivity"
             android:label="@string/title_activity_canvas" >
         </activity>
         <activity
@@ -45,15 +36,12 @@
             android:label="@string/title_activity_canvas" >
              <intent-filter >
                   <action android:name="android.intent.action.SEND" />
-<category android:name="android.intent.category.DEFAULT" />
-<data android:mimeType="image/*" />
-                 
-                 
-            <!--    <action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="image/*" />                
+            <!--<action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                  -->
-            </intent-filter>
-           
+            </intent-filter>           
         </activity>
         <activity
             android:name="com.smartnote_demo.directories_menu.Directories"
