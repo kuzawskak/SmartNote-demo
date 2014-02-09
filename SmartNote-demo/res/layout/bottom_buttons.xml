@@ -1,12 +1,16 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-        <ImageButton
+        <Button
             android:id="@+id/createButton"
 			android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_gravity="right|bottom"
-      		android:paddingBottom="10dp"
-      		android:layout_marginBottom="20dp"
+
+      		android:paddingRight="20dp"
+
+      		android:layout_marginRight="20dp"
       		android:scaleType="fitXY"
-            android:background="@drawable/create" />
-   
+      		android:text ="Create"
+      		android:textColor ="@android:color/white"/>  
+            <!--  android:background="@android:color/black" -->
+            
 </merge>

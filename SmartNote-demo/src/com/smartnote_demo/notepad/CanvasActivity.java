@@ -1,21 +1,16 @@
 package com.smartnote_demo.notepad;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -28,17 +23,16 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
-import android.drm.DrmStore.RightsStatus;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
+
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.net.Uri;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
+
 import android.os.StrictMode;
-import android.support.v4.view.GravityCompat;
+
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -64,27 +58,13 @@ import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.AppKeyPair;
 import com.dropbox.client2.session.Session.AccessType;
 import com.dropbox.client2.session.TokenPair;
-import com.example.smartnote_demo.MainActivity;
+
 import com.example.smartnote_demo.R;
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.UiLifecycleHelper;
-import com.facebook.Session.StatusCallback;
-import com.facebook.android.AsyncFacebookRunner;
-import com.facebook.Session;
-import com.facebook.android.AsyncFacebookRunner.RequestListener;
+
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
-import com.facebook.android.Util;
-import com.facebook.model.GraphObject;
-import com.facebook.model.GraphUser;
-import com.facebook.model.OpenGraphAction;
-import com.facebook.widget.FacebookDialog;
-import com.facebook.widget.FacebookDialog.PendingCall;
 import com.samsung.spenemulatorlibrary.ActivityWithSPenLayer;
 import com.samsung.spensdk.SCanvasConstants;
 import com.samsung.spensdk.SCanvasView;
@@ -113,7 +93,8 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
     
 	DropboxAPI<AndroidAuthSession> mApi;
     private boolean mLoggedIn;
-
+    private String share_filename;
+    
     // If you'd like to change the access type to the full Dropbox instead of
    // an app folder, change this value.
    final static private AccessType ACCESS_TYPE = AccessType.APP_FOLDER;
@@ -154,8 +135,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	private ImageView 		mNextSiteBtn;
 	private ImageView		mPrevSiteBtn;
 	private TextView 		mSiteNumberTextview;
-
-
 
 	//==============================
 	// Variables
@@ -313,7 +292,7 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		// Set Background of layout container
 		//mLayoutContainer.setBackgroundResource(R.drawable.page4);
 
-		
+		updatePrevNextState();
 		//------------------------------------
 		// SettingView Setting
 		//------------------------------------
@@ -593,6 +572,7 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 		}
 		else if(nBtnID == mAddSiteBtn.getId()) {
 			AddNewSite();
+			updatePrevNextState();
 			//add new site in editor			
 		}
 		//bottom menu
@@ -613,7 +593,7 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 			if(savePNGFile(notepad_name+current_site_number)==false) {
 				Log.e("smart","failed to save png file");
 			}
-		
+			mDrawerLayout.closeDrawers();
 			//temporary zoom testing			
 			//thats works! but we want probably canvas to fill the whole place
 		//	mSCanvas.setCanvasZoomScale(mZoomValue += 0.2, false);
@@ -750,9 +730,8 @@ private boolean shareOnDropbox(String fileName ) {
 	File filePath = getFileStreamPath(fileName);
 	
 	DropboxUploadPicture upload = new DropboxUploadPicture(this, mApi,PHOTO_DIR,filePath);
-    upload.execute();
-	//Upload upload = new Upload(1,this,mApi, PHOTO_DIR,filePath);
-	//upload.execute();
+    mDrawerLayout.closeDrawers();
+	upload.execute();
 	return true;
 }
 
@@ -800,20 +779,16 @@ private boolean saveAndSharePngFile()
 {    
 	//we get the whole bitmap - not only the foreground (arg0 ==false)
 	Bitmap bmCanvas = mSCanvas.getCanvasBitmap(false);
-	 String current_date = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-	 String filename = current_date+".png";
+	String current_date = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+	share_filename = current_date+".png";
 	  if(saveImageToInternalStorage(bmCanvas,current_date))
-	  {
-		  	MemoDatabaseHandler db = new MemoDatabaseHandler(this);
-		  	Log.d("Insert: ", "Inserting ...");	 
-	        db.addMemo(new Memo(filename,current_date));
-	        Log.d("Insert",filename + "inserted ");
-	        shareOnDropbox(filename);
+	  {		
+		  //we don't add the file to database, 
+		  //bcs it's temporary file for sharing
+	        shareOnDropbox(share_filename);
 	        return true;
 	  }
-	  
 	  return false;
-
 }   
 
 //it will be used rather in Directories menu when we will be loading saved notepad
@@ -899,13 +874,10 @@ Rect getMaximumCanvasRect(Rect rectImage, int nMarginWidth, int nMarginHeight){
 
 
 // This is what gets called on finishing a media piece to import
-
-
 private void logOut()
 {
        // Remove credentials from the session
        mApi.getSession().unlink();
-
        // Clear our stored keys
        clearKeys();
        // Change UI state to display logged out version
@@ -917,9 +889,7 @@ private void logOut()
  */
 private void setLoggedIn(boolean loggedIn)
 {
-
-       mLoggedIn = loggedIn;     
-    
+       mLoggedIn = loggedIn;       
 }
 
 /**
@@ -983,7 +953,6 @@ private AndroidAuthSession buildSession() {
 
 @Override
 public void onSuccess(int requestnumber, Object obj) {
-	// TODO Auto-generated method stub
 	 try
      {
             if(requestnumber == Constants.UploadPhotos_Code)
@@ -996,6 +965,7 @@ public void onSuccess(int requestnumber, Object obj) {
                          
                          startActivity(i);
                          finish();
+                         mDrawerLayout.closeDrawers();
                   }
             }
      }
@@ -1050,6 +1020,7 @@ public void switchToPrevSite() {
 		Log.v("add_new_site","4");
 		refreshSiteNumberTextView();
 		Log.v("add_new_site","5");
+		updatePrevNextState();
 	}
 	else {
 		Log.d("notepad","failed to save current site");
@@ -1074,6 +1045,7 @@ public void AddNewSite() {
 		mSCanvas.setClearImageBitmap(mBGBitmap);
 		Log.v("add_new_site","7");
 		refreshSiteNumberTextView();
+		updatePrevNextState();
 	}
 	else {
 		Log.d("notepad","failed to save current site");
@@ -1119,7 +1091,12 @@ protected Dialog onCreateDialog(int id) {
 	return null;
 }
 
-
+void updatePrevNextState() {
+		mNextSiteBtn.setEnabled(sites_count<=1||current_site_number==sites_count?
+				false:true);
+		mPrevSiteBtn.setEnabled(sites_count<=1||current_site_number<=1?
+				false:true);
+}
 
 @Override
 public void onFail(String errormessage) {

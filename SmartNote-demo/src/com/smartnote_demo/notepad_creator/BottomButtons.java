@@ -12,25 +12,19 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.example.smartnote_demo.MainActivity;
 import com.example.smartnote_demo.R;
-import com.smartnote_demo.database.Memo;
-import com.smartnote_demo.database.MemoDatabaseHandler;
 import com.smartnote_demo.database.Notepad;
 import com.smartnote_demo.database.NotepadDatabaseHandler;
 import com.smartnote_demo.notepad.CanvasActivity;
-import com.smartnote_demo.notepad_creator.NotepadCreator;
 
 public class BottomButtons extends LinearLayout {
 	
 	private Context mContext;
-	
+	private Button CancelButton;
+	private Button CreateButton;
 	
 	public BottomButtons(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -48,7 +42,7 @@ public class BottomButtons extends LinearLayout {
 	  	
 	
 		
-		CreateButton = (ImageButton)itemTemplate.findViewById(R.id.createButton);
+		CreateButton = (Button)itemTemplate.findViewById(R.id.createButton);
 		
 		
 		CreateButton.setOnClickListener(new OnClickListener() {
@@ -99,7 +93,7 @@ public class BottomButtons extends LinearLayout {
 	  	LayoutInflater inflater = LayoutInflater.from(context);
 		View itemTemplate = inflater.inflate(R.layout.bottom_buttons, this, true);
 	  	
-		CreateButton = (ImageButton)itemTemplate.findViewById(R.id.createButton);
+		CreateButton = (Button)itemTemplate.findViewById(R.id.createButton);
 
 		
 		CreateButton.setOnClickListener(new OnClickListener() {
@@ -123,7 +117,6 @@ public class BottomButtons extends LinearLayout {
 				
 	}	
 	
-	private ImageButton CancelButton;
-	private ImageButton CreateButton;
+
 	
 }
