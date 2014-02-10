@@ -1,7 +1,9 @@
 package com.smartnote_demo.database;
-
-import java.util.Date;
-
+/**
+ * 
+ *Class to handle quicknote
+ *
+ */
 public class Memo {
 	
 	//private variables

@@ -44,14 +44,8 @@ public class Carousel extends CarouselSpinner implements GestureDetector.OnGestu
 	
 	// Static private members
 
-	/**
-	 * Tag for a class logging
-	 */
 	private static final String TAG = Carousel.class.getSimpleName();
 
-	/**
-	 * If logging should be inside class
-	 */
 	private static final boolean localLOGV = false;
 	
 	/**

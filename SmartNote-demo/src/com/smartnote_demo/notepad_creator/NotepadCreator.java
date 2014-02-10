@@ -1,10 +1,8 @@
 package com.smartnote_demo.notepad_creator;
 
 import com.example.smartnote_demo.R;
-import com.smartnote_demo.directories_menu.DirItem;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Point;
@@ -15,9 +13,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
 

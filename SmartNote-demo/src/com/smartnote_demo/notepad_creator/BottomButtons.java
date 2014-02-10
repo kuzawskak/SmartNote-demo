@@ -6,8 +6,6 @@ import java.util.Calendar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,21 +36,15 @@ public class BottomButtons extends LinearLayout {
 		
 	  	LayoutInflater inflater = LayoutInflater.from(context);
 		View itemTemplate = inflater.inflate(R.layout.bottom_buttons, this, true);
-	  	
-	
-		
+	  			
 		CreateButton = (Button)itemTemplate.findViewById(R.id.createButton);
-		
-		
-		CreateButton.setOnClickListener(new OnClickListener() {
-		
 			
+		CreateButton.setOnClickListener(new OnClickListener() {
+					
 			@Override
 			public void onClick(View v) {
-					Log.v("button", "create button clicked");
 				 SharedPreferences sp = mContext.getSharedPreferences("NEW_NOTEPAD", 0);
 				    String name = sp.getString("name", "new_notepad");
-				   
 				    int site_id = sp.getInt("site_id",0);
 				    Log.v("directories",""+site_id);
 				    int template_id = sp.getInt("template_id",0);
@@ -92,9 +84,7 @@ public class BottomButtons extends LinearLayout {
 	  	LayoutInflater inflater = LayoutInflater.from(context);
 		View itemTemplate = inflater.inflate(R.layout.bottom_buttons, this, true);
 	  	
-		CreateButton = (Button)itemTemplate.findViewById(R.id.createButton);
-
-		
+		CreateButton = (Button)itemTemplate.findViewById(R.id.createButton);	
 		CreateButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -114,8 +104,5 @@ public class BottomButtons extends LinearLayout {
 			}
 		});
 				
-	}	
-	
-
-	
+	}		
 }

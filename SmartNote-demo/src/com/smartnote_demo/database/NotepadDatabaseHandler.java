@@ -12,7 +12,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class NotepadDatabaseHandler extends SQLiteOpenHelper{
-
 	
 	// All Static variables
     // Database Version
@@ -47,10 +46,6 @@ public class NotepadDatabaseHandler extends SQLiteOpenHelper{
                 + KEY_DATE + " TEXT" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
- 
-    
-    
-    
     
     // Upgrading database
     @Override
@@ -77,7 +72,6 @@ public void addNotepad(Notepad notepad) {
     values.put(KEY_TEMPLATE_ID, notepad.getTemplateID());
     values.put(KEY_SITE_ID, notepad.getSiteID());
     values.put(KEY_DATE, notepad.getCreationDate()); // Notepad creation date
-
 
 //insert row
     db.insert(TABLE_NOTEPADS, null, values);
@@ -113,7 +107,7 @@ return notepad;
 }
 
 
-//Getting All Contacts
+//Getting All Notepads
 public List<Notepad> getAllNotepads() {
     List<Notepad> notepadList = new ArrayList<Notepad>();
     // Select All Query
@@ -131,12 +125,12 @@ public List<Notepad> getAllNotepads() {
             notepad.setTemplateID(Integer.parseInt(cursor.getString(2)));
             notepad.setSiteID(Integer.parseInt(cursor.getString(3)));
             notepad.setCreationDate(cursor.getString(4));
-            // Adding contact to list
+            // Adding notepad to list
             notepadList.add(notepad);
         } while (cursor.moveToNext());
     }
 
-    // return contact list
+    // return as a list
     return notepadList;
 }
 

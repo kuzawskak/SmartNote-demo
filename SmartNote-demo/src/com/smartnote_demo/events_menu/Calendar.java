@@ -19,12 +19,11 @@ public class Calendar extends Activity{
 		@Override
 		public void onSelectedDayChange(CalendarView view, int year, int month,
 				int dayOfMonth) {
-			// TODO Auto-generated method stub
+			// for future development
 			
 		}
 	});
 	 
-	
 	}
 }
 	

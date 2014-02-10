@@ -4,7 +4,6 @@ import java.util.List;
 import com.example.smartnote_demo.R;
 import com.smartnote_demo.database.Notepad;
 import com.smartnote_demo.database.NotepadDatabaseHandler;
-import com.smartnote_demo.database.Site;
 import com.smartnote_demo.database.SiteDatabaseHandler;
 
 import android.util.Log;
@@ -16,17 +15,22 @@ import android.graphics.Point;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Display;
-import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View.OnDragListener;
 import android.widget.AdapterView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 
-
+/**
+ * 
+ * Activity with saved notepads loaded from database
+ * (each item is reacting on long press and click 
+ * long click - to show context menu
+ * click  - to open the notepad to edit)
+ *
+ */
 public class Directories extends Activity implements OnItemClickListener {
 	
 	int count =0;
@@ -49,11 +53,10 @@ public class Directories extends Activity implements OnItemClickListener {
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
+		//to be used on constructor  - to dynamically set item size for screen
 		int width = size.x;
 		int height = size.y;
-		
-		mDirectoriesContainer.setPadding(20, 10, 20, 10);
-		
+				
 		if(notepads.isEmpty()) {
 			Toast.makeText(this, "No notepads created yet.",Toast.LENGTH_SHORT).show();
 		}
@@ -76,9 +79,7 @@ public class Directories extends Activity implements OnItemClickListener {
         Log.d("directories", log);
         }
 
-             
-		//mDirectoriesContainer.setOnDragListener(new MyDragListener());
-			
+
 	}
 
 	
@@ -111,8 +112,7 @@ public class Directories extends Activity implements OnItemClickListener {
 		DirItem notePadView = new DirItem(this,"filename",height,skin_id,site_id,name,database_id);
 		return notePadView;		
 	}
-	
-	
+		
 	public void showInfo() {
 		String creation_date;
 		int sites_count ;
@@ -199,43 +199,4 @@ public class Directories extends Activity implements OnItemClickListener {
 		// TODO Auto-generated method stub
 		
 	}
-
-	 class MyDragListener implements OnDragListener {
-		    //Drawable enterShape = getResources().getDrawable(R.drawable.notepad);
-		   // Drawable normalShape = getResources().getDrawable(R.drawable.notepad);
-
-		    @Override
-		    public boolean onDrag(View v, DragEvent event) {
-				 // Log.v("motion","before remove");
-		      int action = event.getAction();
-		      switch (event.getAction()) {
-		      case DragEvent.ACTION_DRAG_STARTED:
-		        // do nothing
-			        Log.v("motion","drag started");
-		        break;
-		      case DragEvent.ACTION_DRAG_ENTERED:
-			        Log.v("motion","drag enetered");
-		        break;
-		      case DragEvent.ACTION_DRAG_EXITED:
-			        Log.v("motion","drag exited");
-		        break;
-		      case DragEvent.ACTION_DROP:
-		    	  View view = (View) event.getLocalState();
-		    	 // view.setVisibility(View.GONE);
-		    	 // view.setVisibility(View.GONE);
-		    	  ((LinearLayout)v).removeView(view);
-		  
-		    
-		        break;
-		      case DragEvent.ACTION_DRAG_ENDED:		    	  
-			        Log.v("motion","drag ended");
-		      break;
-
-		      default:
-		        break;
-		      }
-		      return true;
-		    }
-	 }
-	
 }

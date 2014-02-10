@@ -1,7 +1,5 @@
 package com.smartnote_demo.database;
 
-import java.util.Date;
-
 public class Notepad {
 	
 	//private variables

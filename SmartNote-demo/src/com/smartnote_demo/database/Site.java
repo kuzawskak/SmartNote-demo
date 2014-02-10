@@ -1,7 +1,8 @@
 package com.smartnote_demo.database;
-
-import java.util.Date;
-
+/**
+ * class to handle site info
+ *
+ */
 public class Site {
 	
 	//private variables
@@ -9,7 +10,6 @@ public class Site {
 	String _notepad_name;
 	String _filename;
 	int _site_number;
-
 	
 	//Empty contructor
 	public Site () {
@@ -69,9 +69,5 @@ public class Site {
 	public void setFileName(String filename){
 			this._filename = filename;
 		}
- 
 
 }
-
-
-

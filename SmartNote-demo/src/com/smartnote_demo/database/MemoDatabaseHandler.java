@@ -50,7 +50,6 @@ public class MemoDatabaseHandler extends SQLiteOpenHelper{
         onCreate(db);
     }
 	
-	
 		
 	
 	public MemoDatabaseHandler(Context context, String name,
@@ -58,10 +57,7 @@ public class MemoDatabaseHandler extends SQLiteOpenHelper{
 		super(context, name, factory, version);
 		// TODO Auto-generated constructor stub
 	}
-
-
 	
-
     // Adding new memo
 public void addMemo(Memo memo) {
     SQLiteDatabase db = this.getWritableDatabase();

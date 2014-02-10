@@ -1,22 +1,17 @@
 package com.smartnote_demo.directories_menu;
 
-
-	import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
+import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.smartnote_demo.R;
 
 	public class TopMenu extends LinearLayout {
+		
+		private ImageButton ExitButton;
 		
 		public TopMenu(Context context, AttributeSet attrs) {
 			super(context, attrs);
@@ -50,12 +45,6 @@ import com.example.smartnote_demo.R;
 		  	
 			ExitButton = (ImageButton)itemTemplate.findViewById(R.id.exitButton);
 
-					
 		}	
-		
-		private ImageButton ExitButton;
-
-
-		
-	}
+}
 

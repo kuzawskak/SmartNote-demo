@@ -93,9 +93,6 @@ Site site = new Site(Integer.parseInt(cursor.getString(0)),
 return site;
 }
 
-
-
-
 //Getting All Sites
 public List<Site> getAllSitesFromNotepad(String notepad_name) {
     List<Site> siteList = new ArrayList<Site>();
@@ -169,8 +166,6 @@ public int getNotepadsCount() {
     // return count
     return cursor.getCount();
 }
-
-
 
 public Cursor GetCursor() {
 	    // Select All Query

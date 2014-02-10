@@ -41,12 +41,10 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
+
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,7 +71,6 @@ import com.smartnote_demo.database.Notepad;
 import com.smartnote_demo.database.NotepadDatabaseHandler;
 import com.smartnote_demo.database.Site;
 import com.smartnote_demo.database.SiteDatabaseHandler;
-import com.smartnote_demo.directories_menu.Directories;
 import com.smartnote_demo.spen_tools.SPenSDKUtils;
 import com.smartnote_demo.share.*;
 
@@ -145,12 +142,8 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	private Bitmap 	mBGBitmap;
 	private Rect	mSrcImageRect = null;
 
-	private final static int    CANVAS_HEIGHT_MARGIN = 160; // Top,Bottom margin  
-	private final static int    CANVAS_WIDTH_MARGIN = 50; // Left,Right margin
 	protected static final int DATE_DIALOG_ID = 0;
-		
-	private File mFolder = null;
-	private float mZoomValue = 1f;
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -233,18 +226,12 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		//List<Site> sites = site_handler.getAllSitesFromNotepad(notepad_id);
 		//add new site when notepad is opened
 		
-			Log.v("notepad","EMPTY NOTEPAD");
 			String notepad_name = current_notepad.getFileName();
-			Log.v("notepad","after name");
 			current_site = new Site(notepad_name,notepad_name+String.format("%d",sites_count),sites_count);
-			Log.v("notepad","after site");
 			site_handler.addSite(current_site);
 			List<Site> sites = site_handler.getAllSitesFromNotepad(notepad_name);
-			Log.v("notepad","after second site handler");
-			
-			
 
-			
+
 			if (savedInstanceState != null) {
 				Log.v("notepad","setting counters");
 				sites_count = savedInstanceState.getInt("sites_counter");
@@ -353,10 +340,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
         }
 
 
-	
-
-
-    
     @Override
     protected void onResume()
     {
@@ -410,8 +393,7 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	}	
 
 	
-	private void exitActivity(){
-		// TODO Auto-generated method stub		
+	private void exitActivity(){	
 		//change it and ask if the user wants to SAVE the file
 		AlertDialog.Builder ad = new AlertDialog.Builder(mContext);		
 		ad.setIcon(getResources().getDrawable(android.R.drawable.ic_dialog_alert));	// Android Resource
@@ -538,10 +520,7 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 				Log.e("smart","failed to save png file");
 			}
 			mDrawerLayout.closeDrawers();
-			//temporary zoom testing			
-			//thats works! but we want probably canvas to fill the whole place
-		//	mSCanvas.setCanvasZoomScale(mZoomValue += 0.2, false);
-		//	mSCanvas.setCanvasZoomScale(mZoomValue, true);			
+		
 		}
 		else if(nBtnID == mDropboxBtn.getId()) {
 			//login and share on dropbox
@@ -640,29 +619,6 @@ if(fb.isSessionValid()) {
 }
 return true;
 }
-/*  THE SAME AS IN ASYNC TASK FOR UPLOAD ON FACEBOOK
-void postToWall() throws FileNotFoundException, MalformedURLException, IOException, JSONException {
-	Bitmap bmCanvas = mSCanvas.getCanvasBitmap(false);	  
-	    String albumId = "me";	    	 
-	    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-	    bmCanvas.compress(Bitmap.CompressFormat.JPEG,100,bos);
-	    byte[] photoBytes = bos.toByteArray();
-	     
-	    Bundle params = new Bundle();
-	    params.putByteArray("picture", photoBytes);
-	     
-	    try {
-	        String resp = fb.request(albumId + "/photos", params, "POST");
-	        JSONObject json = Util.parseJson(resp);	
-	    } catch ( IOException e ) {
-	    	Log.v("facebook","IOException");
-	    } catch ( FacebookError e ) {
-	    	Log.v("facebook","FacebookError");
-	    } catch ( JSONException e ) {
-	    	Log.v("facebook","JSONException");
-	    }
-}
-	*/
 
 
 /*
@@ -693,14 +649,6 @@ private void checkAppKeySetup() {
     }
 }
 
-/*private AndroidAuthSession buildSession() {
-    AppKeyPair appKeyPair = new AppKeyPair(APP_KEY, APP_SECRET);
-
-    AndroidAuthSession session = new AndroidAuthSession(appKeyPair);
-    loadAuth(session);
-    return session;
-}*/
-
 private void showToast(String msg) {
     Toast error = Toast.makeText(this, msg, Toast.LENGTH_LONG);
     error.show();
@@ -713,7 +661,6 @@ private void loadAuth(AndroidAuthSession session) {
 
 /**
  * Save current site
- * @return
  */
 private boolean savePNGFile(String filename) 
 {    
@@ -959,14 +906,8 @@ public void switchToPrevSite() {
 		Log.v("add_new_site","1");
 		--current_site_number;
 		//the filename is : notepad_name+current_site_number
-		Log.v("add_new_site","2");
 		loadCanvasImage(notepad_name+String.format("%d",current_site_number)+".png",true);
-		//load bitmap from saved file
-		Log.v("add_new_site","3");
-		//mSCanvas.setClearImageBitmap(mBGBitmap);
-		Log.v("add_new_site","4");
 		refreshSiteNumberTextView();
-		Log.v("add_new_site","5");
 		updatePrevNextState();
 	}
 	else {
@@ -978,19 +919,12 @@ public void switchToPrevSite() {
 public void AddNewSite() {
 	if(saveCurrentSite()) {
 		sites_count++;
-		Log.v("add_new_site","1");
 		current_site_number++;
-		Log.v("add_new_site","2");
 		SiteDatabaseHandler db = new SiteDatabaseHandler(this);
-		Log.v("add_new_site","3");
 		Site new_site = new Site(notepad_name,notepad_name+String.format("%d",sites_count),sites_count);	
-		Log.v("add_new_site","4");
 		db.addSite(new_site);
-		Log.v("add_new_site","5");
 		db.close();
-		Log.v("add_new_site","6");
 		mSCanvas.setClearImageBitmap(mBGBitmap);
-		Log.v("add_new_site","7");
 		refreshSiteNumberTextView();
 		updatePrevNextState();
 	}
@@ -1023,8 +957,6 @@ int selectedMonth, int selectedDay) {
 	
 	}
 };
-
-
 
 
 protected void onSaveInstanceState(Bundle outState) {

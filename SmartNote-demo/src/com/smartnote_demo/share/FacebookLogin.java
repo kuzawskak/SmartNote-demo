@@ -1,6 +1,5 @@
 package com.smartnote_demo.share;
 
-
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.FacebookError;

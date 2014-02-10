@@ -1,45 +1,29 @@
-
 package com.smartnote_demo.directories_menu;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Calendar;
-
-import com.example.smartnote_demo.MainActivity;
 import com.example.smartnote_demo.R;
-import com.example.smartnote_demo.R.id;
-import com.example.smartnote_demo.R.layout;
-import com.smartnote_demo.carouselmenu.CarouselItem;
-import com.smartnote_demo.database.Notepad;
-import com.smartnote_demo.database.NotepadDatabaseHandler;
+
 import com.smartnote_demo.notepad.CanvasActivity;
 
-import android.content.ClipData;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.gesture.GestureOverlayView.OnGestureListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Matrix;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.view.View.OnTouchListener;
-import android.view.View.DragShadowBuilder;
-import android.view.View.OnDragListener;
-import android.view.DragEvent;
-import android.graphics.drawable.Drawable;
-import android.net.nsd.NsdManager.RegistrationListener;
 
+/**
+ * 
+ * Class representing Notepad item (only the UI part - template, name)
+ * to be shown in Directories activity
+ *
+ */
 public class DirItem extends FrameLayout {
 
 	private ImageView mImage;
@@ -48,12 +32,6 @@ public class DirItem extends FrameLayout {
 	private Context mContext;
 	private int index;
 	private int mDatabaseId;
-	private float itemX;
-	private float itemY;
-	private boolean drawn;	
-
-	// It's needed to find screen coordinates
-	private Matrix mCIMatrix;
 	
 	public DirItem(Context context,String filename,int height,int skin_id, int site_id,String name,int id_in_database) {
 		
@@ -62,14 +40,9 @@ public class DirItem extends FrameLayout {
 		mDatabaseId = id_in_database;
 		mName = name;
 		
-		String h = ""+height;
-		Log.d("heightinside",h);
-		
 		LinearLayout.LayoutParams params = 
 				new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.FILL_PARENT);
-				//(200,300);
-						//LayoutParams.MATCH_PARENT, 
-						//LayoutParams.MATCH_PARENT);	
+
 		params.weight = 1;
 		
 		this.setLayoutParams(params);
@@ -82,7 +55,6 @@ public class DirItem extends FrameLayout {
 		mText = (TextView)itemTemplate.findViewById(R.id.grid_item_label);
 		mText.setText(mName);
 	
-	   // this.setOnTouchListener(new MyTouchListener());
 		this.setOnClickListener(new NotepadClickListener());
 		
 	    this.setOnLongClickListener(new OnLongClickListener() {
@@ -119,9 +91,7 @@ public class DirItem extends FrameLayout {
 	public int getDatabaseId() {
 		return mDatabaseId;
 	}
-	
-
-	
+		
 	public String getName(){
 		return mText.getText().toString();
 	}	
@@ -135,31 +105,6 @@ public class DirItem extends FrameLayout {
 	}
 	
 
-	public void setItemX(float x) {
-		this.itemX = x;
-	}
-
-	public float getItemX() {
-		return itemX;
-	}
-
-	public void setItemY(float y) {
-		this.itemY = y;
-	}
-
-	public float getItemY() {
-		return itemY;
-	}
-
-
-
-	public void setDrawn(boolean drawn) {
-		this.drawn = drawn;
-	}
-
-	public boolean isDrawn() {
-		return drawn;
-	}
 	
 	public void setImageBitmap(Bitmap bitmap){
 		mImage.setImageBitmap(bitmap);
@@ -170,14 +115,6 @@ public class DirItem extends FrameLayout {
 		mText.setText(txt);
 	}
 	
-	Matrix getCIMatrix() {
-		return mCIMatrix;
-	}
-
-	void setCIMatrix(Matrix mMatrix) {
-		this.mCIMatrix = mMatrix;
-	}
-
 	private final class NotepadClickListener implements OnClickListener {
 
 		@Override
@@ -189,63 +126,6 @@ public class DirItem extends FrameLayout {
 		}	
 	}
 	
-	private final class NotepadGestureListener implements OnLongClickListener{
-
-		@Override
-		public boolean onLongClick(View v) {
-			// show context menu
-			return false;
-		}
-		
-	}
-	
-
-	
-	
-	
-	private final class MyTouchListener implements OnTouchListener {
-		boolean start  = false;
-    	float x1, x2, y1, y2;
-	    public boolean onTouch(View view, MotionEvent motionEvent) {
-	    	
-
-	    	
-
-	      if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-	    	 Log.v("motion","action down");
-	    	  x1=motionEvent.getX();
-	    	  y1 = motionEvent.getY();
-	       // view.setVisibility(View.INVISIBLE);
-	        return true;
-	      } 
-	      else if(motionEvent.getAction() == MotionEvent.ACTION_MOVE)
-	    	  {
-	    	  x2 = motionEvent.getX();
-	    	  y2 = motionEvent.getY();
-	    	  if(Math.abs(y2-y1)>100 && start == false)
-	    		  start=true;
-	    	  ClipData data = ClipData.newPlainText("", "");
-		        DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-		        view.startDrag(data, shadowBuilder, view, 0);
-	    	  return true;
-	    	  }
-	      else if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
-	    	  
-	    	  Log.v("motion","action up");
-	    	  return true;
-	      }
-	      
-	      else
-	      {
-	        return false;
-	      }
-	      
-	      
-	    }
-	  }
-	
-	
-
 	 
 }
 

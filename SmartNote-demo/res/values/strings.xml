@@ -16,7 +16,6 @@
 	<string name="events">Events</string>
 	<string name="others">Others</string>
 	
-	
 	<!-- Settings -->		
 	<string name="pen_settings">Pen settings</string>
 	<string name="pen_settings_preset_empty">No preset settings</string>
@@ -220,16 +219,7 @@
 
 	<string name="hover_popup_window">The minimal organic design of the Samsung GALAXY S III is reflected in its smooth curves</string>
 	
-<string-array name="planets_array">
-<item>Mercury</item>
-<item>Venus</item>
-<item>Earth</item>
-<item>Mars</item>
-<item>Jupiter</item>
-<item>Saturn</item>
-<item>Uranus</item>
-<item>Neptune</item>
-</string-array>
+
 <string name="drawer_open">Open navigation drawer</string>
 <string name="drawer_close">Close navigation drawer</string>
 <string name="action_websearch">Web search</string>
