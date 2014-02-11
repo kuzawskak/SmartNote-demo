@@ -1,6 +1,5 @@
 package com.example.smartnote_demo;
 
-import android.app.Application;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;

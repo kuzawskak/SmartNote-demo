@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import com.example.smartnote_demo.ExitButtonListener;
 import com.example.smartnote_demo.R;
 
 	public class TopMenu extends LinearLayout {
@@ -28,6 +29,9 @@ import com.example.smartnote_demo.R;
 		  	
 			ExitButton = (ImageButton)itemTemplate.findViewById(R.id.exitButton);
 
+			
+			ExitButton.setOnClickListener(new ExitButtonListener());
+			
 		}
 		
 		public TopMenu(Context context) {
@@ -44,7 +48,7 @@ import com.example.smartnote_demo.R;
 			View itemTemplate = inflater.inflate(R.layout.bottom_menu, this, true);
 		  	
 			ExitButton = (ImageButton)itemTemplate.findViewById(R.id.exitButton);
-
+			ExitButton.setOnClickListener(new ExitButtonListener());
 		}	
 }
 
