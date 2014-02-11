@@ -1,39 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:pj="http://schemas.android.com/apk/res/com.example.smartnote_demo"
-    xmlns:bm="com.example.smartnote_demo"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <LinearLayout
+<RelativeLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+    	xmlns:pj="http://schemas.android.com/apk/res/com.example.smartnote_demo"
+    	xmlns:bm="com.example.smartnote_demo"    
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@drawable/main_background"
         android:gravity="top"
         android:orientation="vertical"
         android:padding="5dip" >
-    	
-        <com.smartnote_demo.directories_menu.TopMenu
-        	android:id="@+id/topMenu"
-        	android:layout_height="0dp"
-        	android:layout_weight="0.10"
-        	android:layout_width="wrap_content"
-        	android:layout_gravity="right"
-        ></com.smartnote_demo.directories_menu.TopMenu>
-                 
-                 
 			<com.smartnote_demo.carouselmenu.Carousel
 			    android:layout_width="fill_parent"
-			    android:layout_marginBottom="50dp"
-			    android:layout_height="0dp"
-        		android:layout_weight="0.90"
+			    android:layout_height="fill_parent"
 			    android:id="@+id/carousel"  
 			    pj:UseReflection="true"
 			    pj:Items="@array/entries"
 			    pj:Names="@array/names" 
 			    pj:SelectedItem="0"
-			    android:animationDuration="200"
-			/>    	
-	</LinearLayout>    	
-</LinearLayout>
+			    android:animationDuration="200"/>    	
+			<com.smartnote_demo.directories_menu.TopMenu
+        	android:id="@+id/topMenu"
+        	android:layout_height="wrap_content"
+        	android:layout_width="wrap_content"
+        	android:layout_alignParentRight="true"
+        	android:layout_gravity="right|top">
+        	</com.smartnote_demo.directories_menu.TopMenu>             
+	</RelativeLayout>    	
