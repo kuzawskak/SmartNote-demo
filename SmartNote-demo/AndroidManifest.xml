@@ -38,9 +38,6 @@
                   <action android:name="android.intent.action.SEND" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<data android:mimeType="image/*" />                
-            <!--<action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-                 -->
             </intent-filter>           
         </activity>
         <activity
@@ -67,20 +64,12 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 </intent-filter>     
-      	</activity>
-      	
-       
+      	</activity>       
 		<activity 
-		    android:name="com.smartnote_demo.share.FacebookLogin" 
-                   >
+		    android:name="com.smartnote_demo.share.FacebookLogin">
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
       	</activity>
-       
-       
-	
     </application>
-
 </manifest>
