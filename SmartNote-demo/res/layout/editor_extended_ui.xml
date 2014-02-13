@@ -61,6 +61,15 @@
             android:src="@drawable/selector_redo" />
         
         <ImageView
+            android:id="@+id/stampBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dip"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tool_bg"
+            android:src="@drawable/selector_add" />
+        
+        <ImageView
             android:id="@+id/addSiteBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

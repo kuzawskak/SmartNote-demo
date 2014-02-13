@@ -10,6 +10,7 @@ import com.smartnote_demo.carouselmenu.CarouselAdapter.OnItemSelectedListener;
 import com.smartnote_demo.carouselmenu.CarouselItem;
 import com.smartnote_demo.directories_menu.Directories;
 import com.smartnote_demo.events_menu.Calendar;
+import com.smartnote_demo.images.GalleryActivity;
 import com.smartnote_demo.quick_note.CanvasActivity;
 import com.smartnote_demo.database.MemoDatabaseHandler;
 import android.app.Activity;
@@ -58,7 +59,9 @@ public class MainActivity extends Activity {
 					/***OTHERS***/
 					break;					
 				case 3:
-					/***PICTURES***/				
+					/***PICTURES***/
+					Intent images_intent = new Intent(MainActivity.this,GalleryActivity.class);
+					startActivity(images_intent);
 					break;
 				case 4:
 					/***QUICK NOTES***/

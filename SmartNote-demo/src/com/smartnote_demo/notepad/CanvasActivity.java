@@ -27,11 +27,14 @@ import android.graphics.Bitmap;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.graphics.RectF;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.os.StrictMode;
+import android.provider.MediaStore;
 
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
@@ -62,15 +65,19 @@ import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
+import com.samsung.samm.common.SObjectImage;
+import com.samsung.samm.common.SOptionSCanvas;
 import com.samsung.spenemulatorlibrary.ActivityWithSPenLayer;
 import com.samsung.spensdk.SCanvasConstants;
 import com.samsung.spensdk.SCanvasView;
 import com.samsung.spensdk.applistener.HistoryUpdateListener;
 import com.samsung.spensdk.applistener.SCanvasInitializeListener;
+
 import com.smartnote_demo.database.Notepad;
 import com.smartnote_demo.database.NotepadDatabaseHandler;
 import com.smartnote_demo.database.Site;
 import com.smartnote_demo.database.SiteDatabaseHandler;
+import com.smartnote_demo.images.GalleryActivity;
 import com.smartnote_demo.spen_tools.SPenSDKUtils;
 import com.smartnote_demo.share.*;
 
@@ -118,6 +125,7 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	private ImageView		mRedoBtn;	
 	private ImageView		mTextBtn;
 	private ImageView		mAddSiteBtn;
+	private ImageView		mStampBtn;
 	//right drawer buttons
 	private ImageView		mFacebookBtn;
 	private ImageView		mDropboxBtn;
@@ -143,6 +151,7 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	private Rect	mSrcImageRect = null;
 
 	protected static final int DATE_DIALOG_ID = 0;
+	protected static final int REQUEST_CODE_INSERT_STAMP_OBJECT = 100;
 
 	
 	@Override
@@ -212,6 +221,9 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 				
 		mAddSiteBtn = (ImageView) findViewById(R.id.addSiteBtn);
 		mAddSiteBtn.setOnClickListener(mBtnClickListener);
+		
+		mStampBtn = (ImageView) findViewById(R.id.stampBtn);
+		mStampBtn.setOnClickListener(mBtnClickListener);
 		
 		mSiteNumberTextview = (TextView) findViewById(R.id.site_textview);
 
@@ -506,6 +518,10 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 			//switch to previous site if possible
 			Log.v("add_new_site","clicked");
 			switchToPrevSite();
+		}
+		else if(nBtnID == mStampBtn.getId()) {
+			Intent intent = new Intent(CanvasActivity.this, GalleryActivity.class);
+			startActivityForResult(intent, REQUEST_CODE_INSERT_STAMP_OBJECT);
 		}
 		else if(nBtnID == mNextSiteBtn.getId()){
 			//switch to next site if possible
@@ -991,4 +1007,83 @@ public void onFail(String errormessage) {
 	// TODO Auto-generated method stub
 	
 }	
+
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	super.onActivityResult(requestCode, resultCode, data);
+
+	// Check result error
+	if(resultCode!=RESULT_OK)
+		return;		
+	if(data == null)
+		return;
+
+	if(requestCode == REQUEST_CODE_INSERT_STAMP_OBJECT) {    			
+		//String 
+		Uri strStampPath = data.getParcelableExtra("stamp_path");//();//UrExtra("stamp_path");
+		
+		Bitmap bm = null;
+		try {
+			 bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), strStampPath);
+			//bm = BitmapFactory.decodeStream(mContext.getAssets().open(strStampPath));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if(bm == null)
+			return;
+
+		// canvas option setting
+		SOptionSCanvas canvasOption = mSCanvas.getOption();					
+		if(canvasOption == null)
+			return;
+
+		//if(canvasOption.mSAMMOption == null)
+		//	return;
+
+		//canvasOption.mSAMMOption.setContentsQuality(PreferencesOfSAMMOption.getPreferenceSaveImageQuality(mContext));
+		// option setting
+		//mSCanvas.setOption(canvasOption);			
+
+		RectF rectF = getDefaultRect(bm);
+		int nContentsQualityOption = canvasOption.mSAMMOption.getContentsQuality();
+		SObjectImage sImageObject = new SObjectImage(nContentsQualityOption);
+		sImageObject.setRect(rectF);
+		try {
+			bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), strStampPath);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//sImageObject.setImageUri(strStampPath);//Path(strStampPath);
+		sImageObject.setImageBitmap(bm);
+
+		if(mSCanvas.insertSAMMImage(sImageObject, true)){
+			Toast.makeText(this, "Insert image file("+ strStampPath +") Success!", Toast.LENGTH_SHORT).show();	
+		}
+		else{
+			Toast.makeText(this, "Insert image file("+ strStampPath +") Fail!", Toast.LENGTH_LONG).show();    				
+		}
+	}
+}
+
+RectF getDefaultRect(Bitmap bm){
+	// Rect Region : Consider image real size		
+	int nImageWidth = bm.getWidth();
+	int nImageHeight = bm.getHeight();
+	int nScreenWidth = mSCanvas.getWidth();
+	int nScreenHeight = mSCanvas.getHeight();    			
+	int nBoxRadius = (nScreenWidth>nScreenHeight) ? nScreenHeight/8 : nScreenWidth/8;
+	int nCenterX = nScreenWidth/2;
+	int nCenterY = nScreenHeight/2;
+	if(nImageWidth > nImageHeight)
+		return new RectF(nCenterX-nBoxRadius,nCenterY-(nBoxRadius*nImageHeight/nImageWidth),nCenterX+nBoxRadius,nCenterY+(nBoxRadius*nImageHeight/nImageWidth));
+	else
+		return new RectF(nCenterX-(nBoxRadius*nImageWidth/nImageHeight),nCenterY-nBoxRadius,nCenterX+(nBoxRadius*nImageWidth/nImageHeight),nCenterY+nBoxRadius);
+}
+
 }

@@ -1,0 +1,21 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+        
+        <ImageButton
+            android:id="@+id/take_photo"
+			android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+      		android:scaleType="fitXY"
+      		android:layout_gravity="bottom"
+            android:background="@drawable/exit_button" />                  
+        <ImageButton
+            android:id="@+id/import_photos"
+			android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+      		android:scaleType="fitXY"
+      		android:layout_gravity="bottom"
+            android:background="@drawable/exit_button" />
+</merge>

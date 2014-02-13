@@ -1,0 +1,38 @@
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/main_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+     
+<ImageSwitcher 
+    android:id="@+id/switcher" 
+    android:layout_width="match_parent" 
+    android:layout_height="match_parent" 
+    android:layout_alignParentTop="true" 
+    android:layout_alignParentLeft="true"/>
+<Gallery android:id="@+id/gallery" 
+    android:background="#55000000" 
+    android:layout_width="match_parent" 
+    android:layout_height="60dp" 
+    android:layout_alignParentBottom="true" 
+    android:layout_alignParentLeft="true" 
+    android:gravity="center_vertical" 
+    android:spacing="16dp"/>
+
+    		<com.smartnote_demo.directories_menu.TopMenu
+        	android:id="@+id/topMenu"
+        	android:layout_height="wrap_content"
+        	android:layout_width="wrap_content"
+        	android:layout_alignParentRight="true"
+        	android:layout_gravity="right|top">
+        	</com.smartnote_demo.directories_menu.TopMenu>  
+        	
+    			
+    		<com.smartnote_demo.images.GalleryBottomMenu
+    		    android:id="@+id/galleryBottomMenu"
+    		    android:layout_height="wrap_content"
+        	android:layout_width="wrap_content"
+        	android:layout_alignParentRight="true"
+        	android:layout_gravity="bottom">   		    
+    		</com.smartnote_demo.images.GalleryBottomMenu>
+</RelativeLayout>
