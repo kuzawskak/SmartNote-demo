@@ -1,21 +1,27 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
-        
-        <ImageButton
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+
+	    android:id="@+id/gallery_bottom_menu"
+		android:orientation="horizontal"
+		android:layout_gravity="top|right"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		
+		<ImageView
             android:id="@+id/take_photo"
-			android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-      		android:scaleType="fitXY"
-      		android:layout_gravity="bottom"
-            android:background="@drawable/exit_button" />                  
-        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dip"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tool_bg"
+            android:src="@drawable/selector_pen" />
+
+        <ImageView
             android:id="@+id/import_photos"
-			android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-      		android:scaleType="fitXY"
-      		android:layout_gravity="bottom"
-            android:background="@drawable/exit_button" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dip"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tool_bg"
+            android:src="@drawable/selector_eraser" />   
+
 </merge>

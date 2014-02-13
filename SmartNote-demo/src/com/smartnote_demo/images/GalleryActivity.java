@@ -21,7 +21,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
-import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.Gallery.LayoutParams;
 import android.widget.ImageSwitcher;
@@ -31,8 +30,8 @@ import android.widget.ViewSwitcher;
 public class GalleryActivity extends Activity implements
         AdapterView.OnItemSelectedListener, ViewSwitcher.ViewFactory {
 	
-	ImageButton TakePhotoButton;
-	ImageButton ImportImagesButton;
+	ImageView TakePhotoButton;
+	ImageView ImportImagesButton;
 	Context mContext;
 	Gallery g;
 	ImportedImages imported = new ImportedImages();
@@ -69,7 +68,7 @@ public class GalleryActivity extends Activity implements
         g.setOnItemSelectedListener(this);
 
         
-		TakePhotoButton = (ImageButton)findViewById(R.id.take_photo);
+		TakePhotoButton = (ImageView)findViewById(R.id.take_photo);
 
 		
 		TakePhotoButton.setOnClickListener(new OnClickListener() {
@@ -83,7 +82,7 @@ public class GalleryActivity extends Activity implements
 				
 			}
 		});
-		ImportImagesButton = (ImageButton)findViewById(R.id.import_photos);
+		ImportImagesButton = (ImageView)findViewById(R.id.import_photos);
 		
 		ImportImagesButton.setOnClickListener(new OnClickListener() {
 			

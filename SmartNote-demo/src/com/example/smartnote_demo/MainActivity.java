@@ -32,7 +32,14 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
     	        
         super.onCreate(savedInstanceState);
+
+   
         setContentView(R.layout.activity_main);
+        
+        if( getIntent().getBooleanExtra("Exit me", false)){
+            finish();
+            return; // add this to prevent from doing unnecessary stuffs
+        }
         
         Carousel carousel = (Carousel)findViewById(R.id.carousel);
         
@@ -46,31 +53,20 @@ public class MainActivity extends Activity {
 
 				switch(position) {
 				case 0:
-					/***EVENTS***/
-					Intent events_intent = new Intent(MainActivity.this,Calendar.class);	
-					startActivity(events_intent);
-					break;					
-				case 1:
 					/***NOTEPADS***/
 					Intent directories_intent = new Intent(MainActivity.this,Directories.class);
 					startActivity(directories_intent);	
 					break;					
-				case 2:
-					/***OTHERS***/
-					break;					
-				case 3:
+				case 1:
 					/***PICTURES***/
 					Intent images_intent = new Intent(MainActivity.this,GalleryActivity.class);
 					startActivity(images_intent);
 					break;
-				case 4:
+				case 2:
 					/***QUICK NOTES***/
 					Intent canvas_intent = new Intent(MainActivity.this,CanvasActivity.class);			
 					startActivity(canvas_intent);					
-					break;
-				case 5:
-					/***RECORDS***/					
-					break;					
+					break;				
 				}
 		
 			}		
@@ -84,29 +80,17 @@ public class MainActivity extends Activity {
 
 				switch(position){
 				case 0:
-					//Events 						
-					Toast.makeText(MainActivity.this,"Check events", Toast.LENGTH_SHORT).show();								
-					break;
-				case 1:
 					//Notepads
 					Toast.makeText(MainActivity.this,"Check your notepads", Toast.LENGTH_SHORT).show();
 					break;
-				case 2:
-					//Others
-					Toast.makeText(MainActivity.this,"Others - not implemented yet", Toast.LENGTH_SHORT).show();
-					break;
-				case 3:
+				case 1:
 					//Gallery
 					Toast.makeText(MainActivity.this,"Check and import images", Toast.LENGTH_SHORT).show();
 					break;
-				case 4:
+				case 2:
 					//Quick notes
 					Toast.makeText(MainActivity.this,"Create quick note", Toast.LENGTH_SHORT).show();
-					break;
-				case 5:
-					//Records
-					Toast.makeText(MainActivity.this,"Check and import records", Toast.LENGTH_SHORT).show();
-					break;					
+					break;				
 				}				
 			}
 

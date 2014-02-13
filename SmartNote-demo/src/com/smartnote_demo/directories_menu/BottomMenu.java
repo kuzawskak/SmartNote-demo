@@ -38,7 +38,7 @@ import com.smartnote_demo.notepad_creator.NotepadCreator;
 							
 				@Override
 				public void onClick(View v) {
-					((Directories)mContext).finish();
+					//((Directories)mContext).finish();
 					Intent create_notepad_intent = new Intent(v.getContext(),NotepadCreator.class);
 					v.getContext().startActivity(create_notepad_intent);
 					

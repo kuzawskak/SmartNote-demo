@@ -975,10 +975,10 @@ public class Carousel extends CarouselSpinner implements GestureDetector.OnGestu
     private void Calculate3DPosition(CarouselItem child, int diameter, float angleOffset){
     	
     	angleOffset = angleOffset * (float)(Math.PI/180.0f);    	
-
+    	float const_margin_height = 50.0f;
     	float x = - (float)(diameter/2  * android.util.FloatMath.sin(angleOffset)) + diameter/2 - child.getWidth()/2;
     	float z = diameter/2 * (1.0f - (float)android.util.FloatMath.cos(angleOffset));
-    	float y = - getHeight()/2 + (float) (z * android.util.FloatMath.sin(mTheta));
+    	float y = - getHeight()/2 + (float) (z * android.util.FloatMath.sin(mTheta)) + const_margin_height;
 
     	child.setItemX(x);
     	child.setItemZ(z);

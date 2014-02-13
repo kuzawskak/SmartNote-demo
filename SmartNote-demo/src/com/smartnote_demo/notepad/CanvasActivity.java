@@ -59,6 +59,7 @@ import com.dropbox.client2.session.AppKeyPair;
 import com.dropbox.client2.session.Session.AccessType;
 import com.dropbox.client2.session.TokenPair;
 
+import com.example.smartnote_demo.MainActivity;
 import com.example.smartnote_demo.R;
 
 import com.facebook.android.DialogError;
@@ -392,6 +393,8 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		//super.onBackPressed();
+		
+		
 		exitActivity();	
 
 	}
@@ -418,6 +421,11 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 				// finish dialog
 				dialog.dismiss();
 				setResult(RESULT_OK, getIntent());
+				
+				//Close previous activities and go to MainActivity
+				Intent intent = new Intent(mContext,MainActivity.class);
+			    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			    mContext.startActivity(intent);
 				finish();
 			}
 		})
@@ -426,6 +434,11 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 
 				dialog.dismiss();
 				setResult(RESULT_OK, getIntent());
+				
+				//Close previous activities and go to MainActivity
+				Intent intent = new Intent(mContext,MainActivity.class);
+			    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			    mContext.startActivity(intent);
 				finish();
 
 			}

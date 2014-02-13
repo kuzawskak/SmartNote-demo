@@ -154,7 +154,7 @@ public class Directories extends Activity implements OnItemClickListener {
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
-		//super.onBackPressed();
+		super.onBackPressed();
 
 	}
 	

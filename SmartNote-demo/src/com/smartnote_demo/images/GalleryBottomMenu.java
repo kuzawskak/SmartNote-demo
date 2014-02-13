@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.app.Activity;
 
@@ -21,8 +21,8 @@ public class GalleryBottomMenu extends LinearLayout {
 	/** Picture cropping request. */
 	
 	
-			private ImageButton TakePhotoButton;
-			private ImageButton ImportImagesButton;
+			private ImageView TakePhotoButton;
+			private ImageView ImportImagesButton;
 			private Context mContext;
 			public GalleryBottomMenu(Context context, AttributeSet attrs) {
 				super(context, attrs);
@@ -38,11 +38,11 @@ public class GalleryBottomMenu extends LinearLayout {
 			  	LayoutInflater inflater = LayoutInflater.from(context);
 				View itemTemplate = inflater.inflate(R.layout.gallery_bottom_buttons, this, true);
 			  	
-				TakePhotoButton = (ImageButton)itemTemplate.findViewById(R.id.take_photo);
+				TakePhotoButton = (ImageView)itemTemplate.findViewById(R.id.take_photo);
 
 				
 				TakePhotoButton.setOnClickListener(new ExitButtonListener());
-				ImportImagesButton = (ImageButton)itemTemplate.findViewById(R.id.import_photos);
+				ImportImagesButton = (ImageView)itemTemplate.findViewById(R.id.import_photos);
 				
 				ImportImagesButton.setOnClickListener(new ExitButtonListener());
 			}
@@ -60,7 +60,7 @@ public class GalleryBottomMenu extends LinearLayout {
 			  	LayoutInflater inflater = LayoutInflater.from(context);
 				View itemTemplate = inflater.inflate(R.layout.gallery_bottom_buttons, this, true);
 			  	
-				TakePhotoButton = (ImageButton)itemTemplate.findViewById(R.id.take_photo);
+				TakePhotoButton = (ImageView)itemTemplate.findViewById(R.id.take_photo);
 
 				
 				TakePhotoButton.setOnClickListener(new OnClickListener() {
@@ -74,7 +74,7 @@ public class GalleryBottomMenu extends LinearLayout {
 						
 					}
 				});
-				ImportImagesButton = (ImageButton)itemTemplate.findViewById(R.id.import_photos);
+				ImportImagesButton = (ImageView)itemTemplate.findViewById(R.id.import_photos);
 				
 				ImportImagesButton.setOnClickListener(new OnClickListener() {
 					
