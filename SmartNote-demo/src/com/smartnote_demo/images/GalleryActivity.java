@@ -30,28 +30,21 @@ import android.widget.ViewSwitcher;
 public class GalleryActivity extends Activity implements
         AdapterView.OnItemSelectedListener, ViewSwitcher.ViewFactory {
 	
+	public static boolean only_preview = true;
 	ImageView TakePhotoButton;
 	ImageView ImportImagesButton;
 	Context mContext;
 	Gallery g;
-	ImportedImages imported = new ImportedImages();
 	/** Camera request. */
 	private static final int CAMERA_REQUEST = 1001;
 	/** Gallery request. */
 	private static final int GALLERY_REQUEST = 1002;
 	/** Picture cropping request. */
 		
-	public ArrayList<Uri> ThumbListUpdated;
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	mContext = this;
-    	
-    	if(ThumbListUpdated!=null) {  	
-    		for(int i=0;i<ThumbListUpdated.size();i++) {
-    			ImportedImages.ThumbList.add(ThumbListUpdated.get(i));
-    		}              
-    	}
-    
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.gallery_activity);
@@ -70,7 +63,7 @@ public class GalleryActivity extends Activity implements
         
 		TakePhotoButton = (ImageView)findViewById(R.id.take_photo);
 
-		
+
 		TakePhotoButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -82,8 +75,10 @@ public class GalleryActivity extends Activity implements
 				
 			}
 		});
+		
 		ImportImagesButton = (ImageView)findViewById(R.id.import_photos);
 		
+
 		ImportImagesButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -97,6 +92,8 @@ public class GalleryActivity extends Activity implements
 			}
 		});
 		
+		
+		if(!only_preview) {
 		mSwitcher.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -113,6 +110,7 @@ public class GalleryActivity extends Activity implements
 				finish();
 			}
 		});
+		}
         
     }
  

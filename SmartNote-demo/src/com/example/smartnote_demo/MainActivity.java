@@ -11,6 +11,7 @@ import com.smartnote_demo.carouselmenu.CarouselItem;
 import com.smartnote_demo.directories_menu.Directories;
 import com.smartnote_demo.events_menu.Calendar;
 import com.smartnote_demo.images.GalleryActivity;
+import com.smartnote_demo.images.ImportedImages;
 import com.smartnote_demo.quick_note.CanvasActivity;
 import com.smartnote_demo.database.MemoDatabaseHandler;
 import android.app.Activity;
@@ -27,10 +28,14 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 	
 	private ImageButton ExitButton;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	        
+    	
+    	if(savedInstanceState==null) {
+    		ImportedImages i = new ImportedImages();
+    	}
         super.onCreate(savedInstanceState);
 
    
@@ -60,6 +65,7 @@ public class MainActivity extends Activity {
 				case 1:
 					/***PICTURES***/
 					Intent images_intent = new Intent(MainActivity.this,GalleryActivity.class);
+					GalleryActivity.only_preview = true;
 					startActivity(images_intent);
 					break;
 				case 2:

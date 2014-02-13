@@ -534,6 +534,7 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 		}
 		else if(nBtnID == mStampBtn.getId()) {
 			Intent intent = new Intent(CanvasActivity.this, GalleryActivity.class);
+			GalleryActivity.only_preview = false;
 			startActivityForResult(intent, REQUEST_CODE_INSERT_STAMP_OBJECT);
 		}
 		else if(nBtnID == mNextSiteBtn.getId()){
