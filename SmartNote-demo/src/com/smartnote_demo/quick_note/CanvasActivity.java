@@ -44,7 +44,7 @@ import com.smartnote_demo.spen_tools.SPenSDKUtils;
 import com.smartnote_demo.share.*;
 import android.widget.CursorAdapter;
 
-public class CanvasActivity extends ActivityWithSPenLayer implements API_Listener {
+public class CanvasActivity extends ActivityWithSPenLayer {
 
 	private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -475,13 +475,4 @@ private void showToast(String msg) {
     error.show();
 }
 
-@Override
-public void onSuccess(int requestnumber, Object obj) {
-	// TODO Auto-generated method stub	
-}
-
-@Override
-public void onFail(String errormessage) {
-	// TODO Auto-generated method stub	
-}	
 }

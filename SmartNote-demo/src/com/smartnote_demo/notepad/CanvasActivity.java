@@ -5,12 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-
-import org.json.JSONException;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -21,8 +18,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteCursor;
 import android.graphics.Bitmap;
 
 import android.graphics.BitmapFactory;
@@ -30,7 +25,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.os.StrictMode;
@@ -62,10 +56,7 @@ import com.dropbox.client2.session.TokenPair;
 import com.example.smartnote_demo.MainActivity;
 import com.example.smartnote_demo.R;
 
-import com.facebook.android.DialogError;
-import com.facebook.android.Facebook;
-import com.facebook.android.Facebook.DialogListener;
-import com.facebook.android.FacebookError;
+
 import com.samsung.samm.common.SObjectImage;
 import com.samsung.samm.common.SOptionSCanvas;
 import com.samsung.spenemulatorlibrary.ActivityWithSPenLayer;
@@ -82,10 +73,10 @@ import com.smartnote_demo.images.GalleryActivity;
 import com.smartnote_demo.spen_tools.SPenSDKUtils;
 import com.smartnote_demo.share.*;
 
-public class CanvasActivity extends ActivityWithSPenLayer implements API_Listener {
+public class CanvasActivity extends ActivityWithSPenLayer  {
 
 	//===============================
-	// App settings for share in Dropbox and Facebook
+	// App settings for share in Dropbox 
 	//===============================
 	
 	//for DROPBOX share	
@@ -100,14 +91,9 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
     // If you'd like to change the access type to the full Dropbox instead of
    // an app folder, change this value.
    final static private AccessType ACCESS_TYPE = AccessType.APP_FOLDER;
-    //  Facebook APP ID
-    final static private String APPL_ID = "242229975950290"; // Replace your App ID here
-    // Instance of Facebook Class
-    private Facebook fb;  
-    private SharedPreferences preferences_for_fb;
-    
-  
-   // You don't need to change these, leave them alone.
+
+
+   //  don't need to change these, leave them alone
    final static private String ACCOUNT_PREFS_NAME = "prefs";
    final static private String ACCESS_KEY_NAME = "ACCESS_KEY";
    final static private String ACCESS_SECRET_NAME = "ACCESS_SECRET";
@@ -128,7 +114,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 	private ImageView		mAddSiteBtn;
 	private ImageView		mStampBtn;
 	//right drawer buttons
-	private ImageView		mFacebookBtn;
 	private ImageView		mDropboxBtn;
 	private ImageView		mSaveBtn;
 	private ImageView		mEventBtn;
@@ -168,17 +153,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy); 
         
-        fb = new Facebook(APPL_ID);
-        preferences_for_fb = getPreferences(MODE_PRIVATE);
-        String access_token = preferences_for_fb.getString("access_token",null);
-        long expires = preferences_for_fb.getLong("access_expires", 0);
-        
-        if(access_token!=null) {
-        	fb.setAccessToken(access_token);
-        }
-        if(expires!=0) {
-        	fb.setAccessExpires(expires);
-        }
   
         checkAppKeySetup();
        
@@ -210,9 +184,6 @@ public class CanvasActivity extends ActivityWithSPenLayer implements API_Listene
 		
 		mPrevSiteBtn = (ImageView) findViewById(R.id.prev_site_button);
 		mPrevSiteBtn.setOnClickListener(mBtnClickListener);
-		
-		mFacebookBtn = (ImageView) findViewById(R.id.facebook_button);
-		mFacebookBtn.setOnClickListener(mBtnClickListener);
 		
 		mDropboxBtn = (ImageView) findViewById(R.id.dropbox_button);
 		mDropboxBtn.setOnClickListener(mBtnClickListener);
@@ -556,24 +527,6 @@ OnClickListener mBtnClickListener = new OnClickListener() {
 			//login and share on dropbox
 			saveAndSharePngFile();						
 		}
-		else if(nBtnID == mFacebookBtn.getId()) {
-			//login and upload as photo in fb
-				try {
-					shareOnFacebook();
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}					
-		}
 		else if(nBtnID == mEventBtn.getId()) {
 			Log.v("event","event button clicked");
 			showDialog(DATE_DIALOG_ID);
@@ -593,62 +546,6 @@ public static void setReminder(Context caller, long time, String message)
 	caller.startActivity(calIntent); 
 }
 
-/*FACEBOOK share function*/
-private boolean shareOnFacebook() throws FileNotFoundException, MalformedURLException, IOException, JSONException {
-
-
-if(fb.isSessionValid()) {
-
-	//postToWall();
-	FacebookLogin fb_login_async_task = new FacebookLogin(mSCanvas, CanvasActivity.this, fb,preferences_for_fb);
-	fb_login_async_task.execute();
-}else 
-//{
-//	FacebookLogin fb_login_async_task = new FacebookLogin(mSCanvas, CanvasActivity.this, fb,preferences_for_fb);
-//	fb_login_async_task.execute();
-//}
-{
-	//login to facebook
-	String[] perm = {"publish_stream","photo_upload"};
-	fb.authorize(CanvasActivity.this,perm, new DialogListener() {
-		
-		@Override
-		public void onFacebookError(FacebookError e) {
-			// TODO Auto-generated method stub
-			Toast.makeText(CanvasActivity.this,"onFacebookError", Toast.LENGTH_SHORT).show();
-			mDrawerLayout.closeDrawers();
-		}
-		
-		@Override
-		public void onError(DialogError e) {
-			// TODO Auto-generated method stub
-			Toast.makeText(CanvasActivity.this,"onError", Toast.LENGTH_SHORT).show();
-			mDrawerLayout.closeDrawers();
-		}
-		
-		@Override
-		public void onComplete(Bundle values) {
-			// TODO Auto-generated method stub
-			Editor  editor = preferences_for_fb.edit();
-			editor.putString("access_token",fb.getAccessToken());
-			editor.putLong("acccess_expires", fb.getAccessExpires());
-			editor.commit();
-			Toast.makeText(CanvasActivity.this,"onComplete", Toast.LENGTH_SHORT).show();
-					FacebookLogin fb_login_async_task = new FacebookLogin(mSCanvas, CanvasActivity.this, fb,preferences_for_fb);
-					fb_login_async_task.execute();	
-					mDrawerLayout.closeDrawers();
-		}
-		
-		@Override
-		public void onCancel() {
-			// TODO Auto-generated method stub
-			Toast.makeText(CanvasActivity.this,"onCancel", Toast.LENGTH_SHORT).show();
-			mDrawerLayout.closeDrawers();
-		}
-	});
-}
-return true;
-}
 
 
 /*
@@ -875,30 +772,7 @@ private AndroidAuthSession buildSession() {
        return session;
 }      
 
-@Override
-public void onSuccess(int requestnumber, Object obj) {
-	 try
-     {
-            if(requestnumber == Constants.UploadPhotos_Code)
-            {
-                  boolean sucess=(Boolean) obj;
-                  if(sucess)
-                  {
-                         Toast.makeText(CanvasActivity.this, "Photos uploaded successfully", Toast.LENGTH_LONG).show();
-                         Intent i=new Intent(CanvasActivity.this,CanvasActivity.class);
-                         
-                         startActivity(i);
-                         finish();
-                         mDrawerLayout.closeDrawers();
-                  }
-            }
-     }
-     catch (Exception e)
-     {
-            e.printStackTrace();
-     }
-     
-}
+
 
 public void deleteCurrentSite() {
 	if(sites_count>0) {
@@ -1016,11 +890,7 @@ void updatePrevNextState() {
 				false:true);
 }
 
-@Override
-public void onFail(String errormessage) {
-	// TODO Auto-generated method stub
-	
-}	
+
 
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {

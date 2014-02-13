@@ -176,14 +176,7 @@
             android:layout_weight="0.25"
             android:background="@drawable/selector_dropbox"
              />
-        <ImageView
-            android:id="@+id/facebook_button"
-           android:layout_width="40dip"
-            android:layout_height="40dip"
-            android:layout_margin="1dip"
-            android:layout_weight="0.25"
-            android:background="@drawable/selector_facebook"
-			/>  
+
         <ImageView
             android:id="@+id/event_button"
             android:layout_width="40dip"

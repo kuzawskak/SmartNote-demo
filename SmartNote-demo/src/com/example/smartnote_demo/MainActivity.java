@@ -1,28 +1,17 @@
 package com.example.smartnote_demo;
 
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.session.AppKeyPair;
 import com.smartnote_demo.carouselmenu.Carousel;
 import com.smartnote_demo.carouselmenu.CarouselAdapter;
 import com.smartnote_demo.carouselmenu.CarouselAdapter.OnItemClickListener;
 import com.smartnote_demo.carouselmenu.CarouselAdapter.OnItemSelectedListener;
-import com.smartnote_demo.carouselmenu.CarouselItem;
 import com.smartnote_demo.directories_menu.Directories;
-import com.smartnote_demo.events_menu.Calendar;
 import com.smartnote_demo.images.GalleryActivity;
-import com.smartnote_demo.images.ImportedImages;
 import com.smartnote_demo.quick_note.CanvasActivity;
-import com.smartnote_demo.database.MemoDatabaseHandler;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.service.dreams.DreamService;
-import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -33,11 +22,7 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	
-    	if(savedInstanceState==null) {
-    		ImportedImages i = new ImportedImages();
-    	}
         super.onCreate(savedInstanceState);
-
    
         setContentView(R.layout.activity_main);
         
